@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer } from "react-toastify";
 
 import { Tooltip } from "react-tooltip";
 import { jwtDecode } from "jwt-decode";
@@ -30,7 +31,7 @@ import QuizItem from "../components/QuizItem";
 import MobileQuizItem from "../components/MobileQuizItem";
 import TranslateComponent from "../components/TranslateComponent";
 import { logout } from "../reducers/userSlice";
-import { handleRemember } from "../actions/feed";
+import { handleRemember } from "../actions/study";
 
 function LurnyQuiz() {
   const dispatch = useDispatch();
@@ -70,8 +71,6 @@ function LurnyQuiz() {
       ) {
         const data = event.data.payload;
         localStorage.setItem("tempData", JSON.stringify(data));
-        navigate("/lurny/profile");
-        // setTempData(JSON.stringify(data));
       }
     }
 
@@ -183,7 +182,7 @@ function LurnyQuiz() {
     if (index < 2) {
       setContent(index);
     } else {
-      dispatch(handleRemember(userData._id, lurnies[selectedIndex]._id));
+      dispatch(handleRemember(userData.id, lurnies[selectedIndex]._id));
       setOpenRememberModal(true);
     }
   };
@@ -240,9 +239,9 @@ function LurnyQuiz() {
   };
 
   return (
-    <div className="min-h-[100vh] bg-black font-raleway flex flex-col justify-between sm:justify-start">
+    <div className="min-h-[100vh] bg-black font-raleway flex flex-col justify-center sm:justify-start">
       {/* Header */}
-      <div className="w-full bg-black px-[4rem] sm:px-[20rem] flex justify-between items-center py-[4rem] lg:py-[1.5rem]">
+      <div className="w-full bg-black px-[4rem] sm:px-[20rem] flex justify-between items-center mb-[4rem] sm:mb-0 sm:py-[1.5rem]">
         <Link to="/lurny/search" className="select-none">
           <img
             src={LetterLogo}
@@ -598,7 +597,7 @@ function LurnyQuiz() {
       {/* Remember Modal */}
       {openRememberModal && (
         <div
-          className="w-full h-full bg-gray-100 bg-opacity-30 flex items-center justify-center absolute top-0 left-0 z-50"
+          className="w-full h-full bg-black/20 flex items-center justify-center absolute top-0 left-0 z-50"
           id="remember-modal"
           onClick={handleClickModal}
         >
@@ -608,10 +607,10 @@ function LurnyQuiz() {
               Repetition over Optimally Spaced Intervals (ROSI)
             </span>
             <div className="flex items-center justify-center gap-[4rem]">
-              <button className="bg-[#7F51BA] focus:outline-none">
+              <button className="bg-[#7F51BA] hover:bg-[#583685] focus:outline-none">
                 Go to Saved Lurnies
               </button>
-              <button className="bg-[#7F51BA] focus:outline-none">
+              <button className="bg-[#7F51BA] hover:bg-[#583685] focus:outline-none">
                 Go to ROSI Settings
               </button>
             </div>
@@ -619,8 +618,10 @@ function LurnyQuiz() {
         </div>
       )}
 
+      <ToastContainer />
+
       {/* Footer */}
-      <div className="w-full flex sm:hidden justify-around items-center mb-[8rem]">
+      <div className="w-full flex sm:hidden justify-around items-center mb-[24rem]">
         <div className="flex flex-col text-white text-[12rem] items-center gap-[2rem]">
           <Link to="/">
             <BiLink id="source" className="text-white" />

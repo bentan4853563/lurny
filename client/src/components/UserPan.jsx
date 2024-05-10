@@ -1,8 +1,13 @@
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { getStudies } from "../actions/study";
+import { Link } from "react-router-dom";
 
 function UserPan({ all }) {
+  const dispatch = useDispatch();
+
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
@@ -11,6 +16,21 @@ function UserPan({ all }) {
       setUserData(jwtDecode(accessToken));
     }
   }, []);
+
+  useEffect(() => {
+    if (userData) {
+      dispatch(getStudies(userData.id));
+    }
+  }, [userData]);
+
+  const getEndPoint = () => {
+    const currentHref = window.location.href;
+    const parsedUrl = new URL(currentHref);
+    const pathSegmants = parsedUrl.pathname
+      .split("/")
+      .filter((segment) => segment);
+    return pathSegmants[pathSegmants.length - 1];
+  };
 
   return (
     <div className="w-[140rem] sm:w-[42rem] lg:w-[32rem] bg-[#262626] flex flex-col items-start gap-[8rem] lg:gap-[2rem]">
@@ -37,18 +57,22 @@ function UserPan({ all }) {
       >
         Settings
       </a>
-      <span
-        // onClick={() => showAll(false)}
-        className="w-full text-gray-500 hover:text-gray-300 text-left text-[2rem] font-bold border-b border-white cursor-pointer"
+      <Link
+        to="/lurny/saved"
+        className={`w-full active:text-gray-300 hover:text-white text-left text-[2rem] font-bold border-b border-white cursor-pointer ${
+          getEndPoint() == "profile" ? "text-white" : "text-gray-500"
+        } `}
       >
         Saved Lurnies (0)
-      </span>
-      <span
-        // onClick={() => showAll(true)}
-        className="w-full text-white hover:text-gray-300 text-left text-[2rem] font-bold border-b border-white cursor-pointer"
+      </Link>
+      <Link
+        to="/lurny/profile"
+        className={`w-full active:text-gray-300 hover:text-white text-left text-[2rem] font-bold border-b border-white cursor-pointer ${
+          getEndPoint() == "profile" ? "text-white" : "text-gray-500"
+        } `}
       >
         My Lurnies ({all})
-      </span>
+      </Link>
     </div>
   );
 }

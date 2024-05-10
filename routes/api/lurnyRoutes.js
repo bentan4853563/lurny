@@ -14,6 +14,18 @@ router.get("/get", async (req, res) => {
   }
 });
 
+router.get("/currents", async (req, res) => {
+  try {
+    const lurnies = await Lurny.find({ shared: true })
+      .sort({ date: -1 })
+      .limit(20)
+      .populate("user");
+    res.json(lurnies);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.post("/my-lurnies", async (req, res) => {
   try {
     const lurnies = await Lurny.find({ user: req.body.user })
@@ -28,44 +40,19 @@ router.post("/my-lurnies", async (req, res) => {
   }
 });
 
-router.post("/lurny-update", async (req, res) => {
-  try {
-    const results = await Lurny.find({ user: { $type: "string" } });
-
-    // Create an array of update operations
-    const updateOps = results.map(async (doc) => {
-      await Lurny.updateOne(
-        { _id: doc._id },
-        { $set: { user: new mongoose.Types.ObjectId(doc.user) } }
-      );
-    });
-
-    // Execute all update operations
-    await Promise.all(updateOps);
-
-    res.json({ message: "All eligible documents have been updated." });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
 router.post("/insert", async (req, res) => {
   try {
-    const { user, title, summary, collections, quiz, image, url } = req.body;
-    const newLurny = new Lurny({
-      user,
-      title,
-      summary,
-      quiz,
-      image,
-      url,
-      collections,
-    });
+    const newLurnies = req.body;
+    const savedLurny = await Lurny.insertMany(newLurnies);
 
-    const savedLurny = await newLurny.save();
-
-    const response = await Lurny.findById(savedLurny._id).populate("user");
-    res.status(201).json(response);
+    // Use Promise.all to wait for all promises to resolve simultaneously,
+    // rather than waiting for each find operation to complete serially
+    const populatedLurniesPromises = savedLurny.map((lurny) =>
+      Lurny.findById(lurny._id).populate("user")
+    );
+    const populatedLurnies = await Promise.all(populatedLurniesPromises);
+    console.log("populatedLurnies", populatedLurnies);
+    res.status(201).json(populatedLurnies);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -109,19 +96,7 @@ router.delete("/delete-byuser", async (req, res) => {
   res.send("Success!!");
 });
 
-router.delete("/lurnies/:id", async (req, res) => {
-  try {
-    const deletedLurny = await Lurny.findByIdAndDelete(req.params.id);
-    if (!deletedLurny) {
-      return res.status(404).json({ message: "Lurny not found" });
-    }
-    res.json({ message: "Lurny successfully deleted" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-router.delete("/no-url", async (req, res) => {
+router.delete("/many", async (req, res) => {
   try {
     // const result = await Lurny.deleteMany({ url: { $exists: false } });
     // Or if you want to check for both non-existent and null values:

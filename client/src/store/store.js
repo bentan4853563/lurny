@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "../reducers/userSlice";
 import lurnyReducer from "../reducers/lurnySlice";
-import feedsSlice from "../reducers/feedsSlice";
+import studySlice from "../reducers/studySlice";
 import loadingReducer from "../reducers/loadingSlice";
 
 const store = configureStore({
   reducer: {
     user: userReducer,
     lurny: lurnyReducer,
-    feed: feedsSlice,
+    study: studySlice,
     loading: loadingReducer,
   },
 });

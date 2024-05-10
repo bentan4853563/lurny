@@ -14,9 +14,10 @@ const lurnySlice = createSlice({
       state.lurnies = action.payload;
     },
     insertLurny: (state, action) => {
+      console.log("action.payload", action.payload);
       return {
         ...state,
-        lurnies: [action.payload, ...state.lurnies],
+        lurnies: [...action.payload, ...state.lurnies],
       };
     },
     shareLurny: (state, action) => {

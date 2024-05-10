@@ -10,6 +10,7 @@ import { logout } from "../reducers/userSlice";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 
+import { GrUserAdmin } from "react-icons/gr";
 import { IoCompassOutline } from "react-icons/io5";
 import { IoSearchSharp } from "react-icons/io5";
 import LetterLogo from "../assets/icons/letter_logo.png";
@@ -55,7 +56,7 @@ export default function Header() {
 
   return (
     <div
-      className="bg-black px-[12rem] flex justify-between items-center py-[4rem] sm:py-[1.5rem] sticky"
+      className="bg-black px-[12rem] flex justify-between items-center py-[4rem] sm:py-[1.5rem] top-0 sticky"
       style={{ zIndex: 999 }}
     >
       <Link to="/lurny/search" className="select-none">
@@ -67,16 +68,20 @@ export default function Header() {
       </Link>
       <div className="flex items-center gap-[4rem]">
         {lurnies.length > 0 && (
+          <Link to={`/admin/lurny`}>
+            <GrUserAdmin className="text-zinc-300 text-[16rem] sm:text-[3.2rem] hover:text-gray-400" />
+          </Link>
+        )}
+        {lurnies.length > 0 && (
           <Link to={`/lurny/feeds/${lurnies[0]._id}`}>
-            <IoCompassOutline className="text-white text-[16rem] sm:text-[4rem] hover:text-gray-400" />
+            <IoCompassOutline className="text-zinc-300 text-[16rem] sm:text-[4rem] hover:text-gray-400" />
           </Link>
         )}
         {lurnies.length > 0 && (
           <Link to={"/lurny/search"}>
-            <IoSearchSharp className="text-white text-[16rem] sm:text-[4rem] hover:text-gray-400" />
+            <IoSearchSharp className="text-zinc-300 text-[16rem] sm:text-[4rem] hover:text-gray-400" />
           </Link>
         )}
-
         {userData ? (
           <Menu
             menuButton={
@@ -125,12 +130,11 @@ export default function Header() {
             </a>
           </div>
         )}
-
         {/* Hambuger */}
         <Menu
           menuButton={
             <MenuButton>
-              <IoMenu className="text-[16rem] sm:text-[4rem] text-gray-200" />
+              <IoMenu className="text-[16rem] sm:text-[4rem] text-zinc-300" />
             </MenuButton>
           }
           transition

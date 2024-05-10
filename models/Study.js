@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const FeedSchema = mongoose.Schema({
+const StudySchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
@@ -24,4 +24,4 @@ const FeedSchema = mongoose.Schema({
   // },
 });
 
-module.exports = mongoose.model("feed", FeedSchema);
+module.exports = mongoose.model("study", StudySchema);

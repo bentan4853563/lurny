@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { confirmAlert } from "react-confirm-alert"; // Import
+// import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -11,19 +11,21 @@ import { TfiShare } from "react-icons/tfi";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 
-import LurnyItem from "../components/LurnyItem";
-
 import defaultImg from "../assets/images/Lurny/default.png";
+
+import Header from "../components/Header";
 import UserPan from "../components/UserPan";
+import LurnyItem from "../components/LurnyItem";
 import NewPagination from "../components/NewPagination";
+import ConfirmModal from "../components/ComfirmModal";
+
 import {
   handleDeleteLurny,
   handleInsertLurny,
   handleShareLurny,
 } from "../actions/lurny";
-import Header from "../components/Header";
 
-const LurnyUser = () => {
+const LurnyProfile = () => {
   const dispatch = useDispatch();
 
   const { lurnies } = useSelector((state) => state.lurny);
@@ -32,6 +34,8 @@ const LurnyUser = () => {
   const [myLurnies, setMyLurnies] = useState([]);
   const [tempData, setTempData] = useState(null);
   const [showSidePan, setShowSidePan] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmModalProps, setConfirmModalProps] = useState({});
   // const [showAll, setShowAll] = useState(true);
   // const [filterdLurnies, setFilteredLurnies] = useState([]);
 
@@ -92,13 +96,41 @@ const LurnyUser = () => {
   useEffect(() => {
     if (userDetails && tempData && tempData !== "undefined") {
       try {
+        let newLurnies = [];
         const parsedTempData = JSON.parse(tempData);
-        if (parsedTempData.media === "PDF") {
-          const { summary_content, questions, fileName, url } = parsedTempData;
+        for (let i = 0; i < parsedTempData.length; i++) {
+          const parsedLurny = JSON.parse(parsedTempData[i]);
+          if (parsedLurny.media === "PDF") {
+            const { summary_content, questions, fileName, url } = parsedLurny;
+            if (Array.isArray(summary_content) && summary_content.length > 0) {
+              // If summary_content[0] is a string containing JSON, parse it as well
+              const json_summary_content = JSON.parse(summary_content[0]);
 
-          if (Array.isArray(summary_content) && summary_content.length > 0) {
+              const title = json_summary_content.title;
+              const summary = json_summary_content.summary;
+              const collections = json_summary_content.hash_tags;
+
+              let quiz = [];
+              questions.forEach((element) => {
+                quiz.push(JSON.parse(element));
+              });
+              const lurnyObject = {
+                user: userDetails.id,
+                title,
+                summary,
+                collections,
+                quiz,
+                image: defaultImg, // Ensure getDefaultImg function is defined or imported
+                url: url ? url : fileName,
+              };
+              newLurnies.push(lurnyObject);
+            }
+          } else {
+            const { summary_content, questions, image, url } = parsedLurny;
+
+            // if (Array.isArray(summary_content) && summary_content.length > 0) {
+            const json_summary_content = JSON.parse(summary_content);
             // If summary_content[0] is a string containing JSON, parse it as well
-            const json_summary_content = JSON.parse(summary_content[0]);
 
             const title = json_summary_content.title;
             const summary = json_summary_content.summary;
@@ -108,46 +140,22 @@ const LurnyUser = () => {
             questions.forEach((element) => {
               quiz.push(JSON.parse(element));
             });
+
             const lurnyObject = {
               user: userDetails.id,
               title,
               summary,
               collections,
               quiz,
-              image: defaultImg, // Ensure getDefaultImg function is defined or imported
-              url: url ? url : fileName,
+              image: getDefaultImg(image, url), // Ensure getDefaultImg function is defined or imported
+              url,
             };
-            dispatch(handleInsertLurny(lurnyObject, myLurnies[0].user));
+            newLurnies.push(lurnyObject);
           }
-        } else {
-          console.log("parsedTempData", parsedTempData);
-          const { summary_content, questions, image, url } = parsedTempData;
-
-          // if (Array.isArray(summary_content) && summary_content.length > 0) {
-          const json_summary_content = JSON.parse(summary_content);
-          // If summary_content[0] is a string containing JSON, parse it as well
-
-          const title = json_summary_content.title;
-          const summary = json_summary_content.summary;
-          const collections = json_summary_content.hash_tags;
-
-          let quiz = [];
-          questions.forEach((element) => {
-            quiz.push(JSON.parse(element));
-          });
-
-          const lurnyObject = {
-            user: userDetails.id,
-            title,
-            summary,
-            collections,
-            quiz,
-            image: getDefaultImg(image, url), // Ensure getDefaultImg function is defined or imported
-            url,
-          };
-          console.log("lurnyObject", lurnyObject);
-          dispatch(handleInsertLurny(lurnyObject));
-          // }
+        }
+        if (newLurnies.length > 0) {
+          console.log("newLurnies", newLurnies);
+          dispatch(handleInsertLurny(newLurnies));
         }
       } catch (e) {
         console.error("Failed to parse tempData", e);
@@ -190,26 +198,19 @@ const LurnyUser = () => {
     }
   };
 
-  const handleDelete = useCallback(
-    async (id) => {
-      confirmAlert({
-        title: "Are you sure to delete this Lurny?",
-        buttons: [
-          {
-            label: "Yes",
-            onClick: async () => {
-              dispatch(handleDeleteLurny(id));
-            },
-          },
-          {
-            label: "No",
-            onClick: () => console.log("Click No"),
-          },
-        ],
-      });
-    },
-    [dispatch]
-  );
+  const showDeleteConfirmModal = (id) => {
+    setConfirmModalProps({
+      show: true,
+      onConfirm: () => {
+        dispatch(handleDeleteLurny(id));
+        setShowConfirmModal(false);
+      },
+      onClose: () => setShowConfirmModal(false),
+      title: "Delete Lurny",
+      message: "Are you sure you want to delete this Lurny?",
+    });
+    setShowConfirmModal(true);
+  };
 
   return (
     <div className="min-h-[100vh] font-raleway">
@@ -253,8 +254,8 @@ const LurnyUser = () => {
                     <div key={index} className="relative flex flex-col">
                       <div className="absolute right-[8rem] sm:right-[2rem] top-[60rem] sm:top-[12rem] z-50 cursor-pointer">
                         <IoTrashOutline
-                          onClick={() => handleDelete(lurny._id)}
-                          className="text-[12rem] sm:text-[2rem] text-white hover:text-red-400"
+                          onClick={() => showDeleteConfirmModal(lurny._id)}
+                          className="text-[12rem] sm:text-[2rem] text-red-500 hover:text-red-400"
                         />
                       </div>
 
@@ -278,6 +279,7 @@ const LurnyUser = () => {
                   );
               })}
           </div>
+          <ConfirmModal {...confirmModalProps} show={showConfirmModal} />
           {myLurnies.length > 0 && (
             <NewPagination
               totalItems={myLurnies && myLurnies.length}
@@ -292,4 +294,4 @@ const LurnyUser = () => {
   );
 };
 
-export default LurnyUser;
+export default LurnyProfile;

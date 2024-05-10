@@ -3,6 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+import ProtectedRoute from "./routes/ProtectedRoutes";
+import AdminRoute from "./routes/AdminRoutes";
+
 import Loading from "./components/Loading";
 import About from "./pages/About";
 import Signup from "./pages/Signup";
@@ -10,11 +13,13 @@ import Signin from "./pages/Signin";
 import LurnyQuiz from "./pages/LurnyQuiz";
 import LurnyPrice from "./pages/LurnyPrice";
 import LurnyList from "./pages/LurnyList";
-import LurnyUser from "./pages/LurnyUser";
+import LurnyProfile from "./pages/LurnyProfile";
+import LurnySaved from "./pages/LurnySaved";
 import LurnySetting from "./pages/LurnySetting";
 import LurnySearch from "./pages/LurnySearch";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import ProtectedRoute from "./routes/ProtectedRoutes";
+
+import Lurny from "./pages/admin/Lurny";
 
 import { getLurnies } from "./actions/lurny";
 import { setUserDetails } from "./reducers/userSlice";
@@ -58,11 +63,15 @@ function App() {
           <Routes>
             <Route path="/lurny" element={<ProtectedRoute />}>
               <Route path="list" element={<LurnyList />} />
-              <Route path="profile" element={<LurnyUser />} />
+              <Route path="profile" element={<LurnyProfile />} />
+              <Route path="saved" element={<LurnySaved />} />
               <Route path="feeds/:id" element={<LurnyQuiz />} />
               <Route path="search" element={<LurnySearch />} />
               <Route path="price" element={<LurnyPrice />} />
               <Route path="setting" element={<LurnySetting />} />
+            </Route>
+            <Route path="/admin" element={<AdminRoute />}>
+              <Route path="lurny" element={<Lurny />} />
             </Route>
             <Route path="/" element={<About />} />
             <Route path="/signin" element={<Signin />} />

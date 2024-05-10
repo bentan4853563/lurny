@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 
 import defaultImg from "../assets/images/Lurny/1.jpg";
-import pdfImage from "../assets/images/Lurny/pdf.png";
+// import pdfImage from "../assets/images/Lurny/pdf.png";
 
 export default function MobileQuizItem({
   data,
@@ -34,14 +34,16 @@ export default function MobileQuizItem({
   const [answered, setAnswered] = useState(false);
   const [isShowCorrectAnswer, setIsShowCorrectAnswer] = useState(false);
 
+  const [imageUrl, setImageUrl] = useState(null);
+
   // const [translatedTitle, setTranslatedTitle] = useState("");
   // const [translatedSummary, setTranslatedSummary] = useState([]);
   // const [translatedQuestions, setTranslatedQuestions] = useState([]);
   // const [translatedAnswers, setTranslatedAnswers] = useState([]);
   // const [translatedUserName, setTranslatedUserName] = useState("");
 
-  const [touchStart, setTouchStart] = useState(0);
-  const [touchEnd, setTouchEnd] = useState(0);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
 
   const [userData, setUserData] = useState(null);
 
@@ -173,6 +175,24 @@ export default function MobileQuizItem({
   // };
 
   // Set image url
+  useEffect(() => {
+    if (isYoutubeUrl(url)) {
+      setImageUrl(getThumbnailURLFromVideoURL(url));
+    } else if (image) {
+      const img = new Image();
+
+      img.onload = () => {
+        setImageUrl(image);
+      };
+      img.onerror = () => {
+        setImageUrl(defaultImg);
+      };
+
+      img.src = image;
+    } else {
+      setImageUrl(defaultImg);
+    }
+  }, [image, url]);
 
   const isYoutubeUrl = (url) => {
     if (url) {
@@ -181,13 +201,15 @@ export default function MobileQuizItem({
       return false;
     }
   };
-  const getDefaultImg = (image, url) => {
-    if (isYoutubeUrl(url)) {
-      return getThumbnailURLFromVideoURL(url);
-    } else if (image.slice(1, 4) === "url") {
-      return pdfImage;
-    } else return defaultImg;
-  };
+
+  // const getDefaultImg = (image, url) => {
+  //   if (isYoutubeUrl(url)) {
+  //     return getThumbnailURLFromVideoURL(url);
+  //   } else if (image.slice(1, 4) === "url") {
+  //     return pdfImage;
+  //   } else return defaultImg;
+  // };
+
   function getYoutubeVideoID(url) {
     const regExp =
       // eslint-disable-next-line no-useless-escape
@@ -204,8 +226,9 @@ export default function MobileQuizItem({
     return `https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`;
   }
 
-  const newImg = getDefaultImg(image, url);
-
+  const removePrefix = (sentence) => {
+    return sentence.replace(/^[A-Z]\. /, " ");
+  };
   // change quiz
   const handleNextQuiz = () => {
     if (currentQuestionNumber < quiz.length) {
@@ -228,7 +251,7 @@ export default function MobileQuizItem({
   };
 
   const moveSliderRight = () => {
-    if (content === 0 && summaryNumber < summary.length - 1) {
+    if (content === 0 && summaryNumber < summary.length) {
       setSummaryNumber(summaryNumber + 1);
     }
     if (content === 1 && currentQuestionNumber < quiz.length - 1) {
@@ -238,6 +261,7 @@ export default function MobileQuizItem({
     }
   };
 
+  // Handle touch start
   function handleTouchStart(e) {
     setTouchStart({
       x: e.targetTouches[0].clientX,
@@ -245,6 +269,7 @@ export default function MobileQuizItem({
     });
   }
 
+  // Handle touch move
   function handleTouchMove(e) {
     setTouchEnd({
       x: e.targetTouches[0].clientX,
@@ -252,20 +277,38 @@ export default function MobileQuizItem({
     });
   }
 
+  // Handle touch end
   function handleTouchEnd() {
-    if (touchStart.x - touchEnd.x > 100) {
-      moveSliderRight();
-    }
-    if (touchStart.x - touchEnd.x < -100) {
-      moveSliderLeft();
+    if (!touchStart || !touchEnd) {
+      return; // Avoid errors if touchStart or touchEnd are null
     }
 
-    if (touchStart.y - touchEnd.y > 100) {
-      handleClick(index + 1);
+    const diffX = touchStart.x - touchEnd.x;
+    const diffY = touchStart.y - touchEnd.y;
+
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      // Horizontal swipe
+      if (diffX > 100) {
+        // Swipe left
+        moveSliderRight();
+      } else if (diffX < -100) {
+        // Swipe right
+        moveSliderLeft();
+      }
+    } else {
+      // Vertical swipe
+      if (diffY > 100) {
+        // Swipe up
+        handleClick(index + 1);
+      } else if (diffY < -100) {
+        // Swipe down
+        handleClick(index - 1);
+      }
     }
-    if (touchStart.y - touchEnd.y < -100) {
-      handleClick(index - 1);
-    }
+
+    // Reset touch states
+    setTouchStart(null);
+    setTouchEnd(null);
   }
 
   // const translations = {
@@ -358,15 +401,11 @@ export default function MobileQuizItem({
         className="w-full"
       >
         {content === 0 && (
-          <div className="w-full h-[64vh] sm:h-[56rem] relative cursor-pointer">
+          <div className="w-full h-[64vh] relative cursor-pointer">
             {userData && (
-              <div className="flex flex-col h-full justify-center items-center relative animate__animated animate__flipInY">
+              <div className="flex flex-col h-full justify-center items-center relative">
                 <img
-                  src={
-                    userData.email === "bentan010918@gmail.com"
-                      ? defaultImg
-                      : newImg
-                  }
+                  src={imageUrl}
                   alt={title}
                   className="w-full h-full object-cover rounded-[8rem]"
                 />
@@ -404,14 +443,12 @@ export default function MobileQuizItem({
                       summaryNumber === index + 1 && (
                         <div
                           key={index}
-                          className={`w-5/6 h-3/4 bg-white/60 rounded-[8rem] text-zinc-700 font-bold flex flex-col items-center justify-center gap-[2rem] p-[8rem] ${
-                            summaryNumber === 1
-                              ? "animate__animated animate__flipInY"
-                              : "animate__animated animate__fadeIn"
-                          } absolute`}
+                          className={`w-5/6 h-3/4 bg-white/90 rounded-[8rem] text-zinc-700 font-bold flex flex-col items-center justify-center gap-[2rem] p-[8rem] absolute`}
                         >
-                          <span className="text-[12rem]">{index + 1}</span>
-                          <p className="text-[10rem]">{bullet}</p>
+                          <span className="text-[12rem]">
+                            {index + 1} / {summary.length}
+                          </span>
+                          <p className="text-[10rem]">{removePrefix(bullet)}</p>
                         </div>
                       )
                     );
@@ -423,13 +460,9 @@ export default function MobileQuizItem({
         {content === 1 && (
           <div className="w-full h-[64vh] sm:h-[56rem] relative cursor-pointer">
             {currentQuestionNumber === 0 && (
-              <div className="h-full relative animate__animated animate__flipInY">
+              <div className="h-full relative">
                 <img
-                  src={
-                    userData.email === "bentan010918@gmail.com"
-                      ? defaultImg
-                      : newImg
-                  }
+                  src={imageUrl}
                   alt={title}
                   className="w-full h-full object-cover rounded-[8rem]"
                 />
@@ -462,7 +495,7 @@ export default function MobileQuizItem({
             )}
 
             {currentQuestionNumber > 0 && (
-              <div className="h-full bg-white p-[12rem] rounded-[8rem] flex flex-col justify-center gap-[6rem] sm:gap-[2rem] items-start">
+              <div className="h-full bg-white p-[12rem] rounded-[8rem] flex flex-col justify-center gap-[12rem] items-start">
                 {/* Question */}
                 <p className="text-black text-left text-[12rem] leading-[12rem] font-semibold">
                   Q{currentQuestionNumber}:{" "}
@@ -471,7 +504,7 @@ export default function MobileQuizItem({
 
                 <ToastContainer />
 
-                <div className=" w-full flex flex-col gap-[4rem] items-start">
+                <div className=" w-full flex flex-col gap-[8rem] items-start">
                   {quiz[currentQuestionNumber - 1].answer.map(
                     (translatedAnswer, index) => (
                       // Answer
@@ -497,11 +530,13 @@ export default function MobileQuizItem({
                         key={index}
                         onClick={() => !answered && setAnswerNumber(index)}
                       >
-                        <p className="flex flex-1 text-black">
+                        <p className="flex flex-1 text-black gap-[4rem]">
                           <span className="mr-[4rem]">
-                            {String.fromCharCode(index + 65)}
+                            {String.fromCharCode(index + 65)}.
                           </span>
-                          <span className="text-left">{translatedAnswer}</span>
+                          <span className="text-left">
+                            {removePrefix(translatedAnswer)}
+                          </span>
                         </p>
                         {answered &&
                           quiz[currentQuestionNumber - 1].correctanswer ===
@@ -556,13 +591,9 @@ export default function MobileQuizItem({
         {content === 2 && (
           <div className="w-full h-[64vh] sm:h-[56rem] relative cursor-pointer">
             {currentQuestionNumber === 0 && (
-              <div className="h-full relative animate__animated animate__flipInY">
+              <div className="h-full relative">
                 <img
-                  src={
-                    userData.email === "bentan010918@gmail.com"
-                      ? defaultImg
-                      : newImg
-                  }
+                  src={imageUrl}
                   alt={title}
                   className="w-full h-full object-cover rounded-[8rem]"
                 />
