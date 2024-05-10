@@ -10,7 +10,7 @@ import { logout } from "../reducers/userSlice";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 
-import { GrUserAdmin } from "react-icons/gr";
+// import { GrUserAdmin } from "react-icons/gr";
 import { IoCompassOutline } from "react-icons/io5";
 import { IoSearchSharp } from "react-icons/io5";
 import LetterLogo from "../assets/icons/letter_logo.png";
@@ -67,11 +67,11 @@ export default function Header() {
         />
       </Link>
       <div className="flex items-center gap-[4rem]">
-        {lurnies.length > 0 && (
+        {/* {lurnies.length > 0 && (
           <Link to={`/admin/lurny`}>
             <GrUserAdmin className="text-zinc-300 text-[16rem] sm:text-[3.2rem] hover:text-gray-400" />
           </Link>
-        )}
+        )} */}
         {lurnies.length > 0 && (
           <Link to={`/lurny/feeds/${lurnies[0]._id}`}>
             <IoCompassOutline className="text-zinc-300 text-[16rem] sm:text-[4rem] hover:text-gray-400" />
