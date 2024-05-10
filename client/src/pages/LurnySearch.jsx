@@ -36,9 +36,17 @@ const LurnySearch = () => {
     const collectionText = lurny.collections?.join(" ") || "";
     const summaryText = lurny.summary || "";
     const titleText = lurny.title || "";
+    const quizContent =
+      lurny.quiz
+        ?.map((quizItem) => {
+          const questionText = quizItem.question || "";
+          const answersText = quizItem.answers?.join(" ") || "";
+          return `${questionText} ${answersText}`;
+        })
+        .join(" ") || "";
 
     const searchWords = searchTerm.toLowerCase().split(" ");
-    const textToSearch = [collectionText, summaryText, titleText]
+    const textToSearch = [collectionText, summaryText, titleText, quizContent]
       .join(" ")
       .toLowerCase();
 
@@ -54,6 +62,8 @@ const LurnySearch = () => {
     }
   }, [searchTerm, publishedLurnies]);
 
+  console.log("filteredLurnies", filteredLurnies);
+
   return (
     <div className="h-[100vh] font-raleway">
       <Header />
@@ -61,13 +71,13 @@ const LurnySearch = () => {
 
       <div className="w-full bg-[#262626] flex flex-col px-[12rem] py-[4rem] gap-[4rem]">
         {/* Search bar */}
-        <div className="bg-[#1A1A1A] w-full px-[1.5rem] py-[1rem] flex flex-item items-center rounded-[0.5rem]">
-          <ImSearch className="text-white text-[3rem]" />
+        <div className="bg-transparent w-full px-[1.5rem] py-[0.5rem] flex flex-item items-center border border-gray-500 focus-within:border-white rounded-[0.5rem]">
+          <ImSearch className="text-white text-[2rem]" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-transparent text-white text-[2.5rem] px-[1.5rem] flex flex-1 focus:outline-none"
+            className="bg-transparent text-white text-[2rem] px-[1.5rem] flex flex-1 focus:outline-none"
             placeholder="Search topics and people"
           />
         </div>
