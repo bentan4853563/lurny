@@ -405,7 +405,8 @@ export default function MobileQuizItem({
             {userData && (
               <div className="flex flex-col h-full justify-center items-center relative">
                 <img
-                  src={imageUrl}
+                  // src={imageUrl}
+
                   alt={title}
                   className="w-full h-full object-cover rounded-[8rem]"
                 />
@@ -462,7 +463,12 @@ export default function MobileQuizItem({
             {currentQuestionNumber === 0 && (
               <div className="h-full relative">
                 <img
-                  src={imageUrl}
+                  // src={imageUrl}
+                  src={
+                    userData.email === "bentan010918@gmail.com"
+                      ? defaultImg
+                      : imageUrl
+                  }
                   alt={title}
                   className="w-full h-full object-cover rounded-[8rem]"
                 />
@@ -593,7 +599,8 @@ export default function MobileQuizItem({
             {currentQuestionNumber === 0 && (
               <div className="h-full relative">
                 <img
-                  src={imageUrl}
+                  // src={imageUrl}
+
                   alt={title}
                   className="w-full h-full object-cover rounded-[8rem]"
                 />

@@ -416,7 +416,12 @@ function LurnyQuiz() {
               </span>
               {userData && (
                 <img
-                  src={imageUrl}
+                  // src={imageUrl}
+                  src={
+                    userData.email === "bentan010918@gmail.com"
+                      ? defaultImg
+                      : imageUrl
+                  }
                   alt=""
                   className="w-full h-[64rem] sm:h-[20rem] object-cover rounded-[2rem] mt-[3rem]"
                 />

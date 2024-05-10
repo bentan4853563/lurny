@@ -411,7 +411,12 @@ export default function QuizItem({
           {summaryNumber === 0 && userData && (
             <div className="h-full flex flex-col justify-start relative animate__animated animate__flipInY">
               <img
-                src={imageUrl}
+                // src={imageUrl}
+                src={
+                  userData.email === "bentan010918@gmail.com"
+                    ? defaultImg
+                    : imageUrl
+                }
                 alt={title}
                 className="w-full h-full object-cover rounded-[8rem] sm:rounded-[2rem]"
               />
@@ -491,7 +496,12 @@ export default function QuizItem({
             <div className="h-full relative animate__animated animate__flipInY">
               {userData && (
                 <img
-                  src={imageUrl}
+                  // src={imageUrl}
+                  src={
+                    userData.email === "bentan010918@gmail.com"
+                      ? defaultImg
+                      : imageUrl
+                  }
                   alt={title}
                   className="w-full h-full object-cover rounded-2xl"
                 />
