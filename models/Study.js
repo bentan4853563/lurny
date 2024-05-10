@@ -9,6 +9,12 @@ const StudySchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "lurnies",
   },
+  type: {
+    type: Strig,
+  },
+  number: {
+    type: Number,
+  },
   learn_count: {
     type: Number,
     default: 1,
@@ -16,12 +22,6 @@ const StudySchema = mongoose.Schema({
   last_learned: {
     type: Date,
   },
-  // repeat: {
-  //   type: Number,
-  // },
-  // period: {
-  //   type: Number,
-  // },
 });
 
 module.exports = mongoose.model("study", StudySchema);

@@ -8,7 +8,9 @@ const Study = require("../../models/Study");
 router.get("/get/:user_id", async (req, res) => {
   try {
     const user_id = req.params.id;
-    const studies = Study.find({ user_id }).pupulate("user").populate("lurny");
+    const studies = Study.find({ user: user_id })
+      .pupulate("user")
+      .populate("lurny");
     res.send(studies);
   } catch (error) {
     console.log(error);
@@ -17,8 +19,13 @@ router.get("/get/:user_id", async (req, res) => {
 
 router.post("/save", async (req, res) => {
   try {
-    const { user_id, lurny_id } = req.body;
-    const check = await Study.findOne({ user: user_id, lurny: lurny_id });
+    const { user_id, lurny_id, type, number } = req.body;
+    const check = await Study.findOne({
+      user: user_id,
+      lurny: lurny_id,
+      type,
+      number,
+    });
     let response = null;
     if (check) {
       // Increment learn_count

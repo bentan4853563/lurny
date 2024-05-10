@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Tooltip } from "react-tooltip";
@@ -7,10 +8,12 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
+import { IoTrashOutline } from "react-icons/io5";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 
 import defaultImg from "../assets/images/Lurny/default.png";
-import { useNavigate } from "react-router-dom";
+import ROSIIcon from "../assets/icons/ROSI_icon.png";
+import { handleRemember } from "../actions/study";
 
 export default function QuizItem({
   data,
@@ -25,7 +28,7 @@ export default function QuizItem({
   const { _id, title, summary, quiz, image, url, user } = data;
 
   // const api_key = import.meta.env.VITE_CLOUD_TRANSLATE_API_KEY;
-  const [summaryNumber, setSummaryNumber] = useState(0);
+  const [summaryNumber, setSummaryNumber] = useState(2);
 
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(0);
   const [answerNumber, setAnswerNumber] = useState(null);
@@ -53,7 +56,7 @@ export default function QuizItem({
   }, []);
 
   useEffect(() => {
-    setSummaryNumber(0);
+    setSummaryNumber(2);
     setCurrentQuestionNumber(0);
   }, [currentQuizId]);
 
@@ -75,7 +78,7 @@ export default function QuizItem({
   // }, [language, data]);
 
   useEffect(() => {
-    setSummaryNumber(0);
+    setSummaryNumber(2);
     setCurrentQuestionNumber(0);
   }, [content]);
 
@@ -405,7 +408,7 @@ export default function QuizItem({
     >
       {content === 0 && (
         <div
-          className="w-full h-[72vh] sm:h-[80rem] relative cursor-pointer"
+          className="w-full h-[72vh] sm:h-[80rem] relative cursor-pointer sm:cursor-default"
           onClick={() => navigate(`/lurny/feeds/${_id}`)}
         >
           {summaryNumber === 0 && userData && (
@@ -453,7 +456,7 @@ export default function QuizItem({
                 summaryNumber === index + 1 && (
                   <div
                     key={index}
-                    className={`w-full h-full bg-white rounded-2xl text-[8rem] sm:text-[2.5rem] text-[#404040] font-bold flex flex-col items-center justify-center gap-[2rem] p-[8rem] ${
+                    className={`relative w-full h-full bg-white rounded-2xl text-[8rem] sm:text-[2.5rem] text-[#404040] font-bold flex flex-col items-center justify-center gap-[2rem] p-[8rem] ${
                       summaryNumber === 1
                         ? "animate__animated animate__flipInY"
                         : "animate__animated animate__fadeIn"
@@ -463,6 +466,23 @@ export default function QuizItem({
                       {index + 1} / {summary.length}
                     </span>
                     <p>{bullet}</p>
+                    <div className="absolute flex gap-[2rem] sm:bottom-[4rem] sm:right-[4rem]">
+                      <div className="border-2 border-gray-300 rounded-full w-[4rem] flex justify-center items-center">
+                        <IoTrashOutline className="bg-yellow-400 rounded-full p-1 box-content" />
+                      </div>
+                      <img
+                        src={ROSIIcon}
+                        onClick={() =>
+                          handleRemember(
+                            userData.id,
+                            _id,
+                            "stub",
+                            summaryNumber
+                          )
+                        }
+                        className="w-[4rem] border-2 border-gray-300 rounded-full"
+                      />
+                    </div>
                   </div>
                 )
               );
