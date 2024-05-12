@@ -33,9 +33,7 @@ app.use((req, res, next) => {
 
 app.use("/api/lurny", require("./routes/api/lurnyRoutes"));
 app.use("/api/auth", require("./routes/api/newAuth"));
-app.get("/hello", (req, res) => {
-  res.send("Hello");
-});
+app.use("/api/study", require("./routes/api/studyRouter"));
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/dist"));
