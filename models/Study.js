@@ -7,10 +7,10 @@ const StudySchema = mongoose.Schema({
   },
   lurny: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "lurnies",
+    ref: "lurny",
   },
   type: {
-    type: Strig,
+    type: String,
   },
   number: {
     type: Number,

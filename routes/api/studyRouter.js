@@ -5,11 +5,12 @@ const User = require("../../models/User");
 const Lurny = require("../../models/Lurny");
 const Study = require("../../models/Study");
 
-router.get("/get/:user_id", async (req, res) => {
+router.get("/get/:id", async (req, res) => {
   try {
     const user_id = req.params.id;
-    const studies = Study.find({ user: user_id })
-      .pupulate("user")
+    console.log("user_id", user_id);
+    const studies = await Study.find({ user: user_id })
+      .populate("user")
       .populate("lurny");
     res.send(studies);
   } catch (error) {
@@ -26,6 +27,7 @@ router.post("/save", async (req, res) => {
       type,
       number,
     });
+    console.log("check", check);
     let response = null;
     if (check) {
       // Increment learn_count

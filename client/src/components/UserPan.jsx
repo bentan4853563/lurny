@@ -9,6 +9,7 @@ function UserPan({ all }) {
   const dispatch = useDispatch();
 
   const [userData, setUserData] = useState(null);
+  const [endPoint, setEndPoint] = useState(null);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("token");
@@ -23,13 +24,18 @@ function UserPan({ all }) {
     }
   }, [userData]);
 
+  useEffect(() => {
+    getEndPoint;
+  }, [dispatch]);
+
   const getEndPoint = () => {
     const currentHref = window.location.href;
     const parsedUrl = new URL(currentHref);
     const pathSegmants = parsedUrl.pathname
       .split("/")
       .filter((segment) => segment);
-    return pathSegmants[pathSegmants.length - 1];
+    // return pathSegmants[pathSegmants.length - 1];
+    setEndPoint(pathSegmants);
   };
 
   return (
@@ -60,7 +66,7 @@ function UserPan({ all }) {
       <Link
         to="/lurny/saved"
         className={`w-full active:text-gray-300 hover:text-white text-left text-[2rem] font-bold border-b border-white cursor-pointer ${
-          getEndPoint() == "profile" ? "text-white" : "text-gray-500"
+          endPoint && endPoint === "profile" ? "text-white" : "text-gray-500"
         } `}
       >
         Saved Lurnies (0)
@@ -68,7 +74,7 @@ function UserPan({ all }) {
       <Link
         to="/lurny/profile"
         className={`w-full active:text-gray-300 hover:text-white text-left text-[2rem] font-bold border-b border-white cursor-pointer ${
-          getEndPoint() == "profile" ? "text-white" : "text-gray-500"
+          endPoint && endPoint === "profile" ? "text-white" : "text-gray-500"
         } `}
       >
         My Lurnies ({all})

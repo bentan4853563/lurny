@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { confirmAlert } from "react-confirm-alert"; // Import
+import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -17,7 +17,6 @@ import Header from "../components/Header";
 import UserPan from "../components/UserPan";
 import LurnyItem from "../components/LurnyItem";
 import NewPagination from "../components/NewPagination";
-import ConfirmModal from "../components/ComfirmModal";
 
 import {
   handleDeleteLurny,
@@ -34,8 +33,6 @@ const LurnyProfile = () => {
   const [myLurnies, setMyLurnies] = useState([]);
   const [tempData, setTempData] = useState(null);
   const [showSidePan, setShowSidePan] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [confirmModalProps, setConfirmModalProps] = useState({});
   // const [showAll, setShowAll] = useState(true);
   // const [filterdLurnies, setFilteredLurnies] = useState([]);
 
@@ -198,19 +195,26 @@ const LurnyProfile = () => {
     }
   };
 
-  const showDeleteConfirmModal = (id) => {
-    setConfirmModalProps({
-      show: true,
-      onConfirm: () => {
-        dispatch(handleDeleteLurny(id));
-        setShowConfirmModal(false);
-      },
-      onClose: () => setShowConfirmModal(false),
-      title: "Delete Lurny",
-      message: "Are you sure you want to delete this Lurny?",
-    });
-    setShowConfirmModal(true);
-  };
+  const handleDelete = useCallback(
+    async (id) => {
+      confirmAlert({
+        title: "Are you sure to delete this Lurny?",
+        buttons: [
+          {
+            label: "Yes",
+            onClick: async () => {
+              dispatch(handleDeleteLurny(id));
+            },
+          },
+          {
+            label: "No",
+            onClick: () => console.log("Click No"),
+          },
+        ],
+      });
+    },
+    [dispatch]
+  );
 
   return (
     <div className="min-h-[100vh] font-raleway">
@@ -254,7 +258,7 @@ const LurnyProfile = () => {
                     <div key={index} className="relative flex flex-col">
                       <div className="absolute right-[8rem] sm:right-[2rem] top-[60rem] sm:top-[12rem] z-50 cursor-pointer">
                         <IoTrashOutline
-                          onClick={() => showDeleteConfirmModal(lurny._id)}
+                          onClick={() => handleDelete(lurny._id)}
                           className="text-[12rem] sm:text-[2rem] text-red-500 hover:text-red-400"
                         />
                       </div>
@@ -279,7 +283,6 @@ const LurnyProfile = () => {
                   );
               })}
           </div>
-          <ConfirmModal {...confirmModalProps} show={showConfirmModal} />
           {myLurnies.length > 0 && (
             <NewPagination
               totalItems={myLurnies && myLurnies.length}

@@ -14,6 +14,7 @@ import { IoIosInformationCircleOutline } from "react-icons/io";
 import defaultImg from "../assets/images/Lurny/default.png";
 import ROSIIcon from "../assets/icons/ROSI_icon.png";
 import { handleRemember } from "../actions/study";
+import { useDispatch } from "react-redux";
 
 export default function QuizItem({
   data,
@@ -24,6 +25,7 @@ export default function QuizItem({
   // language,
 }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { _id, title, summary, quiz, image, url, user } = data;
 
@@ -473,14 +475,16 @@ export default function QuizItem({
                       <img
                         src={ROSIIcon}
                         onClick={() =>
-                          handleRemember(
-                            userData.id,
-                            _id,
-                            "stub",
-                            summaryNumber
+                          dispatch(
+                            handleRemember(
+                              userData.id,
+                              _id,
+                              "stub",
+                              summaryNumber
+                            )
                           )
                         }
-                        className="w-[4rem] border-2 border-gray-300 rounded-full"
+                        className="w-[4rem] border-2 border-gray-300 rounded-full hover:transform hover:scale-105 cursor-pointer"
                       />
                     </div>
                   </div>
