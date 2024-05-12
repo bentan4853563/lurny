@@ -7,7 +7,7 @@ const Study = require("../../models/Study");
 const { config } = require("dotenv");
 const Material = require("../../models/Material");
 
-const QUIZ_SERVER = "http://localhost:5111";
+const QUIZ_SERVER = "https://lurny.net:5173";
 
 router.get("/get/:id", async (req, res) => {
   try {
