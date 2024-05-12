@@ -31,7 +31,6 @@ import QuizItem from "../components/QuizItem";
 import MobileQuizItem from "../components/MobileQuizItem";
 import TranslateComponent from "../components/TranslateComponent";
 import { logout } from "../reducers/userSlice";
-import { handleRemember } from "../actions/study";
 
 function LurnyQuiz() {
   const dispatch = useDispatch();
@@ -44,7 +43,6 @@ function LurnyQuiz() {
   const [relatedLurnies, setRelatedLurnies] = useState([]);
 
   const [content, setContent] = useState(0);
-  const [openRememberModal, setOpenRememberModal] = useState(false);
 
   const [imageUrl, setImageUrl] = useState(null);
 
@@ -71,6 +69,7 @@ function LurnyQuiz() {
       ) {
         const data = event.data.payload;
         localStorage.setItem("tempData", JSON.stringify(data));
+        navigate("/lurny/profile");
       }
     }
 
@@ -138,6 +137,23 @@ function LurnyQuiz() {
     }
   };
 
+  const getYoutubeVideoID = (url) => {
+    const regExp =
+      // eslint-disable-next-line no-useless-escape
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? match[2] : null;
+  };
+
+  const getThumbnailURLFromVideoURL = (videoURL) => {
+    const videoID = getYoutubeVideoID(videoURL);
+    if (!videoID) {
+      // throw new Error("Invalid YouTube URL");
+      return defaultImg;
+    }
+    return `https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`;
+  };
+
   useEffect(() => {
     if (isYoutubeUrl(url)) {
       setImageUrl(getThumbnailURLFromVideoURL(url));
@@ -157,34 +173,12 @@ function LurnyQuiz() {
     }
   }, [image, url]);
 
-  function getYoutubeVideoID(url) {
-    const regExp =
-      // eslint-disable-next-line no-useless-escape
-      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
-    const match = url.match(regExp);
-    return match && match[2].length === 11 ? match[2] : null;
-  }
-
-  function getThumbnailURLFromVideoURL(videoURL) {
-    const videoID = getYoutubeVideoID(videoURL);
-    if (!videoID) {
-      // throw new Error("Invalid YouTube URL");
-      return defaultImg;
-    }
-    return `https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`;
-  }
-
   // const newImg = getDefaultImg(quizData.image, quizData.url);
 
-  const buttons = ["Stubs", "Quiz Me!", "Remember this"];
+  const buttons = ["Stubs", "Quiz Me!"];
 
   const handleClickHeadButton = (index) => {
-    if (index < 2) {
-      setContent(index);
-    } else {
-      dispatch(handleRemember(userData.id, lurnies[selectedIndex]._id));
-      setOpenRememberModal(true);
-    }
+    setContent(index);
   };
 
   const handleQuizItemClick = (index) => {
@@ -227,12 +221,6 @@ function LurnyQuiz() {
     };
   }, [selectedIndex, lurnies]);
 
-  const handleClickModal = (e) => {
-    if (e.target.id === "remember-modal") {
-      setOpenRememberModal(false);
-    }
-  };
-
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
@@ -241,7 +229,7 @@ function LurnyQuiz() {
   return (
     <div className="min-h-[100vh] bg-black font-raleway flex flex-col justify-center sm:justify-start">
       {/* Header */}
-      <div className="w-full bg-black px-[4rem] sm:px-[20rem] flex justify-between items-center mb-[4rem] sm:mb-0 sm:py-[1.5rem]">
+      <div className="w-full bg-black px-[4rem] sm:px-[20rem] flex justify-between items-center mb-[4rem] sm:mb-0 sm:py-[2rem]">
         <Link to="/lurny/search" className="select-none">
           <img
             src={LetterLogo}
@@ -408,7 +396,7 @@ function LurnyQuiz() {
       {/* body */}
       <div className="flex flex-wrap px-[4rem] sm:px-[20rem] py-[2rem] gap-[8rem] sm:gap-0">
         {/* Image */}
-        <div className="hidden sm:flex w-[36rem]">
+        <div className="hidden sm:flex w-[32rem]">
           {quizData && Object.keys(quizData).length > 0 && (
             <div className="w-full px-[16rem] sm:px-0 flex flex-col ">
               <span className="text-white text-start text-[7rem] sm:text-[2.5rem] leading-[3rem]">
@@ -574,7 +562,11 @@ function LurnyQuiz() {
                             onClick={() => {
                               navigate(`/lurny/feeds/${item._id}`);
                             }}
-                            src={getDefaultImg(item.image, item.url)}
+                            src={
+                              userData.email === "bentan010918@gmail.com"
+                                ? defaultImg
+                                : getDefaultImg(item.image, item.url)
+                            }
                             alt="lurny image"
                             className="w-[10rem] h-[6rem] rounded-lg cursor-pointer"
                           />
@@ -598,30 +590,6 @@ function LurnyQuiz() {
           )}
         </div>
       </div>
-
-      {/* Remember Modal */}
-      {openRememberModal && (
-        <div
-          className="w-full h-full bg-black/20 flex items-center justify-center absolute top-0 left-0 z-50"
-          id="remember-modal"
-          onClick={handleClickModal}
-        >
-          <div className="w-[80rem] p-[4rem] bg-[#404040] rounded-[1rem] flex flex-col items-center gap-[4rem] text-white text-[2rem]">
-            <span className="">
-              This Lurny is now saved in your Saved Lurnies folder for
-              Repetition over Optimally Spaced Intervals (ROSI)
-            </span>
-            <div className="flex items-center justify-center gap-[4rem]">
-              <button className="bg-[#7F51BA] hover:bg-[#583685] focus:outline-none">
-                Go to Saved Lurnies
-              </button>
-              <button className="bg-[#7F51BA] hover:bg-[#583685] focus:outline-none">
-                Go to ROSI Settings
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <ToastContainer />
 

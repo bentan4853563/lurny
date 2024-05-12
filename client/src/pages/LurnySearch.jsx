@@ -62,8 +62,6 @@ const LurnySearch = () => {
     }
   }, [searchTerm, publishedLurnies]);
 
-  console.log("filteredLurnies", filteredLurnies);
-
   return (
     <div className="h-[100vh] font-raleway">
       <Header />

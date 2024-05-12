@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Tooltip } from "react-tooltip";
@@ -13,8 +14,9 @@ import { IoIosInformationCircleOutline } from "react-icons/io";
 
 import defaultImg from "../assets/images/Lurny/default.png";
 import ROSIIcon from "../assets/icons/ROSI_icon.png";
+
+import { handleDeleteStubOrQuiz } from "../actions/lurny";
 import { handleRemember } from "../actions/study";
-import { useDispatch } from "react-redux";
 
 export default function QuizItem({
   data,
@@ -30,12 +32,14 @@ export default function QuizItem({
   const { _id, title, summary, quiz, image, url, user } = data;
 
   // const api_key = import.meta.env.VITE_CLOUD_TRANSLATE_API_KEY;
-  const [summaryNumber, setSummaryNumber] = useState(2);
+  const [summaryNumber, setSummaryNumber] = useState(0);
 
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(0);
   const [answerNumber, setAnswerNumber] = useState(null);
   const [answered, setAnswered] = useState(false);
   const [isShowCorrectAnswer, setIsShowCorrectAnswer] = useState(false);
+
+  const [openRememberModal, setOpenRememberModal] = useState(false);
 
   // const [translatedTitle, setTranslatedTitle] = useState("");
   // const [translatedSummary, setTranslatedSummary] = useState([]);
@@ -58,7 +62,7 @@ export default function QuizItem({
   }, []);
 
   useEffect(() => {
-    setSummaryNumber(2);
+    setSummaryNumber(0);
     setCurrentQuestionNumber(0);
   }, [currentQuizId]);
 
@@ -80,7 +84,7 @@ export default function QuizItem({
   // }, [language, data]);
 
   useEffect(() => {
-    setSummaryNumber(2);
+    setSummaryNumber(0);
     setCurrentQuestionNumber(0);
   }, [content]);
 
@@ -320,6 +324,29 @@ export default function QuizItem({
     }
   }
 
+  const handleDelete = (type, number) => {
+    dispatch(handleDeleteStubOrQuiz(type, number));
+  };
+
+  const onClickRemember = (user_id, lurny_id, type, number) => {
+    dispatch(handleRemember(user_id, lurny_id, type, number));
+    setOpenRememberModal(true);
+  };
+
+  const handleClickModal = (e) => {
+    if (e.target.id === "remember-modal") {
+      setOpenRememberModal(false);
+    }
+  };
+
+  const handleGotoROSISetting = () => {
+    navigate("/#");
+  };
+
+  const handleGotoSavedLurnies = () => {
+    navigate("/lurny/saved");
+  };
+
   // const translations = {
   //   en: {
   //     nextQuestion: "Next Question",
@@ -469,22 +496,57 @@ export default function QuizItem({
                     </span>
                     <p>{bullet}</p>
                     <div className="absolute flex gap-[2rem] sm:bottom-[4rem] sm:right-[4rem]">
-                      <div className="border-2 border-gray-300 rounded-full w-[4rem] flex justify-center items-center">
-                        <IoTrashOutline className="bg-yellow-400 rounded-full p-1 box-content" />
-                      </div>
+                      {userData.id === user._id && (
+                        <div
+                          onClick={() => handleDelete("stub", summaryNumber)}
+                          data-data-tooltip-id="delete-stub"
+                          className="border-2 border-gray-300 hover:border-yellow-400 active:border-yellow-600 rounded-full w-[4rem] flex justify-center items-center cursor-pointer"
+                        >
+                          <IoTrashOutline className="bg-yellow-400 rounded-full p-1 box-content" />
+                        </div>
+                      )}
                       <img
                         src={ROSIIcon}
+                        data-tooltip-id="remember-stub"
                         onClick={() =>
-                          dispatch(
-                            handleRemember(
-                              userData.id,
-                              _id,
-                              "stub",
-                              summaryNumber
-                            )
+                          onClickRemember(
+                            userData.id,
+                            _id,
+                            "stub",
+                            summaryNumber
                           )
                         }
-                        className="w-[4rem] border-2 border-gray-300 rounded-full hover:transform hover:scale-105 cursor-pointer"
+                        className="w-[4rem] border-2 border-gray-300 hover:border-yellow-400 active:border-yellow-600 rounded-full hover:transform hover:scale-105 cursor-pointer"
+                      />
+                      <Tooltip
+                        id="remember-stub"
+                        place="top"
+                        content="Save Stub"
+                        style={{
+                          width: "80px",
+                          textAlign: "center",
+                          backgroundColor: "#facc15",
+                          color: "black",
+                          borderRadius: "4px",
+                          padding: "6px",
+                          lineHeight: "12px",
+                          fontSize: "12px",
+                        }}
+                      />
+                      <Tooltip
+                        id="delete-stub"
+                        place="top"
+                        content="Delete Stub"
+                        style={{
+                          width: "80px",
+                          textAlign: "center",
+                          backgroundColor: "#facc15",
+                          color: "black",
+                          borderRadius: "4px",
+                          padding: "6px",
+                          lineHeight: "12px",
+                          fontSize: "12px",
+                        }}
                       />
                     </div>
                   </div>
@@ -495,7 +557,7 @@ export default function QuizItem({
           {summaryNumber > 0 && (
             <button
               onClick={handlePrevious}
-              className="hidden sm:flex items-center justify-center p-[0.5rem] sm:pl-2 text-white text-[12rem] sm:text-[3rem] bg-[#adadad] rounded-full focus:outline-none absolute -left-[2rem] top-1/2 z-30"
+              className="hidden sm:flex items-center justify-center p-[0.5rem] sm:pl-2 text-white text-[12rem] sm:text-[3rem] bg-[#adadad] hover:bg-neutral-400 active:bg-neutral-500 rounded-full focus:outline-none absolute -left-[2rem] top-1/2 z-30"
             >
               <IoIosArrowBack />
             </button>
@@ -503,7 +565,7 @@ export default function QuizItem({
           {summaryNumber < summary.length && (
             <button
               onClick={handleNext}
-              className="hidden sm:flex items-center justify-center p-[0.5rem] sm:pl-2 text-white text-[12rem] sm:text-[3rem] bg-[#adadad] rounded-full focus:outline-none absolute -right-[2rem] top-1/2 z-30"
+              className="hidden sm:flex items-center justify-center p-[0.5rem] sm:pl-2 text-white text-[12rem] sm:text-[3rem] bg-[#adadad] hover:bg-neutral-400 active:bg-neutral-500 rounded-full focus:outline-none absolute -right-[2rem] top-1/2 z-30"
             >
               <IoIosArrowForward />
             </button>
@@ -601,7 +663,7 @@ export default function QuizItem({
                         quiz[currentQuestionNumber - 1].correctanswer ===
                           quiz[currentQuestionNumber - 1].answer[index] && (
                           <IoIosInformationCircleOutline
-                            data-tooltip-id="correct-answer"
+                            id="correct-answer"
                             onClick={() =>
                               setIsShowCorrectAnswer(!isShowCorrectAnswer)
                             }
@@ -631,7 +693,7 @@ export default function QuizItem({
               {!answered ? (
                 <button
                   onClick={() => setAnswered(true)}
-                  className="bg-[#FFC36D] mx-auto mt-[2rem] text-[6rem] sm:text-[1.8rem] border-none focus:outline-none active:bg-yellow-300 text-black"
+                  className="bg-[#FFC36D] hover:bg-[#ebb161] active:bg-[#f1b765] mx-auto mt-[2rem] text-[6rem] sm:text-[1.8rem] border-none focus:outline-none text-black"
                 >
                   {/* {translations[language].submitAnswer} */}
                   Submit Answer
@@ -640,19 +702,76 @@ export default function QuizItem({
                 currentQuestionNumber < quiz.length && (
                   <button
                     onClick={handleNextQuiz}
-                    className="bg-[#FFC36D] mx-auto mt-[2rem] text-[6rem] sm:text-[1.8rem] border-none focus:outline-none active:bg-yellow-300 text-black"
+                    className="bg-[#FFC36D] hover:bg-[#ebb161] active:bg-[#f1b765] mx-auto mt-[2rem] text-[6rem] sm:text-[1.8rem] border-none focus:outline-none text-black"
                   >
                     {/* {translations[language].nextQuestion} */}
                     Next Question
                   </button>
                 )
               )}
+
+              {/* Remember button */}
+              <div className="absolute flex gap-[2rem] sm:bottom-[4rem] sm:right-[4rem]">
+                {userData.id === user._id && (
+                  <div
+                    onClick={() => handleDelete("quiz", currentQuestionNumber)}
+                    data-tooltip-id="delete-quiz"
+                    className="border-2 border-gray-300 hover:border-yellow-400 active:border-yello userData.id w-600 rounded-full w-[4rem] flex justify-center items-center cursor-pointer"
+                  >
+                    <IoTrashOutline className="bg-yellow-400 rounded-full p-1 box-content text-[2.5rem]" />
+                  </div>
+                )}
+                <img
+                  src={ROSIIcon}
+                  data-tooltip-id="remember-quiz"
+                  onClick={() =>
+                    onClickRemember(
+                      userData.id,
+                      _id,
+                      "quiz",
+                      currentQuestionNumber
+                    )
+                  }
+                  className="w-[4rem] border-2 border-gray-300 hover:border-yellow-400 active:border-yellow-600 rounded-full hover:transform hover:scale-105 cursor-pointer"
+                />
+                <Tooltip
+                  id="remember-quiz"
+                  place="top"
+                  content="Save Quiz"
+                  style={{
+                    width: "80px",
+                    textAlign: "center",
+                    backgroundColor: "#facc15",
+                    color: "black",
+                    borderRadius: "4px",
+                    padding: "6px",
+                    lineHeight: "12px",
+                    fontSize: "12px",
+                  }}
+                />
+                <Tooltip
+                  id="delete-quiz"
+                  place="top"
+                  content="Delete Quiz"
+                  style={{
+                    width: "80px",
+                    textAlign: "center",
+                    backgroundColor: "#facc15",
+                    color: "black",
+                    borderRadius: "4px",
+                    padding: "6px",
+                    lineHeight: "12px",
+                    fontSize: "12px",
+                  }}
+                />
+              </div>
             </div>
           )}
+
           {currentQuestionNumber > 0 && (
             <button
               onClick={handlePreviousQuiz}
-              className="hidden sm:flex items-center justify-center p-[0.5rem] sm:pl-2 text-white text-[12rem] sm:text-[3rem] bg-[#adadad] rounded-full focus:outline-none absolute -left-[2rem] top-1/2 z-30"
+              className="hidden sm:flex items-center justify-center p-[0.5rem] sm:pl-2 text-white text-[12rem] sm:text-[3rem] bg-[#adadad] hover:bg-neutral-400 active:bg-neutral-500 rounded-full focus:outline-none absolute -left-[2rem] top-1/2 z-30"
             >
               <IoIosArrowBack />
             </button>
@@ -660,11 +779,41 @@ export default function QuizItem({
           {currentQuestionNumber < quiz.length && (
             <button
               onClick={handleNextQuiz}
-              className="hidden sm:flex items-center justify-center p-[0.5rem] sm:pl-2 text-white text-[12rem] sm:text-[3rem] bg-[#adadad] rounded-full focus:outline-none absolute -right-[2rem] top-1/2 z-30"
+              className="hidden sm:flex items-center justify-center p-[0.5rem] sm:pl-2 text-white text-[12rem] sm:text-[3rem] bg-[#adadad] hover:bg-neutral-400 active:bg-neutral-500 rounded-full focus:outline-none absolute -right-[2rem] top-1/2 z-30"
             >
               <IoIosArrowForward />
             </button>
           )}
+        </div>
+      )}
+
+      {/* Remember Modal */}
+      {openRememberModal && (
+        <div
+          className="w-full h-full bg-black/20 fixed flex items-center justify-center top-0 left-0 z-50"
+          id="remember-modal"
+          onClick={handleClickModal}
+        >
+          <div className="w-[80rem] p-[4rem] bg-[#404040] rounded-[1rem] flex flex-col items-center gap-[4rem] text-white text-[2rem]">
+            <span className="">
+              This Lurny is now saved in your Saved Lurnies folder for
+              Repetition over Optimally Spaced Intervals (ROSI)
+            </span>
+            <div className="flex items-center justify-center gap-[4rem]">
+              <button
+                onClick={handleGotoSavedLurnies}
+                className="bg-[#7F51BA] hover:bg-[#583685] focus:outline-none"
+              >
+                Go to Saved Lurnies
+              </button>
+              <button
+                onClick={handleGotoROSISetting}
+                className="bg-[#7F51BA] hover:bg-[#583685] focus:outline-none"
+              >
+                Go to ROSI Settings
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

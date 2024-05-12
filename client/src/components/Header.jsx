@@ -38,7 +38,6 @@ export default function Header() {
         // setTempData(JSON.stringify(data));
       }
     }
-
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
   }, []);

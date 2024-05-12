@@ -109,3 +109,30 @@ export const handleDeleteLurny = (id) => async (dispatch) => {
     });
   }
 };
+
+export const handleDeleteStubOrQuiz = (type, number) => async (dispatch) => {
+  try {
+    const response = await fetch(`${backend_url}/api/lurny/deleteStubOrQuiz`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": true,
+      },
+      body: JSON.stringify({ type, number }),
+    });
+    if (response.ok) {
+      dispatch(deleteLurny(response));
+      toast.success(`Deleted ${type} successfuly!`, {
+        position: "top-right",
+      });
+    } else {
+      toast.error("Faild delete!", {
+        position: "top-right",
+      });
+    }
+  } catch (error) {
+    toast.error("Network error when trying to delete lurny!", {
+      position: "top-right",
+    });
+  }
+};

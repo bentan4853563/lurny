@@ -15,6 +15,16 @@ const StudySchema = mongoose.Schema({
   number: {
     type: Number,
   },
+  material: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "material",
+  },
+  image: {
+    type: String,
+  },
+  url: {
+    type: String,
+  },
   learn_count: {
     type: Number,
     default: 1,

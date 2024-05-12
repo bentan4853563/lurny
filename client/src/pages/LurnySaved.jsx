@@ -10,16 +10,15 @@ import { IoIosArrowForward } from "react-icons/io";
 
 import Header from "../components/Header";
 import UserPan from "../components/UserPan";
-import LurnyItem from "../components/LurnyItem";
 import NewPagination from "../components/NewPagination";
 
-import {} from "../actions/lurny";
+import MaterialItem from "../components/MaterialItem";
 
 const LurnySaved = () => {
-  const { lurnies } = useSelector((state) => state.lurny);
+  const { studies } = useSelector((state) => state.study);
 
   const [userDetails, setUserDetails] = useState(null);
-  const [myLurnies, setMyLurnies] = useState([]);
+  const [myStudies, setMyStudies] = useState([]);
   const [showSidePan, setShowSidePan] = useState(false);
   // const [showAll, setShowAll] = useState(true);
   // const [filterdLurnies, setFilteredLurnies] = useState([]);
@@ -30,9 +29,9 @@ const LurnySaved = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems =
-    myLurnies &&
-    myLurnies.length > 0 &&
-    myLurnies.slice(indexOfFirstItem, indexOfLastItem);
+    myStudies &&
+    myStudies.length > 0 &&
+    myStudies.slice(indexOfFirstItem, indexOfLastItem);
   // Change page
   const paginate = useCallback((pageNumber) => setCurrentPage(pageNumber), []);
 
@@ -61,13 +60,13 @@ const LurnySaved = () => {
   useEffect(() => {
     // clearLurnies();
     if (userDetails) {
-      let tempLurnies = lurnies;
-      let filtered = tempLurnies.filter(
-        (lurny) => lurny.user._id === userDetails.id
+      let tempStudies = studies;
+      let filtered = tempStudies.filter(
+        (study) => study.user === userDetails.id
       );
-      setMyLurnies(filtered);
+      setMyStudies(filtered);
     }
-  }, [userDetails, lurnies]);
+  }, [userDetails, studies]);
 
   return (
     <div className="min-h-[100vh] font-raleway">
@@ -88,11 +87,7 @@ const LurnySaved = () => {
           />
         </div>
         <div className="hidden sm:flex">
-          <UserPan
-            all={myLurnies.length}
-            // saved={countSharedTrue}
-            // showAll={(value) => setShowAll(value)}
-          />
+          <UserPan />
         </div>
 
         {/* UserPan is hidden on small screens initially */}
@@ -102,15 +97,15 @@ const LurnySaved = () => {
 
         {/* My Lurnies */}
         <div className="w-full flex flex-col justify-between items-start">
-          {/* <div className="flex flex-wrap ml-[6rem] justify-start gap-[8rem] lg:gap-[4rem]">
-            {currentItems.map(
-              (lurny, index) =>
-                lurny.shared && <LurnyItem key={index} data={lurny} />
-            )}
-          </div> */}
-          {myLurnies.length > 0 && (
+          <div className="flex flex-wrap ml-[6rem] justify-start gap-[8rem] lg:gap-[4rem]">
+            {studies.length > 0 &&
+              studies.map((quiz) => (
+                <MaterialItem key={quiz._id} data={quiz} />
+              ))}
+          </div>
+          {currentItems.length > 0 && (
             <NewPagination
-              totalItems={myLurnies && myLurnies.length}
+              totalItems={currentItems && currentItems.length}
               itemsPerPage={itemsPerPage}
               currentPage={currentPage}
               paginate={(value) => paginate(value)}
