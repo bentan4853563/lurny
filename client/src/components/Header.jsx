@@ -59,13 +59,15 @@ export default function Header() {
     }
   }, [studies]);
 
-  const isToday = (date) => {
+  const isDueTodayOrBefore = (date) => {
     const today = new Date();
-    return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
-    );
+    today.setHours(0, 0, 0, 0);
+
+    const comparisonDate = new Date(date);
+    comparisonDate.setHours(0, 0, 0, 0);
+
+    // Check if the comparisonDate is today or before
+    return comparisonDate.getTime() <= today.getTime();
   };
 
   const getNextDay = (last_learned, repeatTimes, period, learn_count) => {
@@ -86,7 +88,7 @@ export default function Header() {
         study.user.period,
         study.learn_count
       );
-      return isToday(nextDay);
+      return isDueTodayOrBefore(nextDay);
     });
   };
 

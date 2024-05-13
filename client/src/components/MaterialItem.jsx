@@ -42,7 +42,7 @@ function MaterialItem({ data }) {
     if (data) {
       const nextDay = getNextDay();
       setNextStudyDay(nextDay.toLocaleDateString());
-      setIsNextStudyDayToday(isToday(nextDay)); // State that determines if the next study day is today
+      setIsNextStudyDayToday(isDueTodayOrBefore(nextDay)); // State that determines if the next study day is today
     }
   }, [data]);
 
@@ -75,13 +75,15 @@ function MaterialItem({ data }) {
     navigate(`/lurny/remind/${_id}`);
   };
 
-  const isToday = (date) => {
+  const isDueTodayOrBefore = (date) => {
     const today = new Date();
-    return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
-    );
+    today.setHours(0, 0, 0, 0);
+
+    const comparisonDate = new Date(date);
+    comparisonDate.setHours(0, 0, 0, 0);
+
+    // Check if the comparisonDate is today or before
+    return comparisonDate.getTime() <= today.getTime();
   };
 
   const getNextDay = () => {
