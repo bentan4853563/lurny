@@ -49,6 +49,9 @@ router.post("/signin", async (req, res) => {
     const decodedToken = await admin.auth().verifyIdToken(accessToken);
     const email = decodedToken.email;
     const existingUser = await User.findOne({ email: email });
+
+    console.log("existingUser :>> ", existingUser);
+
     if (existingUser) {
       const jwtToken = jwt.sign(existingUser, "secreate", { expiresIn: "1h" });
       res
