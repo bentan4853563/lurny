@@ -53,7 +53,17 @@ router.post("/signin", async (req, res) => {
     console.log("existingUser :>> ", existingUser);
 
     if (existingUser) {
-      const jwtToken = jwt.sign(existingUser, "secreate", { expiresIn: "1h" });
+      const jwsPayload = {
+        id: existingUser._id,
+        email: existingUser.email,
+        displayName: existingUser.displayName,
+        photoURL: existingUser.photoURL,
+        repeatTimes: existingUser.repeatTimes,
+        period: existingUser.period,
+      };
+      const jwtToken = jwt.sign(jwsPayload, "secreate", {
+        expiresIn: "1h",
+      });
       res
         .status(200)
         .json({ message: "Successfully logged in", token: jwtToken });
