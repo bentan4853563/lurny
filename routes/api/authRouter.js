@@ -64,6 +64,7 @@ router.post("/signin", async (req, res) => {
       const jwtToken = jwt.sign(jwsPayload, "secreate", {
         expiresIn: "1h",
       });
+      console.log("jwtToken :>> ", jwtToken);
       res
         .status(200)
         .json({ message: "Successfully logged in", token: jwtToken });
