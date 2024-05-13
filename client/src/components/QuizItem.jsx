@@ -13,7 +13,7 @@ import { IoTrashOutline } from "react-icons/io5";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 
 import defaultImg from "../assets/images/Lurny/default.png";
-import ROSIIcon from "../assets/icons/ROSI_icon.png";
+import BrainIcon from "../assets/icons/brain.png";
 
 import { handleDeleteStubOrQuiz } from "../actions/lurny";
 import { handleRemember } from "../actions/study";
@@ -506,7 +506,7 @@ export default function QuizItem({
                         </div>
                       )}
                       <img
-                        src={ROSIIcon}
+                        src={BrainIcon}
                         data-tooltip-id="remember-stub"
                         onClick={() =>
                           onClickRemember(
@@ -575,7 +575,7 @@ export default function QuizItem({
 
       {content === 1 && (
         <div
-          className="w-full sm:h-[80rem] relative cursor-pointer"
+          className="w-full sm:h-[80rem] relative cursor-pointer sm:cursor-default"
           onClick={() => navigate(`/lurny/feeds/${_id}`)}
         >
           {currentQuestionNumber === 0 && (
@@ -663,7 +663,7 @@ export default function QuizItem({
                         quiz[currentQuestionNumber - 1].correctanswer ===
                           quiz[currentQuestionNumber - 1].answer[index] && (
                           <IoIosInformationCircleOutline
-                            id="correct-answer"
+                            data-tooltip-id="correct-answer"
                             onClick={() =>
                               setIsShowCorrectAnswer(!isShowCorrectAnswer)
                             }
@@ -722,7 +722,7 @@ export default function QuizItem({
                   </div>
                 )}
                 <img
-                  src={ROSIIcon}
+                  src={BrainIcon}
                   data-tooltip-id="remember-quiz"
                   onClick={() =>
                     onClickRemember(
