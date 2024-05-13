@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { setStudies } from "../reducers/studySlice";
+import { setStudies, setStudy } from "../reducers/studySlice";
 
 const backend_url = import.meta.env.VITE_BACKEND_URL;
 
@@ -31,7 +31,6 @@ export const handleRemember = (user_id, lurny_id, type, number) => async () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "ngrok-ski-browser-warning": true,
       },
       body: JSON.stringify({ user_id, lurny_id, type, number }),
     });
@@ -39,6 +38,24 @@ export const handleRemember = (user_id, lurny_id, type, number) => async () => {
       toast.success("Saved Lurny", {
         position: "top-right",
       });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const handleTest = (studyId, accuracy) => async (dispatch) => {
+  try {
+    const response = await fetch(`${backend_url}/api/study/test`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ studyId, accuracy }),
+    });
+    if (response.ok) {
+      const studyData = await response.json();
+      dispatch(setStudy(studyData));
     }
   } catch (error) {
     console.log(error);

@@ -309,35 +309,13 @@ function LurnyQuiz() {
             </Link>
           )}
           {userData && (
-            <Menu
-              menuButton={
-                <img
-                  src={userData.photoURL}
-                  alt="User avatar"
-                  className="w-[16rem] sm:w-[12rem] md:w-[10rem] lg:w-[8rem] xl:w-[4rem] rounded-[100%] cursor-pointer"
-                />
-              }
-              transition
-              gap={8}
-              align="center"
-            >
-              <MenuItem>
-                <Link
-                  to="/lurny/profile"
-                  className="px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black hover:text-black"
-                >
-                  Profile
-                </Link>
-              </MenuItem>
-              <MenuItem>
-                <span
-                  onClick={handleLogout}
-                  className="px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black"
-                >
-                  Logout
-                </span>
-              </MenuItem>
-            </Menu>
+            <Link to="/lurny/profile">
+              <img
+                src={userData.photoURL}
+                alt="User avatar"
+                className="w-[16rem] sm:w-[12rem] md:w-[10rem] lg:w-[8rem] xl:w-[4rem] rounded-[100%] cursor-pointer"
+              />
+            </Link>
           )}
           <div className="hidden sm:flex">
             <Menu
@@ -379,13 +357,20 @@ function LurnyQuiz() {
                   Pricing
                 </Link>
               </MenuItem>
-              <MenuItem className="hover:bg-white">
-                <span className="w-full py-[0.5rem] text-[1.5rem]">
-                  A&nbsp;
-                  <span className="text-[#7030A0] font-semibold">
-                    CarillonMedia
-                  </span>
-                  &nbsp;Company
+              <MenuItem>
+                <Link
+                  to="/admin/prompt"
+                  className="px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black"
+                >
+                  Admin
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <span
+                  onClick={handleLogout}
+                  className="px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black"
+                >
+                  Logout
                 </span>
               </MenuItem>
             </Menu>

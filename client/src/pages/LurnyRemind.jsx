@@ -259,6 +259,7 @@ function LurnyRemind() {
         >
           {quizData && Object.keys(quizData).length > 0 && (
             <TestQuizItem
+              studyId={id}
               data={quizData}
               // language={language}
             />

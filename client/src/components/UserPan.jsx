@@ -79,7 +79,7 @@ function UserPan() {
       <Link
         to="/lurny/saved"
         className={`w-full active:text-gray-300 hover:text-white text-left text-[2rem] font-bold border-b border-white cursor-pointer ${
-          endPoint && endPoint === "profile" ? "text-gray-500" : "text-white"
+          endPoint && endPoint === "saved" ? "text-white" : "text-gray-500"
         } `}
       >
         Saved Lurnies ({studies.length})

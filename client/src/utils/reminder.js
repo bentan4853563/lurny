@@ -22,7 +22,6 @@ const getSchedule = (repeat, period) => {
     const period = Math.round(reminderHours[i] / 24);
     predictedDays.push(period);
   }
-  console.log(predictedDays);
   return predictedDays;
 };
 

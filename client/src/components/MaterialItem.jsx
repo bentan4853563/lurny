@@ -5,13 +5,19 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import defaultImg from "../assets/images/Lurny/default.png";
+import getSchedule from "../utils/reminder";
+
+import { BsAlarm } from "react-icons/bs";
 
 function MaterialItem({ data }) {
   const navigate = useNavigate();
   const { userDetails } = useSelector((state) => state.user);
 
   const [imageUrl, setImageUrl] = useState(null);
-  const { _id, image, url } = data;
+  const [nextStudyDay, setNextStudyDay] = useState(null);
+  const [isNextStudyDayToday, setIsNextStudyDayToday] = useState(false);
+
+  const { _id, image, url, user, learn_count, last_learned } = data;
 
   useEffect(() => {
     if (isYoutubeUrl(url)) {
@@ -31,6 +37,14 @@ function MaterialItem({ data }) {
       setImageUrl(defaultImg);
     }
   }, [image, url]);
+
+  useEffect(() => {
+    if (data) {
+      const nextDay = getNextDay();
+      setNextStudyDay(nextDay.toLocaleDateString());
+      setIsNextStudyDayToday(isToday(nextDay)); // State that determines if the next study day is today
+    }
+  }, [data]);
 
   const isYoutubeUrl = (url) => {
     if (url) {
@@ -61,12 +75,31 @@ function MaterialItem({ data }) {
     navigate(`/lurny/remind/${_id}`);
   };
 
+  const isToday = (date) => {
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  };
+
+  const getNextDay = () => {
+    const schedule = getSchedule(user.repeatTimes, user.period);
+    const daysToAdd = schedule[learn_count];
+
+    const lastLearnedDate = new Date(last_learned);
+    const nextDay = new Date(lastLearnedDate);
+    nextDay.setDate(nextDay.getDate() + daysToAdd);
+    return nextDay;
+  };
+
   // const newImg = getDefaultImg(image, url);
   // userDetails && console.log(userDetails.email);
   return (
     <div
       onClick={handleClick}
-      className="w-[150rem] sm:w-[48rem] lg:w-[30rem] cursor-pointer"
+      className="w-[150rem] sm:w-[48rem] lg:w-[30rem] cursor-pointer relative"
     >
       {userDetails && (
         <img
@@ -80,6 +113,20 @@ function MaterialItem({ data }) {
           className="h-[80rem] sm:h-[24rem] lg:h-[16rem] w-full object-cover rounded-[8rem] sm:rounded-[1.5rem]"
         />
       )}
+      <BsAlarm
+        className={`absolute text-[2rem] top-[2rem] right-[2rem] text-red-600 bg-white rounded-full p-[0.5rem] box-content ${
+          isNextStudyDayToday ? "" : "hidden"
+        }`}
+      />
+      <div className="absolute top-[2rem] left-[2rem] flex flex-col items-start text-white text-[1.5rem]">
+        <span className="text-left">Repeat Times: {user.repeatTimes}</span>
+        <span className="text-left">Period: {user.period}</span>
+        <span className="text-left">Count: {learn_count}</span>
+        <span className="text-left">Last: {last_learned}</span>
+        {nextStudyDay && (
+          <span className="text-left">Next: {nextStudyDay}</span>
+        )}
+      </div>
     </div>
   );
 }

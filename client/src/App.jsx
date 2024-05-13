@@ -3,9 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import ProtectedRoute from "./routes/ProtectedRoutes";
-import AdminRoute from "./routes/AdminRoutes";
-
 import Loading from "./components/Loading";
 import About from "./pages/About";
 import Signup from "./pages/Signup";
@@ -21,8 +18,13 @@ import LurnySearch from "./pages/LurnySearch";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 import Lurny from "./pages/admin/Lurny";
+import Prompt from "./pages/admin/Prompt";
 
 import { getLurnies } from "./actions/lurny";
+import { getPrompts } from "./actions/prompts";
+
+import ProtectedRoute from "./routes/ProtectedRoutes";
+import AdminRoute from "./routes/AdminRoutes";
 import { setUserDetails } from "./reducers/userSlice";
 
 import "./App.css";
@@ -34,6 +36,7 @@ function App() {
 
   useEffect(() => {
     dispatch(getLurnies());
+    dispatch(getPrompts());
     const accessToken = localStorage.getItem("token");
     if (accessToken) {
       dispatch(setUserDetails(jwtDecode(accessToken)));
@@ -74,6 +77,7 @@ function App() {
             </Route>
             <Route path="/admin" element={<AdminRoute />}>
               <Route path="lurny" element={<Lurny />} />
+              <Route path="prompt" element={<Prompt />} />
             </Route>
             <Route path="/" element={<About />} />
             <Route path="/signin" element={<Signin />} />

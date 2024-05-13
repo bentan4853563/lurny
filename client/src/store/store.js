@@ -3,6 +3,7 @@ import userReducer from "../reducers/userSlice";
 import lurnyReducer from "../reducers/lurnySlice";
 import studySlice from "../reducers/studySlice";
 import loadingReducer from "../reducers/loadingSlice";
+import promptSlice from "../reducers/promptSlice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     lurny: lurnyReducer,
     study: studySlice,
     loading: loadingReducer,
+    prompt: promptSlice,
   },
 });
 

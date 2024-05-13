@@ -67,3 +67,44 @@ export const signUp = (accessToken, navigate) => async () => {
     alert("Error during signup:", error.message);
   }
 };
+
+export const changeROSI =
+  (user_id, repeatTimes, period) => async (dispatch) => {
+    try {
+      console.log(
+        "user_id, repeatTimes, period :>> ",
+        user_id,
+        repeatTimes,
+        period
+      );
+      const response = await fetch(`${backend_url}/api/user/update-rosi`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": true,
+        },
+        body: JSON.stringify({ user_id, repeatTimes, period }),
+      });
+
+      if (response.ok) {
+        // Display a success toast notification
+        toast.success("Saved!!!", {
+          position: "top-right",
+        });
+
+        // Get the JSON data from the response
+        const data = await response.json();
+
+        // Dispatch action to login, using the token received from the response
+        dispatch(login(data.token));
+      } else {
+        // Display an error toast notification when response is not ok (e.g., status code 4xx or 5xx)
+        toast.error("Save failed! Error: " + response.statusText, {
+          position: "top-right",
+        });
+      }
+    } catch (error) {
+      // Alert the user that there has been an error during the update process
+      alert("Error during update:", error.message);
+    }
+  };

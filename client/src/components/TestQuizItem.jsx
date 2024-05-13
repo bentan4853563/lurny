@@ -5,20 +5,28 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { IoIosInformationCircleOutline } from "react-icons/io";
-import ROSIIcon from "../assets/icons/ROSI_icon.png";
+import BrainIcon from "../assets/icons/brain.png";
 
-function TestQuizItem({ data }) {
+function TestQuizItem({ data, studyId }) {
   const { question, answer, correctanswer, explanation } = data;
 
   const [answerNumber, setAnswerNumber] = useState(null);
   const [answered, setAnswered] = useState(false);
   const [isShowCorrectAnswer, setIsShowCorrectAnswer] = useState(false);
 
+  const handleAnswer = () => {
+    setAnswered(true);
+    let correctAnswerIndex = 0;
+    answer.map((item, index) => {
+      if (item === correctanswer) correctAnswerIndex = index;
+    });
+    const accuracy = correctAnswerIndex === answerNumber;
+    dispatchEvent(handleTest(studyId, accuracy));
+  };
+
   const classNames = (...classes) => {
     return classes.filter(Boolean).join(" ");
   };
-
-  console.log("data :>> ", data);
 
   return (
     <div>
@@ -28,7 +36,7 @@ function TestQuizItem({ data }) {
       >
         <div className="h-full bg-white p-[6rem] rounded-[2rem] flex flex-col justify-center gap-[6rem] sm:gap-[2rem] items-start">
           <img
-            src={ROSIIcon}
+            src={BrainIcon}
             className="absolute sm:top-[4rem] sm:right-[4rem] w-[4rem] border-2 border-gray-300 hover:border-yellow-400 active:border-yellow-600 rounded-full"
           />
           {/* Question */}
@@ -97,7 +105,7 @@ function TestQuizItem({ data }) {
 
           {!answered ? (
             <button
-              onClick={() => setAnswered(true)}
+              onClick={handleAnswer}
               className="bg-[#FFC36D] hover:bg-[#ebb161] active:bg-[#f1b765] mx-auto mt-[4rem] text-[6rem] sm:text-[1.8rem] border-none focus:outline-none text-black"
             >
               {/* {translations[language].submitAnswer} */}
@@ -131,6 +139,7 @@ function TestQuizItem({ data }) {
 
 TestQuizItem.propTypes = {
   data: PropTypes.object,
+  studyId: PropTypes.string,
 };
 
 export default TestQuizItem;

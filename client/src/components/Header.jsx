@@ -7,6 +7,8 @@ import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 
 import { logout } from "../reducers/userSlice";
 
+import getSchedule from "../utils/reminder";
+
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 
@@ -15,6 +17,7 @@ import { IoCompassOutline } from "react-icons/io5";
 import { IoSearchSharp } from "react-icons/io5";
 import LetterLogo from "../assets/icons/letter_logo.png";
 import ChromeIcon from "../assets/icons/chrome.png";
+import BrainIcon from "../assets/icons/brain.png";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -22,6 +25,8 @@ export default function Header() {
 
   const [userData, setUserData] = useState(null);
   const { lurnies } = useSelector((state) => state.lurny);
+  const { studies } = useSelector((state) => state.study);
+  const [todayStudies, setTodayStudies] = useState(null);
 
   const accessToken = localStorage.getItem("token");
 
@@ -35,7 +40,6 @@ export default function Header() {
         const data = event.data.payload;
         localStorage.setItem("tempData", JSON.stringify(data));
         navigate("/lurny/profile");
-        // setTempData(JSON.stringify(data));
       }
     }
     window.addEventListener("message", handleMessage);
@@ -47,6 +51,34 @@ export default function Header() {
       setUserData(jwtDecode(accessToken));
     } else setUserData(null);
   }, [accessToken]);
+
+  useEffect(() => {
+    if (studies) {
+      const todays = getTodaysStudies(studies);
+      setTodayStudies(todays);
+    }
+  }, [studies]);
+
+  const getTodaysStudies = (allStudies) => {
+    return allStudies.filter((study) => {
+      const schedule = getSchedule(study.user.repeatTimes, study.user.period);
+
+      // Create a date object and set its hours to midnight
+      const lastLearnedDate = new Date(study.last_learned);
+      lastLearnedDate.setHours(0, 0, 0, 0);
+      const lastLearnedTimeInMs = lastLearnedDate.getTime();
+
+      // Create a date object for the current time and set its hours to midnight
+      const currentTime = new Date();
+      currentTime.setHours(0, 0, 0, 0);
+
+      // Assuming schedule gives days, convert to milliseconds
+      const dueTime = schedule[study.learn_count] * 24 * 60 * 60 * 1000;
+
+      // Check if the study is due
+      return currentTime.getTime() - lastLearnedTimeInMs >= dueTime;
+    });
+  };
 
   const handleLogout = () => {
     dispatch(logout());
@@ -71,6 +103,20 @@ export default function Header() {
             <GrUserAdmin className="text-zinc-300 text-[16rem] sm:text-[3.2rem] hover:text-gray-400" />
           </Link>
         )} */}
+        {todayStudies && (
+          <Link to="#">
+            <div className="relative">
+              <img
+                src={BrainIcon}
+                className="w-[4rem] border-2 border-gray-300 rounded-full hover:transform cursor-pointer"
+              />
+              <div className="absolute w-[2.5rem] h-[2.5rem] flex items-center justify-center bottom-[-0.5rem] left-[-1rem] bg-red-600 p-[0.5rem] rounded-full text-white">
+                {todayStudies.length}
+              </div>
+            </div>
+          </Link>
+        )}
+
         {lurnies.length > 0 && (
           <Link to={`/lurny/feeds/${lurnies[0]._id}`}>
             <IoCompassOutline className="text-zinc-300 text-[16rem] sm:text-[4rem] hover:text-gray-400" />
@@ -82,35 +128,13 @@ export default function Header() {
           </Link>
         )}
         {userData ? (
-          <Menu
-            menuButton={
-              <img
-                src={userData.photoURL}
-                alt="User avatar"
-                className="w-[16rem] sm:w-[12rem] md:w-[10rem] lg:w-[8rem] xl:w-[4rem] rounded-[100%] cursor-pointer"
-              />
-            }
-            transition
-            gap={8}
-            align="center"
-          >
-            <MenuItem>
-              <Link
-                to="/lurny/profile"
-                className="px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black hover:text-black"
-              >
-                Profile
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <span
-                onClick={handleLogout}
-                className="px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black"
-              >
-                Logout
-              </span>
-            </MenuItem>
-          </Menu>
+          <Link to="/lurny/profile">
+            <img
+              src={userData.photoURL}
+              alt="User avatar"
+              className="w-[16rem] sm:w-[12rem] md:w-[10rem] lg:w-[8rem] xl:w-[4rem] rounded-[100%] cursor-pointer"
+            />
+          </Link>
         ) : (
           <div className="flex items-center gap-[2rem]">
             <a
@@ -169,11 +193,20 @@ export default function Header() {
               Privacy
             </Link>
           </MenuItem>
-          <MenuItem className="hover:bg-white text-black">
-            <span className="w-full py-[2rem] sm:py-[0.5rem] text-[8rem] sm:text-[1.5rem] px-[8rem] sm:px-0">
-              A&nbsp;
-              <span className="font-semibold">CarillonMedia</span>
-              &nbsp;Company
+          <MenuItem>
+            <Link
+              to="/admin/prompt"
+              className="px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black"
+            >
+              Admin
+            </Link>
+          </MenuItem>
+          <MenuItem>
+            <span
+              onClick={handleLogout}
+              className="px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black"
+            >
+              Logout
             </span>
           </MenuItem>
         </Menu>

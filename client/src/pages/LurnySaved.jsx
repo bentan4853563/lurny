@@ -99,8 +99,8 @@ const LurnySaved = () => {
         <div className="w-full flex flex-col justify-between items-start">
           <div className="flex flex-wrap ml-[6rem] justify-start gap-[8rem] lg:gap-[4rem]">
             {studies.length > 0 &&
-              studies.map((quiz) => (
-                <MaterialItem key={quiz._id} data={quiz} />
+              studies.map((study) => (
+                <MaterialItem key={study._id} data={study} />
               ))}
           </div>
           {currentItems.length > 0 && (
