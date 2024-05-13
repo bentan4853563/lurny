@@ -5,7 +5,6 @@ const quiz_server_url = import.meta.env.VITE_QUIZ_SERVER;
 
 export const getPrompts = () => async (dispatch) => {
   try {
-    console.log("Get Prompts");
     const response = await fetch(`${quiz_server_url}/get_prompts`, {
       method: "GET",
       headers: {
