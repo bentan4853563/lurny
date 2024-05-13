@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { Tooltip } from "react-tooltip";
+import { t } from "react-t";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -77,14 +77,14 @@ function TestQuizItem({ data, studyId }) {
                   </p>
                   {answered && correctanswer === answer[index] && (
                     <IoIosInformationCircleOutline
-                      id="correct-answer"
+                      data-tooltip-id="correct-answer"
                       onClick={() =>
                         setIsShowCorrectAnswer(!isShowCorrectAnswer)
                       }
                       className="text-[16rem] sm:text-[2.5rem] my-auto text-black"
                     />
                   )}
-                  <Tooltip
+                  <t
                     id="correct-answer"
                     place="left"
                     content={explanation}
