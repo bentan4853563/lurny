@@ -7,7 +7,7 @@ const Study = require("../../models/Study");
 const { config } = require("dotenv");
 const Material = require("../../models/Material");
 
-const QUIZ_SERVER = "https://lurny.net:5173";
+const quiz_server_url = process.env.VITE_QUIZ_SERVER;
 
 router.get("/get/:id", async (req, res) => {
   try {
@@ -69,7 +69,7 @@ router.post("/save", async (req, res) => {
             .send("Invalid 'number' or no summary available.");
         }
         // Assuming 'headers' should be a valid headers object, you might need to set Content-Type, Authorization, etc.
-        const quizResponse = await fetch(`${QUIZ_SERVER}/get_quiz`, {
+        const quizResponse = await fetch(`${quiz_server_url}/get_quiz`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

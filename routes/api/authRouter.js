@@ -50,16 +50,7 @@ router.post("/signin", async (req, res) => {
     const email = decodedToken.email;
     const existingUser = await User.findOne({ email: email });
     if (existingUser) {
-      const jwtToken = jwt.sign(
-        {
-          id: existingUser._id,
-          email: existingUser.email,
-          photoURL: existingUser.photoURL,
-          displayName: existingUser.displayName,
-        },
-        "secreate",
-        { expiresIn: "1h" }
-      );
+      const jwtToken = jwt.sign(existingUser, "secreate", { expiresIn: "1h" });
       res
         .status(200)
         .json({ message: "Successfully logged in", token: jwtToken });

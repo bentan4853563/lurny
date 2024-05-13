@@ -31,8 +31,9 @@ app.use((req, res, next) => {
   }
 });
 
-app.use("/api/lurny", require("./routes/api/lurnyRoutes"));
-app.use("/api/auth", require("./routes/api/newAuth"));
+app.use("/api/auth", require("./routes/api/authRouter"));
+app.use("/api/user", require("./routes/api/userRouter"));
+app.use("/api/lurny", require("./routes/api/lurnyRouter"));
 app.use("/api/study", require("./routes/api/studyRouter"));
 
 if (process.env.NODE_ENV === "production") {
@@ -64,8 +65,9 @@ https.createServer(options, app).listen(PORT, () => {
 
 // app.use(cors());
 
-// app.use("/api/lurny", require("./routes/api/lurnyRoutes"));
-// app.use("/api/auth", require("./routes/api/newAuth"));
+// app.use("/api/auth", require("./routes/api/authRouter"));
+// app.use("/api/user", require("./routes/api/userRouter"));
+// app.use("/api/lurny", require("./routes/api/lurnyRouter"));
 // app.use("/api/study", require("./routes/api/studyRouter"));
 
 // if (process.env.NODE_ENV === "production") {
