@@ -59,24 +59,34 @@ export default function Header() {
     }
   }, [studies]);
 
+  const isToday = (date) => {
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  };
+
+  const getNextDay = (last_learned, repeatTimes, period, learn_count) => {
+    const schedule = getSchedule(repeatTimes, period); // Assuming getSchedule is defined elsewhere
+    const daysToAdd = schedule[learn_count];
+
+    const lastLearnedDate = new Date(last_learned);
+    const nextDay = new Date(lastLearnedDate);
+    nextDay.setDate(nextDay.getDate() + daysToAdd);
+    return nextDay;
+  };
+
   const getTodaysStudies = (allStudies) => {
     return allStudies.filter((study) => {
-      const schedule = getSchedule(study.user.repeatTimes, study.user.period);
-
-      // Create a date object and set its hours to midnight
-      const lastLearnedDate = new Date(study.last_learned);
-      lastLearnedDate.setHours(0, 0, 0, 0);
-      const lastLearnedTimeInMs = lastLearnedDate.getTime();
-
-      // Create a date object for the current time and set its hours to midnight
-      const currentTime = new Date();
-      currentTime.setHours(0, 0, 0, 0);
-
-      // Assuming schedule gives days, convert to milliseconds
-      const dueTime = schedule[study.learn_count] * 24 * 60 * 60 * 1000;
-
-      // Check if the study is due
-      return currentTime.getTime() - lastLearnedTimeInMs >= dueTime;
+      const nextDay = getNextDay(
+        study.last_learned,
+        study.user.repeatTimes,
+        study.user.period,
+        study.learn_count
+      );
+      return isToday(nextDay);
     });
   };
 
