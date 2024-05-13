@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { t } from "react-t";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -21,7 +20,7 @@ function TestQuizItem({ data, studyId }) {
       if (item === correctanswer) correctAnswerIndex = index;
     });
     const accuracy = correctAnswerIndex === answerNumber;
-    dispatchEvent(handleTest(studyId, accuracy));
+    // dispatchEvent(handleTest(studyId, accuracy));
   };
 
   const classNames = (...classes) => {
