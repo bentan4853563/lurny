@@ -6,6 +6,7 @@ import { IoMenu } from "react-icons/io5";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 
 import { logout } from "../reducers/userSlice";
+import useAdmin from "../hooks/useAdmin";
 
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
@@ -21,6 +22,8 @@ import { getTodaysStudies } from "../utils/getTodoayStudies";
 export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const isAdmin = useAdmin();
 
   const [userData, setUserData] = useState(null);
   const { lurnies } = useSelector((state) => state.lurny);
@@ -91,7 +94,7 @@ export default function Header() {
               src={BrainIcon}
               className="w-[4rem] border-2 border-gray-300 rounded-full hover:transform cursor-pointer"
             />
-            <div className="absolute w-[2.5rem] h-[2.5rem] flex items-center justify-center bottom-[-0.5rem] left-[-1rem] bg-red-600 p-[0.5rem] rounded-full text-white">
+            <div className="absolute w-[2.5rem] h-[2.5rem] flex items-center justify-center bottom-[-0.5rem] left-[-1rem] bg-red-600 p-[0.5rem] rounded-full text-white text-[1.5rem]">
               {todayStudies.length}
             </div>
           </div>
@@ -133,6 +136,7 @@ export default function Header() {
             </a>
           </div>
         )}
+
         {/* Hambuger */}
         <Menu
           menuButton={
@@ -173,18 +177,20 @@ export default function Header() {
               Privacy
             </Link>
           </MenuItem>
-          <MenuItem>
-            <Link
-              to="/admin/prompt"
-              className="px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black"
-            >
-              Admin
-            </Link>
-          </MenuItem>
+          {isAdmin && (
+            <MenuItem>
+              <Link
+                to="/admin/prompt"
+                className="w-full px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black"
+              >
+                Admin
+              </Link>
+            </MenuItem>
+          )}
           <MenuItem>
             <span
               onClick={handleLogout}
-              className="px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black"
+              className="w-full px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black"
             >
               Logout
             </span>

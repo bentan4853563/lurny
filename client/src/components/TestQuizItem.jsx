@@ -34,12 +34,12 @@ function TestQuizItem({ data }) {
   useEffect(() => {
     if (studies) {
       const todays = getTodaysStudies(studies);
-      todays.map((lurny, index) => {
-        if (lurny._id === _id) setCurrentStudyIndex(index);
-      });
+      // If you need a specific sorting, add a comparator function here
       setTodayStudies(todays);
+      const index = todays.findIndex((study) => study._id === _id);
+      setCurrentStudyIndex(index);
     }
-  }, [studies]);
+  }, [studies, _id]);
 
   const handleAnswer = () => {
     setAnswered(true);
@@ -55,11 +55,11 @@ function TestQuizItem({ data }) {
     dispatch(handleTest(_id, newStudyData));
   };
 
-  const handlePreviousStudy = () => {
-    navigate(`/lurny/remind/${todayStudies[currentStudyIndex - 1]._id}`);
-  };
-  const handleNextStudy = () => {
-    navigate(`/lurny/remind/${todayStudies[currentStudyIndex + 1]._id}`);
+  const handleNavigateStudy = (direction) => {
+    const newIndex = currentStudyIndex + direction;
+    if (newIndex >= 0 && newIndex < todayStudies.length) {
+      navigate(`/lurny/remind/${todayStudies[newIndex]._id}`);
+    }
   };
 
   const classNames = (...classes) => {
@@ -160,9 +160,9 @@ function TestQuizItem({ data }) {
           )}
         </div>
 
-        {currentStudyIndex > 0 && (
+        {todayStudies && currentStudyIndex > 0 && (
           <button
-            onClick={handlePreviousStudy}
+            onClick={() => handleNavigateStudy(-1)}
             className="hidden sm:flex items-center justify-center p-[0.5rem] sm:pl-2 text-white text-[12rem] sm:text-[3rem] bg-[#adadad] hover:bg-neutral-400 active:bg-neutral-500 rounded-full focus:outline-none absolute -left-[2rem] top-1/2 z-30"
           >
             <IoIosArrowBack />
@@ -170,7 +170,7 @@ function TestQuizItem({ data }) {
         )}
         {todayStudies && currentStudyIndex < todayStudies.length - 1 && (
           <button
-            onClick={handleNextStudy}
+            onClick={() => handleNavigateStudy(1)}
             className="hidden sm:flex items-center justify-center p-[0.5rem] sm:pl-2 text-white text-[12rem] sm:text-[3rem] bg-[#adadad] hover:bg-neutral-400 active:bg-neutral-500 rounded-full focus:outline-none absolute -right-[2rem] top-1/2 z-30"
           >
             <IoIosArrowForward />

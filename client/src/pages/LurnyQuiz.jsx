@@ -30,11 +30,16 @@ import { IoSearchSharp } from "react-icons/io5";
 import QuizItem from "../components/QuizItem";
 import MobileQuizItem from "../components/MobileQuizItem";
 import TranslateComponent from "../components/TranslateComponent";
+
 import { logout } from "../reducers/userSlice";
+import useAdmin from "../hooks/useAdmin";
 
 function LurnyQuiz() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const isAdmin = useAdmin();
+
   const { lurnies } = useSelector((state) => state.lurny);
 
   const [userData, setUserData] = useState(null);
@@ -357,18 +362,20 @@ function LurnyQuiz() {
                   Pricing
                 </Link>
               </MenuItem>
-              <MenuItem>
-                <Link
-                  to="/admin/prompt"
-                  className="px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black"
-                >
-                  Admin
-                </Link>
-              </MenuItem>
+              {isAdmin && (
+                <MenuItem>
+                  <Link
+                    to="/admin/prompt"
+                    className="w-full px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black"
+                  >
+                    Admin
+                  </Link>
+                </MenuItem>
+              )}
               <MenuItem>
                 <span
                   onClick={handleLogout}
-                  className="px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black"
+                  className="w-full px-[8rem] sm:px-[2rem] text-[8rem] sm:text-[1.5rem] text-black"
                 >
                   Logout
                 </span>

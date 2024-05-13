@@ -5,7 +5,7 @@ const useAdmin = () => {
 
   const userData = token ? jwtDecode(token) : null;
 
-  const isAdmin = userData ? true : false;
+  const isAdmin = userData.email === "bentan010918@gmail.com" ? true : false;
   console.log(isAdmin);
 
   return isAdmin;
