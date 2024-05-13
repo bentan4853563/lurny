@@ -11,7 +11,7 @@ const DynamicHeightTextarea = ({ content, handleChange }) => {
       textareaRef.current.style.height = "inherit";
       // Set the height to scroll height to remove scrollbar and then reset back to default
       textareaRef.current.style.height = `${
-        textareaRef.current.scrollHeight + 10
+        textareaRef.current.scrollHeight + 20
       }px`;
     }
   };
