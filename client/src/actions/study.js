@@ -44,14 +44,14 @@ export const handleRemember = (user_id, lurny_id, type, number) => async () => {
   }
 };
 
-export const handleTest = (studyId, accuracy) => async (dispatch) => {
+export const handleTest = (studyId, newStudyData) => async (dispatch) => {
   try {
     const response = await fetch(`${backend_url}/api/study/test`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ studyId, accuracy }),
+      body: JSON.stringify({ studyId, newStudyData }),
     });
     if (response.ok) {
       const studyData = await response.json();

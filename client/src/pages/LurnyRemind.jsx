@@ -15,17 +15,20 @@ import TranslateComponent from "../components/TranslateComponent";
 import TestQuizItem from "../components/TestQuizItem";
 import Header from "../components/Header";
 
+import { getTodaysStudies } from "../utils/getTodoayStudies";
+
 function LurnyRemind() {
   const { studies } = useSelector((state) => state.study);
 
   const [userData, setUserData] = useState(null);
-  const [quizData, setQuizData] = useState({});
+  const [studyData, setStudyData] = useState({});
+  const [todayStudies, setTodayStudies] = useState(null);
 
   const [imageUrl, setImageUrl] = useState(null);
 
   // const [isExpand, setIsExpand] = useState(false);
 
-  const { image, url } = quizData;
+  const { image, url } = studyData;
 
   let { id } = useParams();
 
@@ -56,11 +59,10 @@ function LurnyRemind() {
     if (studies.length > 0 && id) {
       const currentStudy = studies.find((study) => study._id === id); // Utilize .find() for efficiency
       if (currentStudy) {
-        const foundIndex = studies.indexOf(currentStudy);
-        if (foundIndex !== -1) {
-          setQuizData(currentStudy.material);
-        }
+        setStudyData(currentStudy);
       }
+      const todays = getTodaysStudies(studies);
+      setTodayStudies(todays);
     }
   }, [studies, id]);
 
@@ -114,11 +116,8 @@ function LurnyRemind() {
       <div className="flex flex-wrap px-[4rem] sm:px-[20rem] py-[2rem] gap-[8rem] sm:gap-0">
         {/* Image */}
         <div className="hidden sm:flex w-[32rem]">
-          {quizData && Object.keys(quizData).length > 0 && (
+          {studyData && Object.keys(studyData).length > 0 && (
             <div className="w-full px-[16rem] sm:px-0 flex flex-col">
-              <span className="text-white text-start text-[7rem] sm:text-[2.5rem] leading-[3rem]">
-                {quizData.title}
-              </span>
               {userData && (
                 <img
                   // src={imageUrl}
@@ -133,7 +132,7 @@ function LurnyRemind() {
               )}
               <div className="flex flex-col gap-8 mt-12">
                 <a
-                  href={quizData.url}
+                  href={studyData.url}
                   target="black"
                   className="bg-[#FFC36D] w-full text-black hover:text-gray-800 text-[2rem] py-4 rounded-md cursor-pointer"
                 >
@@ -149,12 +148,8 @@ function LurnyRemind() {
           id="current-quiz"
           className="hidden sm:flex flex-1 flex-col gap-[4rem] px-[16rem]"
         >
-          {quizData && Object.keys(quizData).length > 0 && (
-            <TestQuizItem
-              studyId={id}
-              data={quizData}
-              // language={language}
-            />
+          {studyData && Object.keys(studyData).length > 0 && (
+            <TestQuizItem data={studyData} />
           )}
         </div>
 

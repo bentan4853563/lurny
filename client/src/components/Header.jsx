@@ -7,8 +7,6 @@ import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 
 import { logout } from "../reducers/userSlice";
 
-import getSchedule from "../utils/reminder";
-
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 
@@ -18,6 +16,7 @@ import { IoSearchSharp } from "react-icons/io5";
 import LetterLogo from "../assets/icons/letter_logo.png";
 import ChromeIcon from "../assets/icons/chrome.png";
 import BrainIcon from "../assets/icons/brain.png";
+import { getTodaysStudies } from "../utils/getTodoayStudies";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -59,37 +58,8 @@ export default function Header() {
     }
   }, [studies]);
 
-  const isDueTodayOrBefore = (date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const comparisonDate = new Date(date);
-    comparisonDate.setHours(0, 0, 0, 0);
-
-    // Check if the comparisonDate is today or before
-    return comparisonDate.getTime() <= today.getTime();
-  };
-
-  const getNextDay = (last_learned, repeatTimes, period, learn_count) => {
-    const schedule = getSchedule(repeatTimes, period); // Assuming getSchedule is defined elsewhere
-    const daysToAdd = schedule[learn_count];
-
-    const lastLearnedDate = new Date(last_learned);
-    const nextDay = new Date(lastLearnedDate);
-    nextDay.setDate(nextDay.getDate() + daysToAdd);
-    return nextDay;
-  };
-
-  const getTodaysStudies = (allStudies) => {
-    return allStudies.filter((study) => {
-      const nextDay = getNextDay(
-        study.last_learned,
-        study.user.repeatTimes,
-        study.user.period,
-        study.learn_count
-      );
-      return isDueTodayOrBefore(nextDay);
-    });
+  const handleClickROSI = () => {
+    navigate(`/lurny/remind/${todayStudies[0]._id}`);
   };
 
   const handleLogout = () => {
@@ -116,17 +86,15 @@ export default function Header() {
           </Link>
         )} */}
         {todayStudies && (
-          <Link to="#">
-            <div className="relative">
-              <img
-                src={BrainIcon}
-                className="w-[4rem] border-2 border-gray-300 rounded-full hover:transform cursor-pointer"
-              />
-              <div className="absolute w-[2.5rem] h-[2.5rem] flex items-center justify-center bottom-[-0.5rem] left-[-1rem] bg-red-600 p-[0.5rem] rounded-full text-white">
-                {todayStudies.length}
-              </div>
+          <div className="relative" onClick={handleClickROSI}>
+            <img
+              src={BrainIcon}
+              className="w-[4rem] border-2 border-gray-300 rounded-full hover:transform cursor-pointer"
+            />
+            <div className="absolute w-[2.5rem] h-[2.5rem] flex items-center justify-center bottom-[-0.5rem] left-[-1rem] bg-red-600 p-[0.5rem] rounded-full text-white">
+              {todayStudies.length}
             </div>
-          </Link>
+          </div>
         )}
 
         {lurnies.length > 0 && (

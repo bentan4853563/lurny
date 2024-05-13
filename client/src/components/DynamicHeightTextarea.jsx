@@ -22,7 +22,7 @@ const DynamicHeightTextarea = ({ content, handleChange }) => {
   return (
     <textarea
       ref={textareaRef}
-      className="w-full bg-white focus:outline-none resize-none overflow-hidden text-[2rem] rounded-[0.5rem] p-[1rem]"
+      className="w-full bg-white text-black focus:outline-none resize-none overflow-hidden text-[2rem] rounded-[0.5rem] p-[1rem]"
       value={content}
       onChange={handleChange}
     />

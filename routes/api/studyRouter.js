@@ -120,4 +120,22 @@ router.post("/save", async (req, res) => {
   }
 });
 
+router.post("/test", async (req, res) => {
+  try {
+    const { studyId, newStudyData } = req.body;
+
+    const response = await Study.findByIdAndUpdate(studyId, newStudyData, {
+      new: true,
+    })
+      .populate("user")
+      .populate("material");
+
+    console.log("response :>> ", response);
+
+    res.json(response);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 module.exports = router;

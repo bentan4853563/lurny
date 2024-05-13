@@ -1,18 +1,45 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { handleTest } from "../actions/study";
+
 import { IoIosInformationCircleOutline } from "react-icons/io";
+import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowForward } from "react-icons/io";
 import BrainIcon from "../assets/icons/brain.png";
 
-function TestQuizItem({ data, studyId }) {
-  const { question, answer, correctanswer, explanation } = data;
+import { useDispatch, useSelector } from "react-redux";
+import { getTodaysStudies } from "../utils/getTodoayStudies";
+import { useNavigate } from "react-router-dom";
+
+function TestQuizItem({ data }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { studies } = useSelector((state) => state.study);
+
+  const { _id, material, learn_count } = data;
+  const [todayStudies, setTodayStudies] = useState(null);
+  const [currentStudyIndex, setCurrentStudyIndex] = useState(null);
+
+  const { question, answer, correctanswer, explanation } = material;
 
   const [answerNumber, setAnswerNumber] = useState(null);
   const [answered, setAnswered] = useState(false);
   const [isShowCorrectAnswer, setIsShowCorrectAnswer] = useState(false);
+
+  useEffect(() => {
+    if (studies) {
+      const todays = getTodaysStudies(studies);
+      todays.map((lurny, index) => {
+        if (lurny._id === _id) setCurrentStudyIndex(index);
+      });
+      setTodayStudies(todays);
+    }
+  }, [studies]);
 
   const handleAnswer = () => {
     setAnswered(true);
@@ -21,12 +48,29 @@ function TestQuizItem({ data, studyId }) {
       if (item === correctanswer) correctAnswerIndex = index;
     });
     const accuracy = correctAnswerIndex === answerNumber;
-    // dispatchEvent(handleTest(studyId, accuracy));
+    let newStudyData = {
+      last_learned: new Date(),
+      learn_count: accuracy ? learn_count + 1 : 0,
+    };
+    dispatch(handleTest(_id, newStudyData));
+  };
+
+  const handlePreviousStudy = () => {
+    navigate(`/lurny/remind/${todayStudies[currentStudyIndex - 1]._id}`);
+  };
+  const handleNextStudy = () => {
+    navigate(`/lurny/remind/${todayStudies[currentStudyIndex + 1]._id}`);
   };
 
   const classNames = (...classes) => {
     return classes.filter(Boolean).join(" ");
   };
+
+  console.log(
+    "currentStudyIndex, todayStudies :>> ",
+    currentStudyIndex,
+    todayStudies
+  );
 
   return (
     <div>
@@ -116,22 +160,22 @@ function TestQuizItem({ data, studyId }) {
           )}
         </div>
 
-        {/* {currentQuestionNumber > 0 && (
+        {currentStudyIndex > 0 && (
           <button
-            onClick={handlePreviousQuiz}
+            onClick={handlePreviousStudy}
             className="hidden sm:flex items-center justify-center p-[0.5rem] sm:pl-2 text-white text-[12rem] sm:text-[3rem] bg-[#adadad] hover:bg-neutral-400 active:bg-neutral-500 rounded-full focus:outline-none absolute -left-[2rem] top-1/2 z-30"
           >
             <IoIosArrowBack />
           </button>
         )}
-        {currentQuestionNumber < quiz.length && (
+        {todayStudies && currentStudyIndex < todayStudies.length - 1 && (
           <button
-            onClick={handleNextQuiz}
+            onClick={handleNextStudy}
             className="hidden sm:flex items-center justify-center p-[0.5rem] sm:pl-2 text-white text-[12rem] sm:text-[3rem] bg-[#adadad] hover:bg-neutral-400 active:bg-neutral-500 rounded-full focus:outline-none absolute -right-[2rem] top-1/2 z-30"
           >
             <IoIosArrowForward />
           </button>
-        )} */}
+        )}
       </div>
     </div>
   );
@@ -139,7 +183,6 @@ function TestQuizItem({ data, studyId }) {
 
 TestQuizItem.propTypes = {
   data: PropTypes.object,
-  studyId: PropTypes.string,
 };
 
 export default TestQuizItem;
