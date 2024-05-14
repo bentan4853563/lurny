@@ -33,21 +33,33 @@ export const handleRemember = (user_id, lurny_id, type, number) => async () => {
       },
       body: JSON.stringify({ user_id, lurny_id, type, number }),
     });
-    if (response.ok) {
-      if (response.status === 409) {
-        const data = await response.json();
-        console.log("response.message :>> ", data.message);
-        toast.error(data.message, {
-          position: "top-right",
-        });
-      } else {
-        toast.success("Saved Lurny", {
-          position: "top-right",
-        });
-      }
+
+    // Handle 409 Conflict separately
+    if (response.status === 409) {
+      const data = await response.json();
+      console.log("response.message :>> ", data.message);
+      toast.error(data.message, {
+        position: "top-right",
+      });
+    } else if (response.ok) {
+      // If the status code is successful (2xx)
+      toast.success("Saved Lurny", {
+        position: "top-right",
+      });
+    } else {
+      // Other errors such as 4xx or 5xx apart from 409
+      const errorData = await response.json();
+      console.log("Error Response :>> ", errorData.message);
+      toast.error(errorData.message || "An unknown error occurred", {
+        position: "top-right",
+      });
     }
   } catch (error) {
-    console.log(error);
+    // Handle network or other unexpected errors
+    console.error("Network or unexpected error: ", error);
+    toast.error("Network or unexpected error", {
+      position: "top-right",
+    });
   }
 };
 
