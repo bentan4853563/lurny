@@ -35,13 +35,16 @@ export const handleRemember = (user_id, lurny_id, type, number) => async () => {
     });
     if (response.ok) {
       if (response.status === 409) {
-        toast.error(response.message, {
+        const data = await response.json();
+        console.log("response.message :>> ", data.message);
+        toast.error(data.message, {
+          position: "top-right",
+        });
+      } else {
+        toast.success("Saved Lurny", {
           position: "top-right",
         });
       }
-      toast.success("Saved Lurny", {
-        position: "top-right",
-      });
     }
   } catch (error) {
     console.log(error);
