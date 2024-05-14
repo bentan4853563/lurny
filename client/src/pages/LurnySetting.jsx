@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { useDispatch } from "react-redux";
 
-import { IoIosArrowForward } from "react-icons/io";
 import { PiUserGear } from "react-icons/pi";
 import { RiRepeatLine } from "react-icons/ri";
 import { TbBellRinging } from "react-icons/tb";
@@ -13,18 +12,17 @@ import { TbBellRinging } from "react-icons/tb";
 import UserPan from "../components/UserPan";
 import Header from "../components/Header";
 import { changeROSI } from "../actions/auth";
-// import { clearLoading, setLoading } from "../reducers/loadingSlice";
 
 const LurnySetting = () => {
   const dispatch = useDispatch();
 
   const [userDetails, setUserDetails] = useState(null);
-  const [showSidePan, setShowSidePan] = useState(false);
+  // const [showSidePan, setShowSidePan] = useState(false);
   const [section, setSection] = useState("rosi");
   const [repeatTime, setRepeatTime] = useState("");
   const [period, setPeriod] = useState("");
-  // const [showAll, setShowAll] = useState(true);
-  // const [filterdLurnies, setFilteredLurnies] = useState([]);
+
+  const [isChanged, setIsChanged] = useState(false);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("token");
@@ -40,30 +38,29 @@ const LurnySetting = () => {
     }
   }, [userDetails]);
 
+  useEffect(() => {
+    setIsChanged(
+      userDetails &&
+        (userDetails.repeatTimes !== Number(repeatTime) ||
+          userDetails.period !== Number(period))
+    );
+  }, [repeatTime, period, userDetails]);
+
   const handleSaveROSI = () => {
-    // Convert repeatTime and period to numbers for comparison
     const repeatTimeNumber = Number(repeatTime);
     const periodNumber = Number(period);
-
-    // Check for non-empty values
     if (repeatTime === "" || period === "") {
-      // Display an error message if either is empty
       toast.warning("Repeat Time and Period must not be empty.", {
         position: "top-right",
       });
       return; // Prevents further execution
     }
-
-    // Validate repeatTime is between 8 and 15
     if (repeatTimeNumber < 8 || repeatTimeNumber > 15) {
-      // Display an error message if invalid
       toast.warning("Repeat Time must be between 8 and 15.", {
         position: "top-right",
       });
       return; // Prevents further execution
     }
-
-    // Validate period is greater than 40
     if (periodNumber <= 40) {
       toast.warning("Period must be greater than 40 days.", {
         position: "top-right",
@@ -80,7 +77,7 @@ const LurnySetting = () => {
       <ToastContainer className="text-[2rem]" />
       <div className="w-full bg-[#262626] flex flex-1 justify-between px-[12rem] py-[6rem]">
         {/* Toggle button for mobile */}
-        <div
+        {/* <div
           onClick={() => setShowSidePan(!showSidePan)}
           className="h-full bg-transparent sm:hidden fixed bottom-0 left-0 flex items-center z-50"
         >
@@ -91,15 +88,10 @@ const LurnySetting = () => {
                 : ""
             }`}
           />
-        </div>
+        </div> */}
         <div className="hidden sm:flex">
           <UserPan />
         </div>
-
-        {/* UserPan is hidden on small screens initially */}
-        <div
-          className={`${showSidePan ? "absolute" : "hidden"} sm:block`}
-        ></div>
 
         {/* My Lurnies */}
         <div className="w-full pl-[12rem]">
@@ -172,12 +164,14 @@ const LurnySetting = () => {
                 <span>Days</span>
               </div>
 
-              <button
-                onClick={handleSaveROSI}
-                className="w-[12rem] text-black bg-white rounded-[0.5rem] px-[1rem] py-[0.5rem] text-[2rem]"
-              >
-                Save
-              </button>
+              {isChanged && (
+                <button
+                  onClick={handleSaveROSI}
+                  className="w-[12rem] text-black bg-white rounded-[0.5rem] px-[1rem] py-[0.5rem] text-[2rem]"
+                >
+                  Save
+                </button>
+              )}
             </div>
           </div>
         </div>

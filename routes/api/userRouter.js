@@ -23,8 +23,16 @@ router.post("/update-rosi", async (req, res) => {
     }
 
     console.log("response :>> ", response);
+    const jwsPayload = {
+      id: response._id,
+      email: response.email,
+      displayName: response.displayName,
+      photoURL: response.photoURL,
+      repeatTimes: response.repeatTimes,
+      period: response.period,
+    };
 
-    const jwtToken = jwt.sign(response, "secreate", { expiresIn: "1h" });
+    const jwtToken = jwt.sign(jwsPayload, "secreate", { expiresIn: "1h" });
     res.json({ message: "Successfully logged in", token: jwtToken });
   } catch (error) {
     // If an error occurs, send a 500 response with the error message.

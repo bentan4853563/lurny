@@ -88,7 +88,7 @@ export default function Header() {
             <GrUserAdmin className="text-zinc-300 text-[16rem] sm:text-[3.2rem] hover:text-gray-400" />
           </Link>
         )} */}
-        {todayStudies && (
+        {todayStudies && todayStudies.length > 0 && (
           <div className="relative" onClick={handleClickROSI}>
             <img
               src={BrainIcon}

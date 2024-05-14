@@ -99,35 +99,40 @@ function MaterialItem({ data }) {
   // const newImg = getDefaultImg(image, url);
   // userDetails && console.log(userDetails.email);
   return (
-    <div
-      onClick={handleClick}
-      className="w-[150rem] sm:w-[48rem] lg:w-[30rem] cursor-pointer relative"
-    >
-      {userDetails && (
-        <img
-          src={
-            userDetails.email === "bentan010918@gmail.com"
-              ? defaultImg
-              : imageUrl
-          }
-          // src={imageUrl}
-          alt="lurny image"
-          className="h-[80rem] sm:h-[24rem] lg:h-[16rem] w-full object-cover rounded-[8rem] sm:rounded-[1.5rem]"
-        />
-      )}
-      <BsAlarm
-        className={`absolute text-[2rem] top-[2rem] right-[2rem] text-red-600 bg-white rounded-full p-[0.5rem] box-content ${
-          isNextStudyDayToday ? "" : "hidden"
-        }`}
-      />
-      <div className="absolute top-[2rem] left-[2rem] flex flex-col items-start text-white text-[1.5rem]">
-        <span className="text-left">Repeat Times: {user.repeatTimes}</span>
-        <span className="text-left">Period: {user.period}</span>
-        <span className="text-left">Count: {learn_count}</span>
-        <span className="text-left">Last: {last_learned}</span>
-        {nextStudyDay && (
-          <span className="text-left">Next: {nextStudyDay}</span>
+    <div>
+      <div
+        onClick={handleClick}
+        className="w-[150rem] sm:w-[48rem] lg:w-[30rem] cursor-pointer relative"
+      >
+        {userDetails && (
+          <img
+            src={
+              userDetails.email === "bentan010918@gmail.com"
+                ? defaultImg
+                : imageUrl
+            }
+            // src={imageUrl}
+            alt="lurny image"
+            className="h-[80rem] sm:h-[24rem] lg:h-[16rem] w-full object-cover rounded-[8rem] sm:rounded-[1.5rem]"
+          />
         )}
+        <BsAlarm
+          className={`absolute text-[2rem] top-[2rem] right-[2rem] text-red-600 bg-white rounded-full p-[0.5rem] box-content ${
+            isNextStudyDayToday ? "" : "hidden"
+          }`}
+        />
+        {/* Meta info */}
+        <div className="flex flex-col items-start text-white text-[1.5rem] p-[1rem]">
+          <span className="text-left">Repeat Times: {user.repeatTimes}</span>
+          <span className="text-left">Period: {user.period}</span>
+          <span className="text-left">Learned Count: {learn_count}</span>
+          <span className="text-left">
+            Last learned: {new Date(last_learned).toLocaleDateString()}
+          </span>
+          {nextStudyDay && (
+            <span className="text-left">Next Day: {nextStudyDay}</span>
+          )}
+        </div>
       </div>
     </div>
   );

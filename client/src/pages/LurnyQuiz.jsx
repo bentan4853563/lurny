@@ -228,7 +228,7 @@ function LurnyQuiz() {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/");
+    navigate("/lurny/search");
   };
 
   return (
