@@ -67,7 +67,7 @@ const LurnySearch = () => {
       <Header />
       <ToastContainer className="text-start" />
 
-      <div className="w-full bg-[#262626] flex flex-col px-[12rem] py-[4rem] gap-[4rem]">
+      <div className="w-full h-full bg-[#262626] flex flex-col px-[12rem] py-[4rem] gap-[4rem]">
         {/* Search bar */}
         <div className="bg-transparent w-full px-[1.5rem] py-[0.5rem] flex flex-item items-center border border-gray-500 focus-within:border-white rounded-[0.5rem]">
           <ImSearch className="text-white text-[2rem]" />
@@ -80,8 +80,8 @@ const LurnySearch = () => {
           />
         </div>
 
-        <div className="w-full flex flex-col justify-between items-center">
-          <div className="w-full flex flex-wrap justify-start gap-[8rem] lg:gap-[4rem]">
+        <div className="w-full h-full flex flex-col justify-between items-center">
+          <div className="w-full h-full flex flex-wrap justify-start gap-[8rem] lg:gap-[4rem]">
             {currentItems.map((lurny, index) => (
               <LurnyItem key={index} data={lurny} />
             ))}

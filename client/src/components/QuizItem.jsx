@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Tooltip } from "react-tooltip";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { IoIosArrowBack } from "react-icons/io";
@@ -62,6 +62,10 @@ export default function QuizItem({
   }, []);
 
   useEffect(() => {
+    toast.dismiss();
+  }, [summaryNumber]);
+
+  useEffect(() => {
     setSummaryNumber(0);
     setCurrentQuestionNumber(0);
   }, [currentQuizId]);
@@ -86,11 +90,13 @@ export default function QuizItem({
   useEffect(() => {
     setSummaryNumber(0);
     setCurrentQuestionNumber(0);
+    toast.dismiss();
   }, [content]);
 
   useEffect(() => {
     setAnswerNumber(null);
     setAnswered(false);
+    toast.dismiss();
   }, [currentQuestionNumber]);
 
   // const translateContent = async () => {
@@ -627,8 +633,6 @@ export default function QuizItem({
                 <span>{quiz[currentQuestionNumber - 1].question}</span>
               </p>
 
-              <ToastContainer />
-
               <div className="w-full flex flex-col gap-[8rem] sm:gap-[2rem] items-start">
                 {quiz[currentQuestionNumber - 1].answer.map(
                   (translatedAnswer, index) => (
@@ -816,6 +820,20 @@ export default function QuizItem({
           </div>
         </div>
       )}
+
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition:Bounce
+      />
     </div>
   );
 }

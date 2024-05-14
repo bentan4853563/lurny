@@ -39,7 +39,7 @@ router.post("/save", async (req, res) => {
     let response;
 
     if (check) {
-      res.status(409).json({ mesage: `The ${type} already exist.` });
+      res.status(409).send({ message: `The ${type} already exist.` });
     } else {
       const lurny = await Lurny.findById(lurny_id);
       console.log("lurny :>> ", lurny);
