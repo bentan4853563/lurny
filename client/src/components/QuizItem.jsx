@@ -283,7 +283,7 @@ export default function QuizItem({
   };
 
   const handleSubmitAnswer = () => {
-    if (answerNumber) {
+    if (answerNumber !== null) {
       setAnswered(true);
     } else {
       toast.warning("Pleaser select answer");
