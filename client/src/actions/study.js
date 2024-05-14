@@ -34,6 +34,11 @@ export const handleRemember = (user_id, lurny_id, type, number) => async () => {
       body: JSON.stringify({ user_id, lurny_id, type, number }),
     });
     if (response.ok) {
+      if (response.status === 409) {
+        toast.error(response.message, {
+          position: "top-right",
+        });
+      }
       toast.success("Saved Lurny", {
         position: "top-right",
       });

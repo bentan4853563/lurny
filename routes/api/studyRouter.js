@@ -39,15 +39,7 @@ router.post("/save", async (req, res) => {
     let response;
 
     if (check) {
-      // Increment learn_count
-      const updatedLearnCount = check.learn_count + 1;
-
-      // Update the existing document
-      response = await Study.findByIdAndUpdate(
-        check._id,
-        { $set: { learn_count: updatedLearnCount, last_learned: Date.now() } },
-        { new: true }
-      );
+      res.status(409).json({ mesage: `The ${type} already exist.` });
     } else {
       const lurny = await Lurny.findById(lurny_id);
       console.log("lurny :>> ", lurny);
