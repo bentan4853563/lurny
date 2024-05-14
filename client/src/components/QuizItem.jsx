@@ -329,7 +329,7 @@ export default function QuizItem({
   };
 
   const onClickRemember = (user_id, lurny_id, type, number) => {
-    dispatch(handleRemember(user_id, lurny_id, type, number));
+    dispatch(handleRemember(user_id, lurny_id, type, number - 1));
     setOpenRememberModal(true);
   };
 

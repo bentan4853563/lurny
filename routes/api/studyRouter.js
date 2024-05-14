@@ -81,7 +81,6 @@ router.post("/save", async (req, res) => {
           // Handle failed request e.g., return an error message to the client
           return res.status(500).send("Failed to fetch quiz.");
         }
-
         quiz = await quizResponse.json();
       } else {
         console.log("lurny.quiz :>> ", lurny.quiz);

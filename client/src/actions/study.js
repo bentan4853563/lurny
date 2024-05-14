@@ -26,7 +26,6 @@ export const getStudies = (id) => async (dispatch) => {
 
 export const handleRemember = (user_id, lurny_id, type, number) => async () => {
   try {
-    console.log(user_id, lurny_id, type, number);
     const response = await fetch(`${backend_url}/api/study/save`, {
       method: "POST",
       headers: {
