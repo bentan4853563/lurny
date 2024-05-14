@@ -49,6 +49,7 @@ router.post("/save", async (req, res) => {
 
       let quiz = null;
       let stub = null;
+      let title = lurny.title ? lurny.title : null;
       let image = lurny.image ? lurny.image : null;
       let url = lurny.url ? lurny.url : null;
 
@@ -80,6 +81,7 @@ router.post("/save", async (req, res) => {
       }
 
       let quizObject = {
+        title,
         stub,
         ...quiz,
       };

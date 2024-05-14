@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const fs = require("fs");
 
 const Lurny = require("../../models/Lurny");
 
@@ -96,18 +97,33 @@ router.delete("/delete-byuser", async (req, res) => {
   res.send("Success!!");
 });
 
-router.delete("/many", async (req, res) => {
+router.delete("/low-quality", async (req, res) => {
+  const outputFile = "output.txt";
   try {
-    // const result = await Lurny.deleteMany({ url: { $exists: false } });
-    // Or if you want to check for both non-existent and null values:
-    const result = await Lurny.deleteMany({
-      $or: [{ url: { $exists: false } }, { url: null }],
+    const lurnies = await Lurny.find();
+    console.log("lurnies.length :>> ", lurnies.length);
+    const stream = fs.createWriteStream(outputFile, { flags: "w" });
+
+    for (let i = 0; i < 10; i++) {
+      let lurny = lurnies[i];
+      if (lurny.quiz.length < 5) {
+        await Lurny.findByIdAndDelete(lurny._id);
+        console.log(
+          "lurny.user.email, lurny.url :>> ",
+          lurny.user.email,
+          lurny.url
+        );
+        stream.write(`${lurny.user.email} ${lurny.url}\n`);
+      }
+    }
+
+    stream.end(() => {
+      console.log("Finished writing to file");
     });
 
-    res.status(200).json({
-      message: "Documents without url have been deleted",
-      deletedCount: result.deletedCount,
-    });
+    res
+      .status(200)
+      .json({ message: "Low quality lurnies have been deleted and logged." });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

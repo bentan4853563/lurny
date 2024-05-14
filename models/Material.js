@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
 const MaterialShema = new mongoose.Schema({
+  title: {
+    type: String,
+  },
   stub: {
     type: String,
   },
