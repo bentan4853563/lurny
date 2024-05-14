@@ -400,6 +400,20 @@ export default function MobileQuizItem({
         onTouchMove={handleTouchMove}
         className="w-full"
       >
+        <ToastContainer
+          position="top-right"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition:Bounce
+          className="text-[2rem]"
+        />
         {content === 0 && (
           <div className="w-full h-[64vh] relative cursor-pointer">
             {userData && (
@@ -507,8 +521,6 @@ export default function MobileQuizItem({
                   Q{currentQuestionNumber}:{" "}
                   {quiz[currentQuestionNumber - 1].question}
                 </p>
-
-                <ToastContainer />
 
                 <div className=" w-full flex flex-col gap-[8rem] items-start">
                   {quiz[currentQuestionNumber - 1].answer.map(
@@ -640,8 +652,6 @@ export default function MobileQuizItem({
                   Q{currentQuestionNumber + 1}:{" "}
                   {quiz[currentQuestionNumber].question}
                 </p>
-
-                <ToastContainer />
 
                 <div className="w-full flex flex-col gap-[4rem] items-start">
                   {quiz[currentQuestionNumber].answer.map(

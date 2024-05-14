@@ -60,7 +60,20 @@ const Signup = () => {
 
   return (
     <div className="w-full min-h-[100vh] flex font-raleway">
-      <ToastContainer className="text-[2rem] text-start" />
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition:Bounce
+        className="text-[2rem]"
+      />
       <div className="w-1/2 relative">
         <img
           src={signupImg}

@@ -58,7 +58,20 @@ export default function Signin() {
 
   return (
     <div className="w-[100vw] h-[100vh] bg-black flex items-center justify-center">
-      <ToastContainer className="text-[2rem] text-start" />
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition:Bounce
+        className="text-[2rem]"
+      />
       <img
         src={BgImage}
         alt="background image"

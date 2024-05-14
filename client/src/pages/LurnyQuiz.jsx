@@ -583,7 +583,20 @@ function LurnyQuiz() {
         </div>
       </div>
 
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition:Bounce
+        className="text-[2rem]"
+      />
 
       {/* Footer */}
       <div className="w-full flex sm:hidden justify-around items-center mb-[24rem]">

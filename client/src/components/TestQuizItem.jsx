@@ -88,7 +88,20 @@ function TestQuizItem({ data }) {
             <span>{question}</span>
           </p>
 
-          <ToastContainer />
+          <ToastContainer
+            position="top-right"
+            autoClose={1000}
+            hideProgressBar={false}
+            newestOnTop={true}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            transition:Bounce
+            className="text-[2rem]"
+          />
 
           <div className="w-full flex flex-col gap-[8rem] sm:gap-[2rem] items-start">
             {answer &&

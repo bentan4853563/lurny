@@ -147,7 +147,20 @@ const LurnyList = () => {
   return (
     <div className="w-full h-[100vh] font-raleway">
       <Header />
-      <ToastContainer className="text-start" />
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition:Bounce
+        className="text-[2rem]"
+      />
       <div className="w-full bg-[#2E2E2E] flex flex-col gap-[3rem] items-center text-white py-[4rem] sm:py-[3rem] lg:py-[2rem]">
         <div className="w-4/5 hidden sm:flex flex-wrap justify-center gap-[2rem] text-[10rem] lg:text-[2.5rem] font-bold">
           {selectedCategories.length > 0 &&

@@ -47,7 +47,20 @@ export default function Prompt() {
   return (
     <div className="w-full h-[100vh] font-raleway">
       <Header />
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition:Bounce
+        className="text-[2rem]"
+      />
       <div className="flex flex-col w-full px-[12rem] gap-[4rem] py-[4rem]">
         {/* Summary Prompt */}
         <div className="w-full flex flex-col">

@@ -65,7 +65,20 @@ const LurnySearch = () => {
   return (
     <div className="h-[100vh] font-raleway">
       <Header />
-      <ToastContainer className="text-start" />
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition:Bounce
+        className="text-[2rem]"
+      />
 
       <div className="w-full h-full bg-[#262626] flex flex-col px-[12rem] py-[4rem] gap-[4rem]">
         {/* Search bar */}

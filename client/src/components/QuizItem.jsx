@@ -282,6 +282,14 @@ export default function QuizItem({
     }
   };
 
+  const handleSubmitAnswer = () => {
+    if (answerNumber) {
+      setAnswered(true);
+    } else {
+      toast.warning("Pleaser select answer");
+    }
+  };
+
   const classNames = (...classes) => {
     return classes.filter(Boolean).join(" ");
   };
@@ -433,7 +441,7 @@ export default function QuizItem({
   //     learningPoints: "শিক্ষা পইণ্ট",
   //   },
   // };
-
+  console.log("answerNumber :>> ", answerNumber);
   return (
     <div
       className=""
@@ -696,7 +704,7 @@ export default function QuizItem({
 
               {!answered ? (
                 <button
-                  onClick={() => setAnswered(true)}
+                  onClick={handleSubmitAnswer}
                   className="bg-[#FFC36D] hover:bg-[#ebb161] active:bg-[#f1b765] mx-auto mt-[2rem] text-[6rem] sm:text-[1.8rem] border-none focus:outline-none text-black"
                 >
                   {/* {translations[language].submitAnswer} */}
@@ -823,7 +831,7 @@ export default function QuizItem({
 
       <ToastContainer
         position="top-right"
-        autoClose={2000}
+        autoClose={1000}
         hideProgressBar={false}
         newestOnTop={true}
         closeOnClick
@@ -833,6 +841,7 @@ export default function QuizItem({
         pauseOnHover
         theme="light"
         transition:Bounce
+        className="text-[2rem]"
       />
     </div>
   );
