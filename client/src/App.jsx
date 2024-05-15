@@ -29,6 +29,7 @@ import { setUserDetails } from "./reducers/userSlice";
 
 import "./App.css";
 import "animate.css";
+import Landing from "./pages/Landing";
 
 function App() {
   const dispatch = useDispatch();
@@ -79,7 +80,8 @@ function App() {
               <Route path="lurny" element={<Lurny />} />
               <Route path="prompt" element={<Prompt />} />
             </Route>
-            <Route path="/" element={<About />} />
+            <Route path="/" element={<Landing />} />
+            <Route path="/about" element={<About />} />
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
