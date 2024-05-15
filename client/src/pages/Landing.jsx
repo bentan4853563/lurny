@@ -83,12 +83,12 @@ const Landing = () => {
       <div className="w-full h-full bg-[#262626] flex flex-col px-[12rem] pt-[12rem] pb-[8rem] gap-[4rem]">
         {/* Search bar */}
         <div className="flex flex-col gap-[4rem] items-center">
-          <h1 className="text-white text-[6rem] leading-[6rem] font-bold">
+          <h1 className="text-white text-[35px] leading-[6rem] font-bold">
             Learn from millions of Lurnies <br /> drawn from the best content
             available on the Internet
           </h1>
 
-          <div className="bg-white w-1/4 px-[1.5rem] py-[0.5rem] flex flex-item items-center border border-gray-500 focus-within:border-white rounded-[0.5rem]">
+          <div className="bg-white w-1/3 px-[1.5rem] py-[0.8rem] flex flex-item items-center border border-gray-500 focus-within:border-white rounded-full">
             <ImSearch className="text-gray-300 text-[2rem]" />
             <input
               type="text"
@@ -100,8 +100,8 @@ const Landing = () => {
           </div>
         </div>
 
-        <div className="w-full h-full flex flex-col justify-between items-center mt-[4rem]">
-          <div className="w-full h-full flex flex-wrap justify-center gap-[8rem] lg:gap-[4rem]">
+        <div className="w-full h-full flex flex-col justify-between items-center mt-[12rem]">
+          <div className="w-full h-full flex flex-wrap justify-center gap-[8rem] lg:gap-[6rem]">
             {currentItems.map((lurny, index) => (
               <LurnyItem key={index} data={lurny} />
             ))}

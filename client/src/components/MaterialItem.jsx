@@ -116,12 +116,12 @@ function MaterialItem({ data }) {
         <div className="relative">
           {userDetails && (
             <img
-              // src={
-              //   userDetails.email === "bentan010918@gmail.com"
-              //     ? defaultImg
-              //     : imageUrl
-              // }
-              src={imageUrl}
+              src={
+                userDetails.email === "bentan010918@gmail.com"
+                  ? defaultImg
+                  : imageUrl
+              }
+              // src={imageUrl}
               alt="lurny image"
               className="h-[80rem] sm:h-[24rem] lg:h-[16rem] w-full object-cover rounded-[8rem] sm:rounded-[1.5rem]"
             />
