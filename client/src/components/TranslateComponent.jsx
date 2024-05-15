@@ -34,8 +34,11 @@ function TranslateComponent() {
 
   // This useEffect runs when `location` changes
   useEffect(() => {
-    // Check if the pathname includes "lurny/feeds"
-    setIsRender(location.pathname.includes("lurny/feeds"));
+    // Check if the pathname includes "lurny/feeds" or "lurny/remind"
+    const shouldRender =
+      location.pathname.includes("lurny/feeds") ||
+      location.pathname.includes("lurny/remind");
+    setIsRender(shouldRender);
   }, [location]);
 
   return (

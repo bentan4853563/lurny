@@ -376,10 +376,10 @@ export default function QuizItem({
     if (!isSaving) {
       // Only proceed if not already saving
       setIsSaving(true); // Disable further clicks
+      setOpenRememberModal(true);
       dispatch(handleRemember(user_id, lurny_id, type, number - 1)).finally(
         () => {
           setIsSaving(false); // Re-enable interaction after operation is done
-          setOpenRememberModal(true);
         }
       );
     }
@@ -392,7 +392,7 @@ export default function QuizItem({
   };
 
   const handleGotoROSISetting = () => {
-    navigate("/#");
+    navigate("/lurny/setting");
   };
 
   const handleGotoSavedLurnies = () => {

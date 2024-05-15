@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getStudies } from "../actions/study";
 import { Link } from "react-router-dom";
 
+import { IoSettingsSharp } from "react-icons/io5";
+
 function UserPan() {
   const dispatch = useDispatch();
 
@@ -78,11 +80,12 @@ function UserPan() {
       </a>
       <Link
         to="/lurny/saved"
-        className={`w-full active:text-gray-300 hover:text-white text-left text-[2rem] font-bold border-b border-white cursor-pointer ${
+        className={`w-full flex items-center justify-between active:text-gray-300 hover:text-white text-left text-[2rem] font-bold border-b border-white cursor-pointer ${
           endPoint && endPoint === "saved" ? "text-white" : "text-gray-500"
         } `}
       >
-        Saved Lurnies ({studies.length})
+        <span>Saved Lurnies ({studies.length})</span>
+        <IoSettingsSharp />
       </Link>
       <Link
         to="/lurny/profile"
