@@ -90,8 +90,6 @@ router.post("/save", async (req, res) => {
 
     const materialData = {
       title: lurny.title,
-      image: lurny.image,
-      url: lurny.url,
       ...quiz,
     };
 
@@ -104,6 +102,8 @@ router.post("/save", async (req, res) => {
       lurny: lurny_id,
       type,
       number,
+      image: lurny.image,
+      url: lurny.url,
       material: materialDoc._id,
       learn_count: 1,
       saved_date: Date.now(),

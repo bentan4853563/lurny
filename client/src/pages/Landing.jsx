@@ -18,7 +18,7 @@ const Landing = () => {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // Adjust as needed
+  const [itemsPerPage] = useState(20); // Adjust as needed
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredLurnies.slice(indexOfFirstItem, indexOfLastItem);
@@ -80,10 +80,10 @@ const Landing = () => {
         className="text-[2rem]"
       />
 
-      <div className="w-full h-full bg-[#262626] flex flex-col px-[12rem] py-[8rem] gap-[4rem]">
+      <div className="w-full h-full bg-[#262626] flex flex-col px-[12rem] pt-[12rem] pb-[8rem] gap-[4rem]">
         {/* Search bar */}
-        <div className="flex flex-col gap-[2rem] items-center">
-          <h1 className="text-white text-[3rem] w-1/2">
+        <div className="flex flex-col gap-[4rem] items-center">
+          <h1 className="text-white text-[6rem] leading-[6rem] font-bold">
             Learn from millions of Lurnies <br /> drawn from the best content
             available on the Internet
           </h1>
