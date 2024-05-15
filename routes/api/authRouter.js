@@ -50,8 +50,6 @@ router.post("/signin", async (req, res) => {
     const email = decodedToken.email;
     const existingUser = await User.findOne({ email: email });
 
-    console.log("existingUser :>> ", existingUser);
-
     if (existingUser) {
       const jwsPayload = {
         id: existingUser._id,
@@ -64,7 +62,6 @@ router.post("/signin", async (req, res) => {
       const jwtToken = jwt.sign(jwsPayload, "secreate", {
         expiresIn: "1h",
       });
-      console.log("jwtToken :>> ", jwtToken);
       res
         .status(200)
         .json({ message: "Successfully logged in", token: jwtToken });

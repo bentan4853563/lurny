@@ -266,34 +266,34 @@ const LurnyProfile = () => {
             {currentItems &&
               currentItems.length > 0 &&
               currentItems.map((lurny, index) => {
-                if (typeof lurny === "object" && Object.keys(lurny).length > 3)
-                  return (
-                    <div key={index} className="relative flex flex-col">
-                      <div className="absolute right-[8rem] sm:right-[2rem] top-[60rem] sm:top-[12rem] z-50 cursor-pointer">
-                        <IoTrashOutline
-                          onClick={() => handleDelete(lurny._id)}
-                          className="text-[12rem] sm:text-[2rem] text-red-500 hover:text-red-400"
-                        />
-                      </div>
-
-                      <LurnyItem data={lurny} />
-                      {lurny.shared ? (
-                        <div className="bg-[#00B050] py-[4rem] sm:py-[0.5rem] mt-auto rounded-md text-white text-[8rem] sm:text-[2rem] cursor-pointer">
-                          Shared
-                        </div>
-                      ) : (
-                        <div
-                          className="bg-white px-[2rem] py-[4rem] sm:py-[0.5rem] mt-auto rounded-md flex justify-around items-center text-black text-[8rem] sm:text-[2rem] cursor-pointer"
-                          onClick={() => dispatch(handleShareLurny(lurny._id))}
-                        >
-                          <TfiShare />
-                          <span className="justify-center">
-                            Share with Community
-                          </span>
-                        </div>
-                      )}
+                // if (typeof lurny === "object" && Object.keys(lurny).length > 3)
+                return (
+                  <div key={index} className="relative flex flex-col">
+                    <div className="absolute right-[8rem] sm:right-[2rem] top-[60rem] sm:top-[12rem] z-50 cursor-pointer">
+                      <IoTrashOutline
+                        onClick={() => handleDelete(lurny._id)}
+                        className="text-[12rem] sm:text-[2rem] text-red-500 hover:text-red-400"
+                      />
                     </div>
-                  );
+
+                    <LurnyItem data={lurny} />
+                    {lurny.shared ? (
+                      <div className="bg-[#00B050] py-[4rem] sm:py-[0.5rem] mt-auto rounded-md text-white text-[8rem] sm:text-[2rem] cursor-pointer">
+                        Shared
+                      </div>
+                    ) : (
+                      <div
+                        className="bg-white px-[2rem] py-[4rem] sm:py-[0.5rem] mt-auto rounded-md flex justify-around items-center text-black text-[8rem] sm:text-[2rem] cursor-pointer"
+                        onClick={() => dispatch(handleShareLurny(lurny._id))}
+                      >
+                        <TfiShare />
+                        <span className="justify-center">
+                          Share with Community
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                );
               })}
           </div>
           {myLurnies.length > 0 && (

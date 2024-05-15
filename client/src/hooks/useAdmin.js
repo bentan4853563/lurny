@@ -10,7 +10,6 @@ const useAdmin = () => {
     userData.email === "krish@carillonmedia.com"
       ? true
       : false;
-  console.log(isAdmin);
 
   return isAdmin;
 };

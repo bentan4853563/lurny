@@ -514,7 +514,6 @@ function LurnyQuiz() {
                               navigate(
                                 `/lurny/feeds/${encodeURIComponent(item.url)}`
                               );
-                              console.log(item);
                             }}
                             // src="###"
                             src={

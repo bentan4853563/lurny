@@ -12,7 +12,6 @@ const quiz_server_url = process.env.VITE_QUIZ_SERVER;
 router.get("/get/:id", async (req, res) => {
   try {
     const user_id = req.params.id;
-    console.log("user_id", user_id);
     const studies = await Study.find({ user: user_id })
       .populate("user")
       .populate("material");
@@ -25,7 +24,6 @@ router.get("/get/:id", async (req, res) => {
 router.post("/save", async (req, res) => {
   try {
     const { user_id, lurny_id, type, number } = req.body;
-    console.log("object :>> ", user_id, lurny_id, type, number);
 
     // Check for an existing study record
     const check = await Study.findOne({
@@ -34,7 +32,6 @@ router.post("/save", async (req, res) => {
       type,
       number,
     });
-    console.log("check", check);
 
     let response;
 
@@ -42,7 +39,7 @@ router.post("/save", async (req, res) => {
       res.status(409).send({ message: `The ${type} already exist.` });
     } else {
       const lurny = await Lurny.findById(lurny_id);
-      console.log("lurny :>> ", lurny);
+
       if (!lurny) {
         return res.status(404).send(`No Lurny found with id ${lurny_id}`);
       }
@@ -76,7 +73,6 @@ router.post("/save", async (req, res) => {
         }
         quiz = await quizResponse.json();
       } else {
-        console.log("lurny.quiz :>> ", lurny.quiz);
         quiz = lurny.quiz[number];
       }
 
@@ -102,7 +98,6 @@ router.post("/save", async (req, res) => {
       });
 
       response = await newStudy.save();
-      console.log("response :>> ", response);
     }
 
     // The success response could be improved by returning some data about the operation (e.g., the created or updated document)

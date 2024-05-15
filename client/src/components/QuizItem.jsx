@@ -6,6 +6,8 @@ import { jwtDecode } from "jwt-decode";
 import { Tooltip } from "react-tooltip";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
@@ -98,6 +100,18 @@ export default function QuizItem({
     setAnswered(false);
     toast.dismiss();
   }, [currentQuestionNumber]);
+
+  useEffect(() => {
+    if (summaryNumber >= summary.length) {
+      setSummaryNumber(summary.length);
+    }
+  }, [summary, summaryNumber]);
+
+  useEffect(() => {
+    if (currentQuestionNumber >= quiz.length) {
+      setCurrentQuestionNumber(quiz.length);
+    }
+  }, [quiz, currentQuestionNumber]);
 
   // const translateContent = async () => {
   //   try {
@@ -338,8 +352,22 @@ export default function QuizItem({
     }
   }
 
-  const handleDelete = (type, number) => {
-    dispatch(handleDeleteStubOrQuiz(type, number));
+  const handleDelete = (id, type, number) => {
+    confirmAlert({
+      title: `Are you sure to delete this ${type}?`,
+      buttons: [
+        {
+          label: "Yes",
+          onClick: async () => {
+            dispatch(handleDeleteStubOrQuiz(id, type, number));
+          },
+        },
+        {
+          label: "No",
+          onClick: () => console.log("Click No"),
+        },
+      ],
+    });
   };
 
   const onClickRemember = (user_id, lurny_id, type, number) => {
@@ -441,7 +469,6 @@ export default function QuizItem({
   //     learningPoints: "শিক্ষা পইণ্ট",
   //   },
   // };
-  console.log("answerNumber :>> ", answerNumber);
   return (
     <div
       className=""
@@ -512,7 +539,7 @@ export default function QuizItem({
                     <div className="absolute flex gap-[2rem] sm:bottom-[4rem] sm:right-[4rem]">
                       {userData.id === user._id && (
                         <div
-                          onClick={() => handleDelete("stub", summaryNumber)}
+                          onClick={() => handleDelete(_id, "stub", index)}
                           data-data-tooltip-id="delete-stub"
                           className="border-2 border-gray-300 hover:border-yellow-400 active:border-yellow-600 rounded-full w-[4rem] flex justify-center items-center cursor-pointer"
                         >
@@ -726,7 +753,9 @@ export default function QuizItem({
               <div className="absolute flex gap-[2rem] sm:bottom-[4rem] sm:right-[4rem]">
                 {userData.id === user._id && (
                   <div
-                    onClick={() => handleDelete("quiz", currentQuestionNumber)}
+                    onClick={() =>
+                      handleDelete(_id, "quiz", currentQuestionNumber - 1)
+                    }
                     data-tooltip-id="delete-quiz"
                     className="border-2 border-gray-300 hover:border-yellow-400 active:border-yello userData.id w-600 rounded-full w-[4rem] flex justify-center items-center cursor-pointer"
                   >

@@ -96,8 +96,6 @@ function MaterialItem({ data }) {
     return nextDay;
   };
 
-  // const newImg = getDefaultImg(image, url);
-  // userDetails && console.log(userDetails.email);
   return (
     <div>
       <div

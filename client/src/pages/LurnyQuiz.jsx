@@ -84,7 +84,7 @@ function LurnyQuiz() {
 
   useEffect(() => {
     if (lurnies.length > 0 && id) {
-      const foundLurny = lurnies.find((lurny) => lurny._id === id); // Utilize .find() for efficiency
+      const foundLurny = lurnies.find((lurny) => lurny && lurny._id === id); // Utilize .find() for efficiency
       if (foundLurny) {
         const foundIndex = lurnies.indexOf(foundLurny);
         if (foundIndex !== -1) {
@@ -137,7 +137,6 @@ function LurnyQuiz() {
     if (isYoutubeUrl(url)) {
       return getThumbnailURLFromVideoURL(url);
     } else if (image) {
-      console.log(image);
       return image ? image : defaultImg;
     }
   };
@@ -493,7 +492,7 @@ function LurnyQuiz() {
 
         {/* Mobile */}
         <div className="flex sm:hidden">
-          {lurnies && lurnies.length > 0 && (
+          {lurnies && lurnies.length > 0 && lurnies[selectedIndex] && (
             <MobileQuizItem
               currentQuizId={
                 quizData && Object.keys(quizData).length > 0

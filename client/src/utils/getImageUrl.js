@@ -33,10 +33,8 @@ const checkImage = (imageUrl) => {
       .then((response) => {
         // If we receive an ok response, resolve with the image Url
         if (response.ok) {
-          console.log("image, response :>> ", imageUrl, response);
           resolve(imageUrl);
         } else {
-          console.log("default");
           resolve(defaultImg);
         }
       })
@@ -48,10 +46,8 @@ const checkImage = (imageUrl) => {
 };
 
 export const getValidatedImg = async (image, url) => {
-  console.log("image, url :>> ", image, url);
   if (image) {
     const isValidImage = await checkImage(image);
-    console.log("isValidImage :>> ", isValidImage);
     return isValidImage;
   } else if (isYoutubeUrl(url)) {
     return getThumbnailURLFromVideoURL(url);

@@ -1,4 +1,4 @@
 {
-  "mongoURI": "mongodb://ec2-3-84-247-235.compute-1.amazonaws.com:27017/?ssl=false",
+  "mongoURI": "mongodb+srv://krish:yXMdTPwSdTRo7qHY@serverlessinstance0.18otqeg.mongodb.net/Lurny",
   "jwtSecret": "OneBrickSecret"
 }

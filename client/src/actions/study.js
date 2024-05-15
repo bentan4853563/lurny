@@ -16,7 +16,6 @@ export const getStudies = (id) => async (dispatch) => {
     });
     if (response.ok) {
       const studies = await response.json();
-      console.log("Studies", studies);
       dispatch(setStudies(studies));
     }
   } catch (error) {
@@ -37,7 +36,6 @@ export const handleRemember = (user_id, lurny_id, type, number) => async () => {
     // Handle 409 Conflict separately
     if (response.status === 409) {
       const data = await response.json();
-      console.log("response.message :>> ", data.message);
       toast.error(data.message, {
         position: "top-right",
       });
@@ -49,7 +47,6 @@ export const handleRemember = (user_id, lurny_id, type, number) => async () => {
     } else {
       // Other errors such as 4xx or 5xx apart from 409
       const errorData = await response.json();
-      console.log("Error Response :>> ", errorData.message);
       toast.error(errorData.message || "An unknown error occurred", {
         position: "top-right",
       });

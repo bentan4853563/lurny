@@ -61,8 +61,6 @@ function LurnyItem({ data }) {
     return `https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`;
   }
 
-  // const newImg = getDefaultImg(image, url);
-  // userDetails && console.log(userDetails.email);
   return (
     <div
       onClick={handleClick}

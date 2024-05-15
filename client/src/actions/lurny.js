@@ -3,6 +3,7 @@ import {
   insertLurny,
   setLurnies,
   shareLurny,
+  updateLurny,
 } from "../reducers/lurnySlice";
 import { toast } from "react-toastify";
 
@@ -20,7 +21,6 @@ export const getLurnies = () => async (dispatch) => {
     const currents = await fetch(`${backend_url}/api/lurny/currents`, options);
     if (currents.ok) {
       const currentLurnies = await currents.json();
-      console.log("currentLurnies", currentLurnies);
       dispatch(setLurnies(currentLurnies));
     }
     const response = await fetch(`${backend_url}/api/lurny/get`, options);
@@ -110,29 +110,29 @@ export const handleDeleteLurny = (id) => async (dispatch) => {
   }
 };
 
-export const handleDeleteStubOrQuiz = (type, number) => async (dispatch) => {
-  try {
-    const response = await fetch(`${backend_url}/api/lurny/deleteStubOrQuiz`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": true,
-      },
-      body: JSON.stringify({ type, number }),
-    });
-    if (response.ok) {
-      dispatch(deleteLurny(response));
-      toast.success(`Deleted ${type} successfuly!`, {
-        position: "top-right",
+export const handleDeleteStubOrQuiz =
+  (id, type, number) => async (dispatch) => {
+    try {
+      const response = await fetch(`${backend_url}/api/lurny/delete-stub`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": true,
+        },
+        body: JSON.stringify({ id, type, number }),
       });
-    } else {
-      toast.error("Faild delete!", {
+      if (response.ok) {
+        const updatedLurny = await response.json();
+        dispatch(updateLurny(updatedLurny));
+        // toast.success(`Deleted ${type} successfuly!`);
+      } else {
+        toast.error("Faild delete!", {
+          position: "top-right",
+        });
+      }
+    } catch (error) {
+      toast.error("Network error when trying to delete lurny!", {
         position: "top-right",
       });
     }
-  } catch (error) {
-    toast.error("Network error when trying to delete lurny!", {
-      position: "top-right",
-    });
-  }
-};
+  };

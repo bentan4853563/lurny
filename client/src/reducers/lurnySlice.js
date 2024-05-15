@@ -25,6 +25,15 @@ const lurnySlice = createSlice({
         item._id === action.payload ? { ...item, shared: true } : item
       );
     },
+    updateLurny: (state, action) => {
+      const index = state.lurnies.findIndex(
+        (lurny) => lurny._id === action.payload._id
+      );
+      if (index !== -1) {
+        state.lurnies[index] = action.payload;
+      }
+    },
+
     deleteLurny: (state, action) => {
       state.lurnies = state.lurnies.filter(
         (item) => item._id !== action.payload
@@ -40,6 +49,7 @@ export const {
   setLurnies,
   insertLurny,
   shareLurny,
+  updateLurny,
   deleteLurny,
   clearLurnies,
 } = lurnySlice.actions;

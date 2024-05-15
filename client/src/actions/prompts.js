@@ -13,7 +13,6 @@ export const getPrompts = () => async (dispatch) => {
     });
     if (response.ok) {
       const prompts = await response.json();
-      console.log("prompts", prompts);
       dispatch(setPrompts(prompts));
     }
   } catch (error) {
@@ -23,7 +22,6 @@ export const getPrompts = () => async (dispatch) => {
 
 export const savePrompts = (prompts) => async (dispatch) => {
   try {
-    console.log("prompt", prompts);
     const response = await fetch(`${quiz_server_url}/update_prompts`, {
       method: "POST",
       headers: {

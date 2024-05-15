@@ -71,12 +71,6 @@ export const signUp = (accessToken, navigate) => async () => {
 export const changeROSI =
   (user_id, repeatTimes, period) => async (dispatch) => {
     try {
-      console.log(
-        "user_id, repeatTimes, period :>> ",
-        user_id,
-        repeatTimes,
-        period
-      );
       const response = await fetch(`${backend_url}/api/user/update-rosi`, {
         method: "POST",
         headers: {
