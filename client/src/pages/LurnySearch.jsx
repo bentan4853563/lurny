@@ -63,7 +63,7 @@ const LurnySearch = () => {
   }, [searchTerm, publishedLurnies]);
 
   return (
-    <div className="h-[100vh] font-raleway">
+    <div className="min-h-[100vh] font-raleway">
       <Header />
       <ToastContainer
         position="top-right"

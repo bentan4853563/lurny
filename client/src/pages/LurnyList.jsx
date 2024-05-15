@@ -145,7 +145,7 @@ const LurnyList = () => {
   };
 
   return (
-    <div className="w-full h-[100vh] font-raleway">
+    <div className="w-full min-h-[100vh] font-raleway">
       <Header />
       <ToastContainer
         position="top-right"
