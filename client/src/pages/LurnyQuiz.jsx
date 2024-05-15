@@ -227,14 +227,14 @@ function LurnyQuiz() {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/lurny/search");
+    navigate("/");
   };
 
   return (
     <div className="min-h-[100vh] bg-black font-raleway flex flex-col justify-center sm:justify-start">
       {/* Header */}
       <div className="w-full bg-black px-[4rem] sm:px-[20rem] flex justify-between items-center mb-[4rem] sm:mb-0 sm:py-[2rem]">
-        <Link to="/lurny/search" className="select-none">
+        <Link to="/" className="select-none">
           <img
             src={LetterLogo}
             alt="Letter logo"
@@ -472,7 +472,7 @@ function LurnyQuiz() {
 
         <div
           id="current-quiz"
-          className="hidden sm:flex flex-1 flex-col gap-[4rem] px-[16rem]"
+          className="hidden sm:flex flex-1 gap-[4rem] px-[16rem]"
         >
           {quizData && Object.keys(quizData).length > 0 && (
             <QuizItem

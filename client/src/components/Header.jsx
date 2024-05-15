@@ -75,7 +75,7 @@ export default function Header() {
       className="bg-black px-[12rem] flex justify-between items-center py-[4rem] sm:py-[1.5rem] top-0 sticky"
       style={{ zIndex: 999 }}
     >
-      <Link to="/lurny/search" className="select-none">
+      <Link to="/" className="select-none">
         <img
           src={LetterLogo}
           alt="Letter logo"
