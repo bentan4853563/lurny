@@ -12,6 +12,7 @@ import { TbBellRinging } from "react-icons/tb";
 import UserPan from "../components/UserPan";
 import Header from "../components/Header";
 import { changeROSI } from "../actions/auth";
+import getSchedule from "../utils/reminder";
 
 const LurnySetting = () => {
   const dispatch = useDispatch();
@@ -69,7 +70,10 @@ const LurnySetting = () => {
     }
 
     dispatch(changeROSI(userDetails.id, repeatTime, period));
+    setIsChanged(false);
   };
+
+  console.log("userDetails :>> ", userDetails);
 
   return (
     <div className="min-w-[100vw] min-h-[100vh] font-raleway">
@@ -175,6 +179,19 @@ const LurnySetting = () => {
                   className="w-[6rem] bg-white text-black text-bold text-[2rem] px-[0.5rem] py-[0.2rem] rounded-[0.5rem] focus:outline-orange-400"
                 />
                 <span>Days</span>
+              </div>
+
+              <div className="flex gap-[4rem]">
+                <label htmlFor="attempt-days" className="text-[2rem]">
+                  Attempt Days:
+                </label>
+                <div id="attempt-days" className="flex items-center gap-[2rem]">
+                  {getSchedule(repeatTime, period).map((item, index) => (
+                    <span key={index} className="text-white text-[2rem]">
+                      {item}
+                    </span>
+                  ))}
+                </div>
               </div>
 
               {isChanged && (

@@ -56,6 +56,8 @@ export default function QuizItem({
 
   const [imageUrl, setImageUrl] = useState(null);
 
+  const [isSaving, setIsSaving] = useState(false);
+
   useEffect(() => {
     const accessToken = localStorage.getItem("token");
     if (accessToken) {
@@ -371,8 +373,16 @@ export default function QuizItem({
   };
 
   const onClickRemember = (user_id, lurny_id, type, number) => {
-    dispatch(handleRemember(user_id, lurny_id, type, number - 1));
-    setOpenRememberModal(true);
+    if (!isSaving) {
+      // Only proceed if not already saving
+      setIsSaving(true); // Disable further clicks
+      dispatch(handleRemember(user_id, lurny_id, type, number - 1)).finally(
+        () => {
+          setIsSaving(false); // Re-enable interaction after operation is done
+          setOpenRememberModal(true);
+        }
+      );
+    }
   };
 
   const handleClickModal = (e) => {

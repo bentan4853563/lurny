@@ -17,7 +17,8 @@ function MaterialItem({ data }) {
   const [nextStudyDay, setNextStudyDay] = useState(null);
   const [isNextStudyDayToday, setIsNextStudyDayToday] = useState(false);
 
-  const { _id, image, url, user, learn_count, last_learned } = data;
+  const { _id, image, url, user, learn_count, type, saved_date, last_learned } =
+    data;
 
   useEffect(() => {
     if (isYoutubeUrl(url)) {
@@ -96,39 +97,71 @@ function MaterialItem({ data }) {
     return nextDay;
   };
 
+  // Get last attemp data based on the repeat times, period, and last learned date
+  const getLastDay = () => {
+    const schedule = getSchedule(user.repeatTimes, user.period);
+    let daysToAdd = schedule[schedule.length - 1] - schedule[learn_count];
+    console.log("daysToAdd :>> ", daysToAdd);
+    let lastDay = new Date(saved_date);
+    lastDay.setDate(lastDay.getDate() + daysToAdd);
+    return lastDay.toLocaleDateString();
+  };
+
   return (
     <div>
       <div
         onClick={handleClick}
         className="w-[150rem] sm:w-[48rem] lg:w-[30rem] cursor-pointer relative"
       >
-        {userDetails && (
-          <img
-            src={
-              userDetails.email === "bentan010918@gmail.com"
-                ? defaultImg
-                : imageUrl
-            }
-            // src={imageUrl}
-            alt="lurny image"
-            className="h-[80rem] sm:h-[24rem] lg:h-[16rem] w-full object-cover rounded-[8rem] sm:rounded-[1.5rem]"
+        <div className="relative">
+          {userDetails && (
+            <img
+              src={
+                userDetails.email === "bentan010918@gmail.com"
+                  ? defaultImg
+                  : imageUrl
+              }
+              // src={imageUrl}
+              alt="lurny image"
+              className="h-[80rem] sm:h-[24rem] lg:h-[16rem] w-full object-cover rounded-[8rem] sm:rounded-[1.5rem]"
+            />
+          )}
+          <span
+            className={`absolute bottom-[2rem] left-[2rem] rounded-[1rem] text-[2rem] font-bold px-[2rem] py-0 ${
+              type === "stub"
+                ? "bg-[#FFC35E] text-black"
+                : "bg-[#7F52BB] text-white"
+            }`}
+          >
+            {type.toUpperCase()}
+          </span>
+          <BsAlarm
+            className={`absolute text-[2rem] top-[2rem] right-[2rem] text-red-600 bg-white rounded-full p-[0.5rem] box-content ${
+              isNextStudyDayToday ? "" : "hidden"
+            }`}
           />
-        )}
-        <BsAlarm
-          className={`absolute text-[2rem] top-[2rem] right-[2rem] text-red-600 bg-white rounded-full p-[0.5rem] box-content ${
-            isNextStudyDayToday ? "" : "hidden"
-          }`}
-        />
+        </div>
         {/* Meta info */}
         <div className="flex flex-col items-start text-white text-[1.5rem] p-[1rem]">
-          <span className="text-left">Repeat Times: {user.repeatTimes}</span>
-          <span className="text-left">Period: {user.period}</span>
-          <span className="text-left">Learned Count: {learn_count}</span>
           <span className="text-left">
-            Last learned: {new Date(last_learned).toLocaleDateString()}
+            Total repetitions: {user.repeatTimes}
+          </span>
+          <span className="text-left">
+            Repetitions completed: {learn_count} / {user.repeatTimes}
+          </span>
+          <span className="text-left">
+            Repetition cycle begins on:{" "}
+            {new Date(saved_date).toLocaleDateString()}
+          </span>
+          <span className="text-left">
+            Repetition cycle ends on: {getLastDay()}
+          </span>
+
+          <span className="text-left">
+            Previous Attempt on: {new Date(last_learned).toLocaleDateString()}
           </span>
           {nextStudyDay && (
-            <span className="text-left">Next Day: {nextStudyDay}</span>
+            <span className="text-left">Next Attempt on:: {nextStudyDay}</span>
           )}
         </div>
       </div>

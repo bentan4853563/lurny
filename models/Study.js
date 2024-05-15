@@ -25,6 +25,9 @@ const StudySchema = mongoose.Schema({
   url: {
     type: String,
   },
+  saved_date: {
+    type: Date,
+  },
   learn_count: {
     type: Number,
     default: 0,
