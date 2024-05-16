@@ -105,7 +105,6 @@ router.post("/save", async (req, res) => {
       image: lurny.image,
       url: lurny.url,
       material: materialDoc._id,
-      learn_count: 1,
       saved_date: Date.now(),
       last_learned: Date.now(),
     });

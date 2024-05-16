@@ -72,13 +72,13 @@ function UserPan() {
         the final months of the year, driven by strong private investments and a
         pickup in the services sector.
       </p>
-      <a
-        href="/lurny/setting"
+      <Link
+        to="/lurny/setting"
         className="flex items-center gap-[2rem] bg-white px-[2rem] py-[0.5rem] rounded-[0.5rem] text-black text-[2rem] font-semibold focus:outline-none hover:text-black cursor-pointer hover:bg-gray-300"
       >
         <span>Settings</span>
         <IoSettingsSharp />
-      </a>
+      </Link>
       <Link
         to="/lurny/saved"
         className={`w-full flex items-center justify-between active:text-gray-300 hover:text-white text-left text-[2rem] font-bold border-b border-white cursor-pointer ${
