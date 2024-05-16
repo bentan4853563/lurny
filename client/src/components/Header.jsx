@@ -30,8 +30,6 @@ export default function Header() {
   const { studies } = useSelector((state) => state.study);
   const [todayStudies, setTodayStudies] = useState(null);
 
-  const accessToken = localStorage.getItem("token");
-
   useEffect(() => {
     function handleMessage(event) {
       if (
@@ -49,10 +47,11 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
+    const accessToken = localStorage.getItem("token");
     if (accessToken) {
       setUserData(jwtDecode(accessToken));
-    } else setUserData(null);
-  }, [accessToken]);
+    }
+  }, []);
 
   useEffect(() => {
     if (studies) {
