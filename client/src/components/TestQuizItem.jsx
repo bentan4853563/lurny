@@ -42,6 +42,7 @@ function TestQuizItem({ data }) {
   }, [studies, _id]);
 
   const handleAnswer = () => {
+    console.log("answered :>> ", answered);
     setAnswered(true);
     let correctAnswerIndex = 0;
     answer.map((item, index) => {
@@ -56,6 +57,8 @@ function TestQuizItem({ data }) {
   };
 
   const handleNavigateStudy = (direction) => {
+    setAnswered(false);
+    setAnswerNumber(null);
     const newIndex = currentStudyIndex + direction;
     if (newIndex >= 0 && newIndex < todayStudies.length) {
       navigate(`/lurny/remind/${todayStudies[newIndex]._id}`);
@@ -68,6 +71,8 @@ function TestQuizItem({ data }) {
 
   console.log(
     "currentStudyIndex, todayStudies :>> ",
+    answered,
+    answerNumber,
     currentStudyIndex,
     todayStudies
   );
@@ -162,7 +167,7 @@ function TestQuizItem({ data }) {
 
           {!answered ? (
             <button
-              onClick={handleAnswer}
+              onClick={() => handleAnswer()}
               className="bg-[#FFC36D] hover:bg-[#ebb161] active:bg-[#f1b765] mx-auto mt-[4rem] text-[6rem] sm:text-[1.8rem] border-none focus:outline-none text-black"
             >
               {/* {translations[language].submitAnswer} */}

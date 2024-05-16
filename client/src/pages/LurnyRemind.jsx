@@ -120,12 +120,12 @@ function LurnyRemind() {
             <div className="w-full px-[16rem] sm:px-0 flex flex-col">
               {userData && (
                 <img
-                  // src={imageUrl}
-                  src={
-                    userData.email === "bentan010918@gmail.com"
-                      ? defaultImg
-                      : imageUrl
-                  }
+                  src={imageUrl}
+                  // src={
+                  //   userData.email === "bentan010918@gmail.com"
+                  //     ? defaultImg
+                  //     : imageUrl
+                  // }
                   alt=""
                   className="w-full h-[64rem] sm:h-[20rem] object-cover rounded-[2rem] mt-[3rem]"
                 />
