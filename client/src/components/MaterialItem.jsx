@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import defaultImg from "../assets/images/Lurny/default.png";
@@ -10,14 +10,14 @@ import getSchedule from "../utils/reminder";
 import { BsAlarm } from "react-icons/bs";
 
 function MaterialItem({ data }) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { userDetails } = useSelector((state) => state.user);
 
   const [imageUrl, setImageUrl] = useState(null);
   const [nextStudyDay, setNextStudyDay] = useState(null);
   const [isNextStudyDayToday, setIsNextStudyDayToday] = useState(false);
 
-  const { _id, image, url, user, learn_count, type, saved_date, last_learned } =
+  const { image, url, user, learn_count, type, saved_date, last_learned } =
     data;
 
   useEffect(() => {
@@ -72,9 +72,9 @@ function MaterialItem({ data }) {
     return `https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`;
   };
 
-  const handleClick = () => {
-    navigate(`/lurny/remind/${_id}`);
-  };
+  // const handleClick = () => {
+  //   navigate(`/lurny/remind/${_id}`);
+  // };
 
   const isDueTodayOrBefore = (date) => {
     const today = new Date();
@@ -110,8 +110,8 @@ function MaterialItem({ data }) {
   return (
     <div>
       <div
-        onClick={handleClick}
-        className="w-[150rem] sm:w-[48rem] lg:w-[30rem] cursor-pointer relative"
+        // onClick={handleClick}
+        className="w-[150rem] sm:w-[48rem] lg:w-[30rem] relative"
       >
         <div className="relative">
           {userDetails && (

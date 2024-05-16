@@ -21,6 +21,7 @@ import NewPagination from "../components/NewPagination";
 import {
   handleDeleteLurny,
   handleInsertLurny,
+  handleLurnyData,
   handleShareLurny,
 } from "../actions/lurny";
 
@@ -92,71 +93,72 @@ const LurnyProfile = () => {
 
   useEffect(() => {
     if (userDetails && tempData && tempData !== "undefined") {
-      try {
-        let newLurnies = [];
-        const parsedTempData = JSON.parse(tempData);
-        for (let i = 0; i < parsedTempData.length; i++) {
-          const parsedLurny = JSON.parse(parsedTempData[i]);
-          if (parsedLurny.media === "PDF") {
-            const { summary_content, questions, fileName, url } = parsedLurny;
-            if (Array.isArray(summary_content) && summary_content.length > 0) {
-              // If summary_content[0] is a string containing JSON, parse it as well
-              const json_summary_content = JSON.parse(summary_content[0]);
+      handleLurnyData(userDetails.id, tempData);
+      // try {
+      //   let newLurnies = [];
+      //   const parsedTempData = JSON.parse(tempData);
+      //   for (let i = 0; i < parsedTempData.length; i++) {
+      //     const parsedLurny = JSON.parse(parsedTempData[i]);
+      //     if (parsedLurny.media === "PDF") {
+      //       const { summary_content, questions, fileName, url } = parsedLurny;
+      //       if (Array.isArray(summary_content) && summary_content.length > 0) {
+      //         // If summary_content[0] is a string containing JSON, parse it as well
+      //         const json_summary_content = JSON.parse(summary_content[0]);
 
-              const title = json_summary_content.title;
-              const summary = json_summary_content.summary;
-              const collections = json_summary_content.hash_tags;
+      //         const title = json_summary_content.title;
+      //         const summary = json_summary_content.summary;
+      //         const collections = json_summary_content.hash_tags;
 
-              let quiz = [];
-              questions.forEach((element) => {
-                quiz.push(JSON.parse(element));
-              });
-              const lurnyObject = {
-                user: userDetails.id,
-                title,
-                summary,
-                collections,
-                quiz,
-                image: defaultImg, // Ensure getDefaultImg function is defined or imported
-                url: url ? url : fileName,
-              };
-              newLurnies.push(lurnyObject);
-            }
-          } else {
-            const { summary_content, questions, image, url } = parsedLurny;
+      //         let quiz = [];
+      //         questions.forEach((element) => {
+      //           quiz.push(JSON.parse(element));
+      //         });
+      //         const lurnyObject = {
+      //           user: userDetails.id,
+      //           title,
+      //           summary,
+      //           collections,
+      //           quiz,
+      //           image: defaultImg, // Ensure getDefaultImg function is defined or imported
+      //           url: url ? url : fileName,
+      //         };
+      //         newLurnies.push(lurnyObject);
+      //       }
+      //     } else {
+      //       const { summary_content, questions, image, url } = parsedLurny;
 
-            // if (Array.isArray(summary_content) && summary_content.length > 0) {
-            const json_summary_content = JSON.parse(summary_content);
-            // If summary_content[0] is a string containing JSON, parse it as well
+      //       // if (Array.isArray(summary_content) && summary_content.length > 0) {
+      //       const json_summary_content = JSON.parse(summary_content);
+      //       // If summary_content[0] is a string containing JSON, parse it as well
 
-            const title = json_summary_content.title;
-            const summary = json_summary_content.summary;
-            const collections = json_summary_content.hash_tags;
+      //       const title = json_summary_content.title;
+      //       const summary = json_summary_content.summary;
+      //       const collections = json_summary_content.hash_tags;
 
-            let quiz = [];
-            questions.forEach((element) => {
-              quiz.push(JSON.parse(element));
-            });
+      //       let quiz = [];
+      //       questions.forEach((element) => {
+      //         quiz.push(JSON.parse(element));
+      //       });
 
-            const lurnyObject = {
-              user: userDetails.id,
-              title,
-              summary,
-              collections,
-              quiz,
-              image: getDefaultImg(image, url), // Ensure getDefaultImg function is defined or imported
-              url,
-            };
-            newLurnies.push(lurnyObject);
-          }
-        }
-        if (newLurnies.length > 0) {
-          console.log("newLurnies", newLurnies);
-          dispatch(handleInsertLurny(newLurnies));
-        }
-      } catch (e) {
-        console.error("Failed to parse tempData", e);
-      }
+      //       const lurnyObject = {
+      //         user: userDetails.id,
+      //         title,
+      //         summary,
+      //         collections,
+      //         quiz,
+      //         image: getDefaultImg(image, url), // Ensure getDefaultImg function is defined or imported
+      //         url,
+      //       };
+      //       newLurnies.push(lurnyObject);
+      //     }
+      //   }
+      //   if (newLurnies.length > 0) {
+      //     console.log("newLurnies", newLurnies);
+      //     dispatch(handleInsertLurny(newLurnies));
+      //   }
+      // } catch (e) {
+      //   console.error("Failed to parse tempData", e);
+      // }
     }
   }, [tempData, userDetails]);
 

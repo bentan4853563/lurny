@@ -15,14 +15,14 @@ import TranslateComponent from "../components/TranslateComponent";
 import TestQuizItem from "../components/TestQuizItem";
 import Header from "../components/Header";
 
-import { getTodaysStudies } from "../utils/getTodoayStudies";
+// import { getTodaysStudies } from "../utils/getTodoayStudies";
 
 function LurnyRemind() {
   const { studies } = useSelector((state) => state.study);
 
   const [userData, setUserData] = useState(null);
   const [studyData, setStudyData] = useState({});
-  const [todayStudies, setTodayStudies] = useState(null);
+  // const [todayStudies, setTodayStudies] = useState(null);
 
   const [imageUrl, setImageUrl] = useState(null);
 
@@ -61,8 +61,8 @@ function LurnyRemind() {
       if (currentStudy) {
         setStudyData(currentStudy);
       }
-      const todays = getTodaysStudies(studies);
-      setTodayStudies(todays);
+      // const todays = getTodaysStudies(studies);
+      // setTodayStudies(todays);
     }
   }, [studies, id]);
 
