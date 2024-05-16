@@ -152,7 +152,7 @@ router.delete("/clear-hash", async (req, res) => {
     const operations = lurnies.map((lurny) => {
       const collections = lurny.collections.filter(
         (collection) =>
-          !collection.includes("Tolls") && !collection.includes("Function")
+          !collection.includes("Tools") && !collection.includes("Function")
       );
       fs.appendFileSync(outputFilePath, `${lurny.title}, ${lurny.url}\n`);
       return {

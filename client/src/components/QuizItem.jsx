@@ -485,7 +485,7 @@ export default function QuizItem({
   // };
   return (
     <div
-      className=""
+      className="w-full"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onTouchMove={handleTouchMove}
