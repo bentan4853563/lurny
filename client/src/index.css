@@ -38,6 +38,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Raleway';
+  src: url('fonts/Raleway/Raleway-Bold.ttf') format('truetype');
+  font-weight: 700; /* This indicates the bold variant */
+  font-style: normal;
+}
+
 html {
   font-size: 0.5vw;
 }
@@ -137,3 +144,4 @@ button:focus-visible {
 table, th, td {
   border: 1px solid rgb(77, 77, 77)
 }
+

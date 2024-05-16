@@ -12,12 +12,14 @@ import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 
 // import { GrUserAdmin } from "react-icons/gr";
+import { LuPencil } from "react-icons/lu";
 import { IoCompassOutline } from "react-icons/io5";
 import { IoSearchSharp } from "react-icons/io5";
 import LetterLogo from "../assets/icons/letter_logo.png";
 import ChromeIcon from "../assets/icons/chrome.png";
 import BrainIcon from "../assets/icons/brain.png";
 import { getTodaysStudies } from "../utils/getTodoayStudies";
+import CreateLurnyFromURL from "./CreateLurnyModals/CreateLurnyFromURL";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -29,6 +31,8 @@ export default function Header() {
   const { lurnies } = useSelector((state) => state.lurny);
   const { studies } = useSelector((state) => state.study);
   const [todayStudies, setTodayStudies] = useState(null);
+
+  const [lurnifyModal, setLurnifyModal] = useState(null);
 
   const accessToken = localStorage.getItem("token");
 
@@ -60,6 +64,22 @@ export default function Header() {
       setTodayStudies(todays);
     }
   }, [studies]);
+
+  const handleOpenURLModal = () => {
+    setLurnifyModal("URL");
+  };
+
+  const handleOpenPDFModal = () => {
+    setLurnifyModal("PDF");
+  };
+
+  const handleOpenManuallyModal = () => {
+    setLurnifyModal("Manually");
+  };
+
+  const handleCloseLurnifyModal = () => {
+    setLurnifyModal(null);
+  };
 
   const handleClickROSI = () => {
     navigate(`/lurny/remind/${todayStudies[0]._id}`);
@@ -101,15 +121,40 @@ export default function Header() {
             </div>
           </div>
         )}
+        <Menu
+          menuButton={
+            <MenuButton>
+              <LuPencil className="text-zinc-300 text-[12rem] sm:text-[2.5rem] hover:bg-[#262626] box-content rounded-[0.5rem] p-[0.5rem] hover:text-gray-400" />
+            </MenuButton>
+          }
+          transition
+          align="center"
+        >
+          <MenuItem onClick={handleOpenURLModal}>
+            <span className="w-full py-[2rem] sm:py-[0.5rem] text-black text-[8rem] sm:text-[1.5rem]">
+              Create Lunies From URL
+            </span>
+          </MenuItem>
+          <MenuItem onClick={handleOpenPDFModal}>
+            <span className="w-full py-[2rem] sm:py-[0.5rem] text-black text-[8rem] sm:text-[1.5rem]">
+              Create Lunies From PDF
+            </span>
+          </MenuItem>
+          <MenuItem onClick={handleOpenManuallyModal}>
+            <span className="w-full py-[2rem] sm:py-[0.5rem] text-black text-[8rem] sm:text-[1.5rem]">
+              Create Lunies Manually
+            </span>
+          </MenuItem>
+        </Menu>
 
         {lurnies.length > 0 && (
           <Link to={`/lurny/feeds/${lurnies[0]._id}`}>
-            <IoCompassOutline className="text-zinc-300 text-[16rem] sm:text-[4rem] hover:text-gray-400" />
+            <IoCompassOutline className="text-zinc-300 text-[16rem] sm:text-[3rem] hover:text-gray-400 hover:bg-[#262626] box-content rounded-[0.5rem] p-[0.5rem]" />
           </Link>
         )}
         {lurnies.length > 0 && (
           <Link to={"/lurny/search"}>
-            <IoSearchSharp className="text-zinc-300 text-[16rem] sm:text-[4rem] hover:text-gray-400" />
+            <IoSearchSharp className="text-zinc-300 text-[16rem] sm:text-[3rem] hover:text-gray-400 hover:bg-[#262626] box-content rounded-[0.5rem] p-[0.5rem]" />
           </Link>
         )}
         {userData ? (
@@ -138,7 +183,6 @@ export default function Header() {
             </a>
           </div>
         )}
-
         {/* Hambuger */}
         <Menu
           menuButton={
@@ -198,6 +242,10 @@ export default function Header() {
             </span>
           </MenuItem>
         </Menu>
+
+        {lurnifyModal === "URL" && (
+          <CreateLurnyFromURL closeModal={handleCloseLurnifyModal} />
+        )}
       </div>
     </div>
   );

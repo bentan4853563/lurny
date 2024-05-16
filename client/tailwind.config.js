@@ -8,6 +8,9 @@ export default {
       raleway: ["Raleway"],
       sans: ["Arial"],
     },
+    fontWeight: {
+      bold: 700,
+    },
   },
   plugins: [],
 };
