@@ -11,6 +11,8 @@ import { TfiShare } from "react-icons/tfi";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 
+import defaultImg from "../assets/images/Lurny/default.png";
+
 import Header from "../components/Header";
 import UserPan from "../components/UserPan";
 import LurnyItem from "../components/LurnyItem";
@@ -18,7 +20,7 @@ import NewPagination from "../components/NewPagination";
 
 import {
   handleDeleteLurny,
-  handleLurnyData,
+  handleInsertLurny,
   handleShareLurny,
 } from "../actions/lurny";
 
@@ -81,7 +83,6 @@ const LurnyProfile = () => {
   }, [userDetails, lurnies]);
 
   const storedTempData = localStorage.getItem("tempData");
-
   useEffect(() => {
     if (storedTempData) {
       setTempData(storedTempData);
@@ -91,9 +92,107 @@ const LurnyProfile = () => {
 
   useEffect(() => {
     if (userDetails && tempData && tempData !== "undefined") {
-      handleLurnyData(tempData);
+      try {
+        let newLurnies = [];
+        const parsedTempData = JSON.parse(tempData);
+        for (let i = 0; i < parsedTempData.length; i++) {
+          const parsedLurny = JSON.parse(parsedTempData[i]);
+          if (parsedLurny.media === "PDF") {
+            const { summary_content, questions, fileName, url } = parsedLurny;
+            if (Array.isArray(summary_content) && summary_content.length > 0) {
+              // If summary_content[0] is a string containing JSON, parse it as well
+              const json_summary_content = JSON.parse(summary_content[0]);
+
+              const title = json_summary_content.title;
+              const summary = json_summary_content.summary;
+              const collections = json_summary_content.hash_tags;
+
+              let quiz = [];
+              questions.forEach((element) => {
+                quiz.push(JSON.parse(element));
+              });
+              const lurnyObject = {
+                user: userDetails.id,
+                title,
+                summary,
+                collections,
+                quiz,
+                image: defaultImg, // Ensure getDefaultImg function is defined or imported
+                url: url ? url : fileName,
+              };
+              newLurnies.push(lurnyObject);
+            }
+          } else {
+            const { summary_content, questions, image, url } = parsedLurny;
+
+            // if (Array.isArray(summary_content) && summary_content.length > 0) {
+            const json_summary_content = JSON.parse(summary_content);
+            // If summary_content[0] is a string containing JSON, parse it as well
+
+            const title = json_summary_content.title;
+            const summary = json_summary_content.summary;
+            const collections = json_summary_content.hash_tags;
+
+            let quiz = [];
+            questions.forEach((element) => {
+              quiz.push(JSON.parse(element));
+            });
+
+            const lurnyObject = {
+              user: userDetails.id,
+              title,
+              summary,
+              collections,
+              quiz,
+              image: getDefaultImg(image, url), // Ensure getDefaultImg function is defined or imported
+              url,
+            };
+            newLurnies.push(lurnyObject);
+          }
+        }
+        if (newLurnies.length > 0) {
+          console.log("newLurnies", newLurnies);
+          dispatch(handleInsertLurny(newLurnies));
+        }
+      } catch (e) {
+        console.error("Failed to parse tempData", e);
+      }
     }
   }, [tempData, userDetails]);
+
+  // useEffect(() => {
+  //   setCurrentPage(1);
+  //   if (showAll) {
+  //     setFilteredLurnies(lurnies);
+  //   } else {
+  //     let temp = lurnies.filter((lurny) => lurny.user !== userDetails.id);
+  //     setFilteredLurnies(temp);
+  //   }
+  // }, [showAll, lurnies]);
+
+  // const [countSharedTrue, setCountSharedTrue] = useState(0);
+
+  // useEffect(() => {
+  //   if (userDetails && lurnies && lurnies.length > 0) {
+  //     const count =
+  //       lurnies.length > 0
+  //         ? lurnies.filter((obj) => obj.user !== userDetails.id).length
+  //         : 0;
+  //     setCountSharedTrue(count);
+  //   }
+  // }, [userDetails, lurnies]);
+
+  const isYoutubeUrl = (url) => {
+    return url.includes("youtube.com") || url.includes("youtu.be");
+  };
+
+  const getDefaultImg = (image, url) => {
+    if (isYoutubeUrl(url)) {
+      return `${url}/maxresdefault.jpg`;
+    } else {
+      return image ? image : defaultImg;
+    }
+  };
 
   const handleDelete = useCallback(
     async (id) => {
