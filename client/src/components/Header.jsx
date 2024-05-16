@@ -70,6 +70,8 @@ export default function Header() {
     navigate("/");
   };
 
+  console.log("userData :>> ", userData);
+
   return (
     <div
       className="bg-black px-[12rem] flex justify-between items-center py-[4rem] sm:py-[1.5rem] top-0 sticky"

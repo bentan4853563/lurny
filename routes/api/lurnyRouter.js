@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const fs = require("fs");
+const path = require("path");
 
 const Lurny = require("../../models/Lurny");
 
@@ -140,6 +141,38 @@ router.delete("/delete-stub", async (req, res) => {
     res.send(updatedLurny);
   } catch (error) {
     res.status(500).send("Internal Server Error");
+  }
+});
+
+router.delete("/clear-hash", async (req, res) => {
+  try {
+    const lurnies = await Lurny.find(); // Assume Lurny.find() is properly indexed and efficient
+    const outputFilePath = "lurnies-updated.txt";
+    // Operations array for bulkWrite
+    const operations = lurnies.map((lurny) => {
+      const collections = lurny.collections.filter(
+        (collection) =>
+          !collection.includes("Tolls") && !collection.includes("Function")
+      );
+      fs.appendFileSync(outputFilePath, `${lurny.title}, ${lurny.url}\n`);
+      return {
+        updateOne: {
+          filter: { _id: lurny._id },
+          update: { collections },
+        },
+      };
+    });
+
+    // Perform the bulkWrite operation
+    await Lurny.bulkWrite(operations);
+
+    // Send response back to client
+    res.status(200).send({ message: "Hashes cleared successfully" });
+  } catch (error) {
+    console.error("Error clearing hashes:", error);
+
+    // Send error response back to client
+    res.status(500).send({ error: "Failed to clear hashes" });
   }
 });
 
