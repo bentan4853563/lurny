@@ -73,7 +73,7 @@ const LurnyProfile = () => {
 
   useEffect(() => {
     // clearLurnies();
-    if ((userDetails, lurnies)) {
+    if (userDetails && lurnies && lurnies.length > 0) {
       let tempLurnies = lurnies;
       let filtered = tempLurnies.filter(
         (lurny) => lurny.user._id === userDetails.id

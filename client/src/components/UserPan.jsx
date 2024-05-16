@@ -32,7 +32,7 @@ function UserPan() {
 
   useEffect(() => {
     // clearLurnies();
-    if (userData && lurnies) {
+    if (userData && lurnies && lurnies.length > 0) {
       let tempLurnies = lurnies;
       let filtered = tempLurnies.filter(
         (lurny) => lurny.user._id === userData.id
