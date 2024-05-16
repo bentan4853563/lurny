@@ -74,9 +74,10 @@ function UserPan() {
       </p>
       <a
         href="/lurny/setting"
-        className="bg-white px-[2rem] py-[0.5rem] rounded-[0.5rem] text-black text-[2rem] font-semibold focus:outline-none hover:text-black cursor-pointer hover:bg-gray-300"
+        className="flex items-center gap-[2rem] bg-white px-[2rem] py-[0.5rem] rounded-[0.5rem] text-black text-[2rem] font-semibold focus:outline-none hover:text-black cursor-pointer hover:bg-gray-300"
       >
-        Settings
+        <span>Settings</span>
+        <IoSettingsSharp />
       </a>
       <Link
         to="/lurny/saved"
@@ -85,7 +86,6 @@ function UserPan() {
         } `}
       >
         <span>Saved Lurnies ({studies.length})</span>
-        <IoSettingsSharp />
       </Link>
       <Link
         to="/lurny/profile"
