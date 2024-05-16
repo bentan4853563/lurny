@@ -17,7 +17,7 @@ const lurnySlice = createSlice({
     // Action to insert a new lurny at the beginning of the array
     insertLurny: (state, action) => {
       // Directly add to the beginning without reconstructing the whole array
-      state.lurnies.unshift(action.payload);
+      state.lurnies.unshift(...action.payload);
     },
     // Action to mark a lurny as shared based on its _id
     shareLurny: (state, action) => {
