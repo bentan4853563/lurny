@@ -306,6 +306,10 @@ export default function QuizItem({
     }
   };
 
+  const removePrefix = (sentence) => {
+    return sentence.replace(/^[A-Z]\. /, " ");
+  };
+
   const classNames = (...classes) => {
     return classes.filter(Boolean).join(" ");
   };
@@ -680,62 +684,67 @@ export default function QuizItem({
 
               <div className="w-full flex flex-col gap-[8rem] sm:gap-[2rem] items-start">
                 {quiz[currentQuestionNumber - 1].answer.map(
-                  (translatedAnswer, index) => (
+                  (translatedAnswer, index) =>
                     // Answer
-                    <div
-                      className={classNames(
-                        "w-full flex justify-between items-center px-[8rem] sm:px-[1rem] py-[2rem] sm:py-[1rem] rounded-[0.5rem] text-left text-[4rem] sm:text-[1.8rem] leading-[7.5rem] sm:leading-[2.5rem] cursor-pointer border",
-                        answered
-                          ? answerNumber === index
-                            ? quiz[currentQuestionNumber - 1].correctanswer ===
-                              quiz[currentQuestionNumber - 1].answer[index]
+                    translatedAnswer && (
+                      <div
+                        className={classNames(
+                          "w-full flex justify-between items-center px-[8rem] sm:px-[1rem] py-[2rem] sm:py-[1rem] rounded-[0.5rem] text-left text-[4rem] sm:text-[1.8rem] leading-[7.5rem] sm:leading-[2.5rem] cursor-pointer border",
+                          answered
+                            ? answerNumber === index
+                              ? quiz[currentQuestionNumber - 1]
+                                  .correctanswer ===
+                                quiz[currentQuestionNumber - 1].answer[index]
+                                ? "border-[#00AF4F]"
+                                : "border-[#FF0000]"
+                              : quiz[currentQuestionNumber - 1]
+                                  .correctanswer ===
+                                quiz[currentQuestionNumber - 1].answer[index]
                               ? "border-[#00AF4F]"
-                              : "border-[#FF0000]"
-                            : quiz[currentQuestionNumber - 1].correctanswer ===
-                              quiz[currentQuestionNumber - 1].answer[index]
-                            ? "border-[#00AF4F]"
+                              : "border-none"
+                            : answerNumber === index
+                            ? "bg-[#b1b1b1]"
                             : "border-none"
-                          : answerNumber === index
-                          ? "bg-[#b1b1b1]"
-                          : "border-none"
-                      )}
-                      key={index}
-                      onClick={() => !answered && setAnswerNumber(index)}
-                    >
-                      <p className="flex flex-1 text-black">
-                        <span className="mr-[2rem]">
-                          {String.fromCharCode(index + 65)}.
-                        </span>
-                        <span className="text-left">{translatedAnswer}</span>
-                      </p>
-                      {answered &&
-                        quiz[currentQuestionNumber - 1].correctanswer ===
-                          quiz[currentQuestionNumber - 1].answer[index] && (
-                          <IoIosInformationCircleOutline
-                            data-tooltip-id="correct-answer"
-                            onClick={() =>
-                              setIsShowCorrectAnswer(!isShowCorrectAnswer)
-                            }
-                            className="text-[16rem] sm:text-[2.5rem] my-auto text-black"
-                          />
                         )}
-                      <Tooltip
-                        id="correct-answer"
-                        place="left"
-                        content={quiz[currentQuestionNumber - 1].explanation}
-                        style={{
-                          width: "300px",
-                          textAlign: "justify",
-                          backgroundColor: "#00B050",
-                          color: "white",
-                          borderRadius: "8px",
-                          padding: "24px",
-                          lineHeight: "20px",
-                          fontSize: "16px",
-                        }}
-                      />
-                    </div>
-                  )
+                        key={index}
+                        onClick={() => !answered && setAnswerNumber(index)}
+                      >
+                        <p className="flex flex-1 text-black">
+                          <span className="mr-[2rem]">
+                            {String.fromCharCode(index + 65)}.
+                          </span>
+                          <span className="text-left">
+                            {removePrefix(translatedAnswer)}
+                          </span>
+                        </p>
+                        {answered &&
+                          quiz[currentQuestionNumber - 1].correctanswer ===
+                            quiz[currentQuestionNumber - 1].answer[index] && (
+                            <IoIosInformationCircleOutline
+                              data-tooltip-id="correct-answer"
+                              onClick={() =>
+                                setIsShowCorrectAnswer(!isShowCorrectAnswer)
+                              }
+                              className="text-[16rem] sm:text-[2.5rem] my-auto text-black"
+                            />
+                          )}
+                        <Tooltip
+                          id="correct-answer"
+                          place="left"
+                          content={quiz[currentQuestionNumber - 1].explanation}
+                          style={{
+                            width: "300px",
+                            textAlign: "justify",
+                            backgroundColor: "#00B050",
+                            color: "white",
+                            borderRadius: "8px",
+                            padding: "24px",
+                            lineHeight: "20px",
+                            fontSize: "16px",
+                          }}
+                        />
+                      </div>
+                    )
                 )}
               </div>
 

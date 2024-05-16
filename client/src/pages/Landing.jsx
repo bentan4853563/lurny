@@ -82,20 +82,20 @@ const Landing = () => {
 
       <div className="w-full h-full bg-[#262626] flex flex-col px-[12rem] pt-[12rem] pb-[8rem] gap-[4rem]">
         {/* Search bar */}
-        <div className="flex flex-col gap-[4rem] items-center">
-          <h1 className="text-white text-[35px] leading-[6rem] font-bold">
-            Learn from millions of Lurnies <br /> drawn from the best content
-            available on the Internet
+        <div className="flex flex-col gap-[12rem] sm:gap-[4rem] items-center">
+          <h1 className="text-white text-[10rem] leading-[11rem] sm:text-[4rem] sm:leading-[6rem] font-bold">
+            Learn from millions of Lurnies <br className="hidden sm:flex" />{" "}
+            drawn from the best content available on the Internet
           </h1>
 
-          <div className="bg-white w-1/3 px-[1.5rem] py-[0.8rem] flex flex-item items-center border border-gray-500 focus-within:border-white rounded-full">
-            <ImSearch className="text-gray-300 text-[2rem]" />
+          <div className="bg-white w-full sm:w-1/3 px-[4rem] sm:px-[1.5rem] py-[0.8rem] flex flex-item items-center border border-gray-500 focus-within:border-white rounded-[2rem] sm:rounded-full">
+            <ImSearch className="text-gray-500 text-[8rem] sm:text-[2rem]" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-white text-black text-[2rem] px-[1.5rem] flex flex-1 focus:outline-none"
-              placeholder="Search topics and people"
+              className="bg-white text-black text-[8rem] sm:text-[2rem] px-[3rem] py-[2rem] sm:py-0 sm:px-[1.5rem] flex flex-1 focus:outline-none"
+              placeholder="Search title or hashtags"
             />
           </div>
         </div>

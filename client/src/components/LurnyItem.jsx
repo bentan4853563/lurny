@@ -64,7 +64,7 @@ function LurnyItem({ data }) {
   return (
     <div
       onClick={handleClick}
-      className="w-[150rem] sm:w-[48rem] lg:w-[30rem] cursor-pointer"
+      className="w-[80rem] sm:w-[48rem] lg:w-[30rem] cursor-pointer"
     >
       {userDetails && (
         <img
@@ -75,14 +75,14 @@ function LurnyItem({ data }) {
           }
           // src={imageUrl}
           alt="lurny image"
-          className="h-[80rem] sm:h-[24rem] lg:h-[16rem] w-full object-cover rounded-[8rem] sm:rounded-[1.5rem]"
+          className="h-[40rem] sm:h-[24rem] lg:h-[16rem] w-full object-cover rounded-[6rem] sm:rounded-[1.5rem]"
         />
       )}
       <div className="w-full flex flex-col text-white items-start gap-[2rem] sm:gap-[1rem] p-[4rem] sm:p-[2rem]">
         <span className="w-full text-start text-[6rem] sm:text-[3rem] lg:text-[1.2rem] font-semibold truncate">
           {url}
         </span>
-        <div className="w-full text-[10rem] sm:text-[5rem] lg:text-[2rem] leading-[11rem] sm:leading-[6rem] lg:leading-[2.5rem] text-left font-medium  line-clamp-3 sm:line-clamp-2">
+        <div className="w-full text-[8rem] sm:text-[5rem] lg:text-[2rem] leading-[11rem] sm:leading-[6rem] lg:leading-[2.5rem] text-left font-medium line-clamp-2">
           {title}
         </div>
       </div>

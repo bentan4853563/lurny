@@ -23,7 +23,7 @@ export default function LurnyHeader() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/lurny/search");
+    navigate("/");
   };
 
   return (

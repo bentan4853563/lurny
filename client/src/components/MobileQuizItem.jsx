@@ -417,10 +417,14 @@ export default function MobileQuizItem({
         {content === 0 && (
           <div className="w-full h-[64vh] relative cursor-pointer">
             {userData && (
-              <div className="flex flex-col h-full justify-center items-center relative">
+              <div className="flex flex-col w-full h-full justify-center items-center relative">
                 <img
                   // src={imageUrl}
-
+                  src={
+                    userData.email === "bentan010918@gmail.com"
+                      ? defaultImg
+                      : imageUrl
+                  }
                   alt={title}
                   className="w-full h-full object-cover rounded-[8rem]"
                 />
@@ -524,65 +528,68 @@ export default function MobileQuizItem({
 
                 <div className=" w-full flex flex-col gap-[8rem] items-start">
                   {quiz[currentQuestionNumber - 1].answer.map(
-                    (translatedAnswer, index) => (
+                    (translatedAnswer, index) =>
                       // Answer
-                      <div
-                        className={classNames(
-                          "w-full flex justify-between items-center px-[8rem] sm:px-[2rem] py-[4rem] sm:py-[0.5rem] rounded-[4rem] text-left text-[8rem] leading-[8rem] cursor-pointer border",
-                          answered
-                            ? answerNumber === index
-                              ? quiz[currentQuestionNumber - 1]
-                                  .correctanswer ===
-                                quiz[currentQuestionNumber - 1].answer[index]
+                      translatedAnswer && (
+                        <div
+                          className={classNames(
+                            "w-full flex justify-between items-center px-[8rem] sm:px-[2rem] py-[4rem] sm:py-[0.5rem] rounded-[4rem] text-left text-[8rem] leading-[8rem] cursor-pointer border",
+                            answered
+                              ? answerNumber === index
+                                ? quiz[currentQuestionNumber - 1]
+                                    .correctanswer ===
+                                  quiz[currentQuestionNumber - 1].answer[index]
+                                  ? "border-[#00AF4F]"
+                                  : "border-[#FF0000]"
+                                : quiz[currentQuestionNumber - 1]
+                                    .correctanswer ===
+                                  quiz[currentQuestionNumber - 1].answer[index]
                                 ? "border-[#00AF4F]"
-                                : "border-[#FF0000]"
-                              : quiz[currentQuestionNumber - 1]
-                                  .correctanswer ===
-                                quiz[currentQuestionNumber - 1].answer[index]
-                              ? "border-[#00AF4F]"
+                                : "border-none"
+                              : answerNumber === index
+                              ? "bg-[#9c9c9c]"
                               : "border-none"
-                            : answerNumber === index
-                            ? "bg-[#9c9c9c]"
-                            : "border-none"
-                        )}
-                        key={index}
-                        onClick={() => !answered && setAnswerNumber(index)}
-                      >
-                        <p className="flex flex-1 text-black gap-[4rem]">
-                          <span className="mr-[4rem]">
-                            {String.fromCharCode(index + 65)}.
-                          </span>
-                          <span className="text-left">
-                            {removePrefix(translatedAnswer)}
-                          </span>
-                        </p>
-                        {answered &&
-                          quiz[currentQuestionNumber - 1].correctanswer ===
-                            quiz[currentQuestionNumber - 1].answer[index] && (
-                            <IoIosInformationCircleOutline
-                              data-tooltip-id="correct-answer"
-                              onClick={() =>
-                                setIsShowCorrectAnswer(!isShowCorrectAnswer)
-                              }
-                              className="text-[12rem] my-auto right-4 focus:outline-none"
-                            />
                           )}
-                        <div></div>
-                        <Tooltip
-                          id="correct-answer"
-                          place="left"
-                          content={quiz[currentQuestionNumber - 1].explanation}
-                          style={{
-                            width: "200px",
-                            textAlign: "justify",
-                            backgroundColor: "#00B050",
-                            color: "white",
-                            borderRadius: "8px",
-                            padding: "24px",
-                          }}
-                        />
-                      </div>
-                    )
+                          key={index}
+                          onClick={() => !answered && setAnswerNumber(index)}
+                        >
+                          <p className="flex flex-1 text-black gap-[4rem]">
+                            <span className="mr-[4rem]">
+                              {String.fromCharCode(index + 65)}.
+                            </span>
+                            <span className="text-left">
+                              {removePrefix(translatedAnswer)}
+                            </span>
+                          </p>
+                          {answered &&
+                            quiz[currentQuestionNumber - 1].correctanswer ===
+                              quiz[currentQuestionNumber - 1].answer[index] && (
+                              <IoIosInformationCircleOutline
+                                data-tooltip-id="correct-answer"
+                                onClick={() =>
+                                  setIsShowCorrectAnswer(!isShowCorrectAnswer)
+                                }
+                                className="text-[12rem] my-auto right-4 focus:outline-none"
+                              />
+                            )}
+                          <div></div>
+                          <Tooltip
+                            id="correct-answer"
+                            place="left"
+                            content={
+                              quiz[currentQuestionNumber - 1].explanation
+                            }
+                            style={{
+                              width: "200px",
+                              textAlign: "justify",
+                              backgroundColor: "#00B050",
+                              color: "white",
+                              borderRadius: "8px",
+                              padding: "24px",
+                            }}
+                          />
+                        </div>
+                      )
                   )}
                 </div>
                 {!answered ? (
@@ -612,7 +619,11 @@ export default function MobileQuizItem({
               <div className="h-full relative">
                 <img
                   // src={imageUrl}
-
+                  src={
+                    userData.email === "bentan010918@gmail.com"
+                      ? defaultImg
+                      : imageUrl
+                  }
                   alt={title}
                   className="w-full h-full object-cover rounded-[8rem]"
                 />
