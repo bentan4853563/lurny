@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 
 import { ToastContainer, toast, Bounce } from "react-toastify";
@@ -7,42 +8,86 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { handleLurnyData } from "../../actions/lurny";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+
+import { BsFilePdf } from "react-icons/bs";
+import { BsFiletypeDocx } from "react-icons/bs";
+import { BsFiletypePpt } from "react-icons/bs";
+import { PiFileDocDuotone } from "react-icons/pi";
+import { FiFileText } from "react-icons/fi";
 
 export default function CreateLurnyFromFile({ closeModal }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const quiz_server_url = import.meta.env.VITE_QUIZ_SERVER;
-  const textareaRef = useRef(null);
 
+  // State hooks
   const { userDetails } = useSelector((state) => state.user);
-
-  const [content, setContent] = useState("");
+  const [file, setFile] = useState(null);
+  const [fileName, setFileName] = useState("");
   const [status, setStatus] = useState("");
   const [lurnyData, setLurnyData] = useState(null);
 
-  const onChangeContent = (e) => {
-    setContent(e.target.value);
+  useEffect(() => {
+    setStatus("");
+  }, [fileName]);
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFileName(selectedFile.name);
+      setFile(selectedFile); // Store file object
+    }
+  };
+
+  const getFileIcon = (fileName) => {
+    if (fileName) {
+      const extension = fileName.split(".").pop().toLowerCase();
+      console.log("extension :>> ", extension);
+      switch (extension) {
+        case "pdf":
+          return <BsFilePdf />;
+        case "docx":
+          return <BsFiletypeDocx />;
+        case "doc":
+          return <PiFileDocDuotone />;
+        case "ppt":
+          return <BsFiletypePpt />;
+        default:
+          return <FiFileText />;
+      }
+    }
   };
 
   const onClickLurnify = async () => {
-    if (content === "") {
-      toast.error("Please input content to lurnify");
-      textareaRef.current.focus();
+    console.log("Starting upload:", fileName);
+
+    if (!file) {
+      toast.error("Please upload a file");
       return;
     }
+
     setStatus("processing");
-    const response = await fetch(`${quiz_server_url}/manually`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ content }),
-    });
-    if (response.ok) {
-      setStatus("download");
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file); // Append the file
+
+      const response = await fetch(`${quiz_server_url}/manually`, {
+        method: "POST",
+        body: formData, // Send form data
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
       setLurnyData(data);
+      setStatus("download");
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error(`Error: ${error.message}`);
+      setStatus("error");
     }
   };
 
@@ -95,7 +140,7 @@ export default function CreateLurnyFromFile({ closeModal }) {
             <ul className="list-disc ml-[4rem]">
               <li className="text-left">Upload the PDF or</li>
               <li className="text-left">
-                Paste the copied text into the box on the right.
+                Drag and Drop some other text files.
               </li>
               <li className="text-left">Click &quot;Lurnify&quot; button</li>
               <li className="text-left">
@@ -110,14 +155,33 @@ export default function CreateLurnyFromFile({ closeModal }) {
           </div>
         </div>
 
-        <div className="px-[2rem] flex flex-col flex-1 gap-[1rem] items-center justify-center">
-          <textarea
-            type="text"
-            ref={textareaRef}
-            value={content}
-            onChange={onChangeContent}
-            className="w-full h-full bg-white text-black p-[1rem] border-2 border-dashed border-gray-500 rounded-[1rem] text-[1.5rem] focus:outline-gray-600"
-          />
+        <div className="px-[2rem] flex flex-col flex-1 gap-[2rem] items-center justify-center">
+          <div className="w-full h-full flex item-center justify-center border-2 border-gray-600 border-dotted rounded-[1rem]">
+            <div className="flex flex-col gap-[2rem] justify-center text-[2rem] text-black">
+              <span className="font-bold">
+                Drag and Drop your files here <br />
+                PDFs, DOC, DOCX, PPT etc.
+              </span>
+              <span>or</span>
+              <label
+                htmlFor="file-upload"
+                className="bg-white p-[1rem] border border-gray-400 rounded-[1rem] cursor-pointer hover:border-gray-600"
+              >
+                Browse Files
+              </label>
+              <input
+                type="file"
+                id="file-upload"
+                className="hidden"
+                onChange={handleFileChange}
+                accept=".pdf,.doc,.docx,.ppt,.pptx"
+              />
+              <div className="flex items-center gap-[2rem]">
+                <span className="text-[4rem]">{getFileIcon(fileName)}</span>
+                <span className="text-[1.5rem]">{fileName}</span>
+              </div>
+            </div>
+          </div>
           <div className="w-full">
             {status === "" && (
               <button
@@ -128,9 +192,9 @@ export default function CreateLurnyFromFile({ closeModal }) {
               </button>
             )}
             {status === "processing" && (
-              <button
+              <span
                 disabled
-                className="w-1/2 mx-auto flex justify-center items-end gap-[1rem] bg-[#FFC000] text-white text-[2rem]"
+                className="w-1/2 mx-auto flex justify-center items-end gap-[1rem] bg-[#FFC000] text-white text-[2rem] p-[1rem] rounded-[1rem]"
               >
                 <span>PROCESSING</span>
                 <ThreeDots
@@ -141,7 +205,15 @@ export default function CreateLurnyFromFile({ closeModal }) {
                   radius="5"
                   ariaLabel="three-dots-loading"
                 />
-              </button>
+              </span>
+            )}
+            {status === "error" && (
+              <span
+                disabled
+                className="w-1/2 mx-auto flex justify-center items-end gap-[1rem] bg-red-400 text-white text-[2rem] p-[1rem] rounded-[1rem]"
+              >
+                Failed
+              </span>
             )}
             {status === "download" && (
               <button

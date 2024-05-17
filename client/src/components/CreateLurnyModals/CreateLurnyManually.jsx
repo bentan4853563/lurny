@@ -93,7 +93,10 @@ export default function CreateLurnyManually({ closeModal }) {
           <div className="flex flex-col gap-[2rem]">
             <h3 className="font-bold text-left">INSTRUCTIONS</h3>
             <ul className="list-disc ml-[4rem]">
-              <li className="text-left">Upload the PDF or</li>
+              <li className="text-left">
+                Copy the portion of text from the source (web page, word
+                document, PDF etc.) from which you want to copy the text.
+              </li>
               <li className="text-left">
                 Paste the copied text into the box on the right.
               </li>

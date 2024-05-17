@@ -247,7 +247,9 @@ export default function Header() {
         {lurnifyModal === "URL" && (
           <CreateLurnyFromURL closeModal={handleCloseLurnifyModal} />
         )}
-
+        {lurnifyModal === "File" && (
+          <CreateLurnyFromFile closeModal={handleCloseLurnifyModal} />
+        )}
         {lurnifyModal === "Manually" && (
           <CreateLurnyManually closeModal={handleCloseLurnifyModal} />
         )}
