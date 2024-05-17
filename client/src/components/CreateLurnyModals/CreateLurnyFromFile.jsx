@@ -9,7 +9,7 @@ import { handleLurnyData } from "../../actions/lurny";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateLurnyFromURL({ closeModal }) {
+export default function CreateLurnyFromFile({ closeModal }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const quiz_server_url = import.meta.env.VITE_QUIZ_SERVER;
@@ -84,23 +84,18 @@ export default function CreateLurnyFromURL({ closeModal }) {
       <div className="w-[150rem] sm:w-[150rem] relative p-[10rem] sm:p-[8rem] bg-white rounded-[2rem] shadow-md shadow-gray-400 flex gap-[4rem] divide-x-2 m-auto">
         <div className="flex flex-col flex-1 gap-[4rem] text-black text-[1.5rem]">
           <div className="flex flex-col gap-[2rem]">
-            <h3 className="font-bold text-left">LURNIFY A URL</h3>
+            <h3 className="font-bold text-left">LURNIFY A PDF</h3>
             <span className="text-left ml-[2rem]">
-              Easily convert any online article or video into a Lurny by copying
-              and pasting its URL
-            </span>
-            <span className="text-left ml-[2rem]">
-              If you haven&apos;t installed the Lurny Chrome extension, use this
-              method to easily convert web pages and videos into learning
-              objects by just pasting the URL.
+              Convert entire PDF documents into multiple Lurnies by uploading
+              the PDF file or providing its URL.
             </span>
           </div>
           <div className="flex flex-col gap-[2rem]">
             <h3 className="font-bold text-left">INSTRUCTIONS</h3>
             <ul className="list-disc ml-[4rem]">
-              <li className="text-left">Copy the URL</li>
+              <li className="text-left">Upload the PDF or</li>
               <li className="text-left">
-                Paste copied URL in the box on the right
+                Paste the copied text into the box on the right.
               </li>
               <li className="text-left">Click &quot;Lurnify&quot; button</li>
               <li className="text-left">
@@ -110,6 +105,7 @@ export default function CreateLurnyFromURL({ closeModal }) {
                 &quot;Download&quot; button to save the Lurny to your profile
                 under the My Lurnies section.
               </li>
+              <li className="text-left">under the My Lurnies section.</li>
             </ul>
           </div>
         </div>
@@ -165,6 +161,6 @@ export default function CreateLurnyFromURL({ closeModal }) {
   );
 }
 
-CreateLurnyFromURL.propTypes = {
+CreateLurnyFromFile.propTypes = {
   closeModal: PropTypes.func.isRequired,
 };

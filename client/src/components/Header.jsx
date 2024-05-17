@@ -20,6 +20,7 @@ import ChromeIcon from "../assets/icons/chrome.png";
 import BrainIcon from "../assets/icons/brain.png";
 import { getTodaysStudies } from "../utils/getTodoayStudies";
 import CreateLurnyFromURL from "./CreateLurnyModals/CreateLurnyFromURL";
+import CreateLurnyFromFile from "./CreateLurnyModals/CreateLurnyFromFile";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -69,8 +70,8 @@ export default function Header() {
     setLurnifyModal("URL");
   };
 
-  const handleOpenPDFModal = () => {
-    setLurnifyModal("PDF");
+  const handleOpenFileModal = () => {
+    setLurnifyModal("File");
   };
 
   const handleOpenManuallyModal = () => {
@@ -133,7 +134,7 @@ export default function Header() {
               Create Lunies From URL
             </span>
           </MenuItem>
-          <MenuItem onClick={handleOpenPDFModal}>
+          <MenuItem onClick={handleOpenFileModal}>
             <span className="w-full py-[2rem] sm:py-[0.5rem] text-black text-[8rem] sm:text-[1.5rem]">
               Create Lunies From PDF
             </span>
@@ -181,6 +182,7 @@ export default function Header() {
             </a>
           </div>
         )}
+
         {/* Hambuger */}
         <Menu
           menuButton={
@@ -244,6 +246,10 @@ export default function Header() {
         {lurnifyModal === "URL" && (
           <CreateLurnyFromURL closeModal={handleCloseLurnifyModal} />
         )}
+
+        {/* {lurnifyModal === "File" && (
+          <CreateLurnyFromFile closeModal={handleCloseLurnifyModal} />
+        )} */}
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 
 import { Tooltip } from "react-tooltip";
 import { jwtDecode } from "jwt-decode";
@@ -593,7 +593,7 @@ function LurnyQuiz() {
         draggable
         pauseOnHover
         theme="light"
-        transition:Bounce
+        transition={Bounce}
         className="text-[2rem]"
       />
 

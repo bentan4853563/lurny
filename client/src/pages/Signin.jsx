@@ -8,7 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { auth } from "../firebase/config";
@@ -69,7 +69,7 @@ export default function Signin() {
         draggable
         pauseOnHover
         theme="light"
-        transition:Bounce
+        transition={Bounce}
         className="text-[2rem]"
       />
       <img

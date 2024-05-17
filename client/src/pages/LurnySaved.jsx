@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
 
@@ -82,7 +82,7 @@ const LurnySaved = () => {
         draggable
         pauseOnHover
         theme="light"
-        transition:Bounce
+        transition={Bounce}
         className="text-[2rem]"
       />
       <div className="w-full bg-[#262626] flex flex-1 justify-between px-[12rem] py-[6rem]">

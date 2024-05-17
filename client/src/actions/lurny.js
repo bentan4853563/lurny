@@ -43,17 +43,48 @@ export const getLurnies = () => async (dispatch) => {
   }
 };
 
-export const handleLurnyData = (user_id, lurnyData) => {
-  try {
-    let newLurnies = [];
-    const parsedLurnyData = JSON.parse(lurnyData);
-    for (let i = 0; i < parsedLurnyData.length; i++) {
-      const parsedLurny = JSON.parse(parsedLurnyData[i]);
-      if (parsedLurny.media === "PDF") {
-        const { summary_content, questions, fileName, url } = parsedLurny;
-        if (Array.isArray(summary_content) && summary_content.length > 0) {
+/**
+ * Handle new Lurny Data from the chrome extension, save to DB
+ *
+ * @param {id, Object} lurny - The Lurny object to be inserted.
+ */
+export const handleLurnyData =
+  (user_id, lurnyData, navigate) => async (dispatch) => {
+    try {
+      let newLurnies = [];
+      for (let i = 0; i < lurnyData.length; i++) {
+        const parsedLurny = JSON.parse(lurnyData[i]);
+        console.log("parsedLurny :>> ", parsedLurny);
+        if (parsedLurny.media === "PDF") {
+          const { summary_content, questions, fileName, url } = parsedLurny;
+          if (Array.isArray(summary_content) && summary_content.length > 0) {
+            // If summary_content[0] is a string containing JSON, parse it as well
+            const json_summary_content = JSON.parse(summary_content[0]);
+
+            const title = json_summary_content.title;
+            const summary = json_summary_content.summary;
+            const collections = json_summary_content.hash_tags;
+
+            let quiz = [];
+            questions.forEach((element) => {
+              quiz.push(JSON.parse(element));
+            });
+            const lurnyObject = {
+              user: user_id,
+              title,
+              summary,
+              collections,
+              quiz,
+              image: null, // Ensure getDefaultImg function is defined or imported
+              url: url ? url : fileName,
+            };
+            newLurnies.push(lurnyObject);
+          }
+        } else if (parsedLurny.media === "web") {
+          const { summary_content, questions, image, url } = parsedLurny;
+          // if (Array.isArray(summary_content) && summary_content.length > 0) {
+          const json_summary_content = JSON.parse(summary_content);
           // If summary_content[0] is a string containing JSON, parse it as well
-          const json_summary_content = JSON.parse(summary_content[0]);
 
           const title = json_summary_content.title;
           const summary = json_summary_content.summary;
@@ -63,65 +94,40 @@ export const handleLurnyData = (user_id, lurnyData) => {
           questions.forEach((element) => {
             quiz.push(JSON.parse(element));
           });
+
           const lurnyObject = {
             user: user_id,
             title,
             summary,
             collections,
             quiz,
-            image: null, // Ensure getDefaultImg function is defined or imported
-            url: url ? url : fileName,
+            image, // Ensure getDefaultImg function is defined or imported
+            url,
           };
+
           newLurnies.push(lurnyObject);
         }
-      } else {
-        const { summary_content, questions, image, url } = parsedLurny;
-
-        // if (Array.isArray(summary_content) && summary_content.length > 0) {
-        const json_summary_content = JSON.parse(summary_content);
-        // If summary_content[0] is a string containing JSON, parse it as well
-
-        const title = json_summary_content.title;
-        const summary = json_summary_content.summary;
-        const collections = json_summary_content.hash_tags;
-
-        let quiz = [];
-        questions.forEach((element) => {
-          quiz.push(JSON.parse(element));
-        });
-
-        const lurnyObject = {
-          user: user_id,
-          title,
-          summary,
-          collections,
-          quiz,
-          image, // Ensure getDefaultImg function is defined or imported
-          url,
-        };
-        newLurnies.push(lurnyObject);
       }
+      if (newLurnies.length > 0) {
+        dispatch(handleInsertLurny(newLurnies, navigate));
+      }
+    } catch (e) {
+      console.error("Failed to parse tempData", e);
     }
-    if (newLurnies.length > 0) {
-      handleInsertLurny(newLurnies);
-    }
-  } catch (e) {
-    console.error("Failed to parse tempData", e);
-  }
-};
+  };
 
 /**
  * Insert a new Lurny into the backend and update the store upon success.
  *
  * @param {Object} lurny - The Lurny object to be inserted.
  */
-export const handleInsertLurny = (lurny) => async (dispatch) => {
+export const handleInsertLurny = (lurnies, navigate) => async (dispatch) => {
   const options = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(lurny),
+    body: JSON.stringify(lurnies),
   };
 
   try {
@@ -129,10 +135,11 @@ export const handleInsertLurny = (lurny) => async (dispatch) => {
     const response = await fetch(`${backend_url}/api/lurny/insert`, options);
     if (response.ok) {
       const responseData = await response.json();
+      navigate("/lurny/profile");
       dispatch(insertLurny(responseData));
-      toast.success("Inserted!", {
-        position: "top-right",
-      });
+      // toast.success("Inserted!", {
+      //   position: "top-right",
+      // });
     }
   } catch (error) {
     console.error("Error:", error);

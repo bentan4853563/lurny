@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Tooltip } from "react-tooltip";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // import { IoIosArrowBack } from "react-icons/io";
@@ -411,7 +411,7 @@ export default function MobileQuizItem({
           draggable
           pauseOnHover
           theme="light"
-          transition:Bounce
+          transition={Bounce}
           className="text-[2rem]"
         />
         {content === 0 && (

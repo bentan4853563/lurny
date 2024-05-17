@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { handleTest } from "../actions/study";
@@ -104,7 +104,7 @@ function TestQuizItem({ data }) {
             draggable
             pauseOnHover
             theme="light"
-            transition:Bounce
+            transition={Bounce}
             className="text-[2rem]"
           />
 

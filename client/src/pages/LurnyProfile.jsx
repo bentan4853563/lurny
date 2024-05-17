@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -11,8 +11,6 @@ import { TfiShare } from "react-icons/tfi";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 
-import defaultImg from "../assets/images/Lurny/default.png";
-
 import Header from "../components/Header";
 import UserPan from "../components/UserPan";
 import LurnyItem from "../components/LurnyItem";
@@ -20,7 +18,6 @@ import NewPagination from "../components/NewPagination";
 
 import {
   handleDeleteLurny,
-  handleInsertLurny,
   handleLurnyData,
   handleShareLurny,
 } from "../actions/lurny";
@@ -184,17 +181,17 @@ const LurnyProfile = () => {
   //   }
   // }, [userDetails, lurnies]);
 
-  const isYoutubeUrl = (url) => {
-    return url.includes("youtube.com") || url.includes("youtu.be");
-  };
+  // const isYoutubeUrl = (url) => {
+  //   return url.includes("youtube.com") || url.includes("youtu.be");
+  // };
 
-  const getDefaultImg = (image, url) => {
-    if (isYoutubeUrl(url)) {
-      return `${url}/maxresdefault.jpg`;
-    } else {
-      return image ? image : defaultImg;
-    }
-  };
+  // const getDefaultImg = (image, url) => {
+  //   if (isYoutubeUrl(url)) {
+  //     return `${url}/maxresdefault.jpg`;
+  //   } else {
+  //     return image ? image : defaultImg;
+  //   }
+  // };
 
   const handleDelete = useCallback(
     async (id) => {
@@ -231,7 +228,7 @@ const LurnyProfile = () => {
         draggable
         pauseOnHover
         theme="light"
-        transition:Bounce
+        transition={Bounce}
         className="text-[2rem]"
       />
       <div className="w-full bg-[#262626] flex flex-1 justify-between px-[12rem] py-[6rem]">

@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Tooltip } from "react-tooltip";
-import { toast, ToastContainer } from "react-toastify";
+import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -888,7 +888,7 @@ export default function QuizItem({
         draggable
         pauseOnHover
         theme="light"
-        transition:Bounce
+        transition={Bounce}
         className="text-[2rem]"
       />
     </div>

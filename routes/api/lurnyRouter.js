@@ -46,9 +46,10 @@ router.post("/my-lurnies", async (req, res) => {
 
 router.post("/insert", async (req, res) => {
   try {
+    console.log("req.body :>> ", req.body);
     const newLurnies = req.body;
     const savedLurny = await Lurny.insertMany(newLurnies);
-
+    console.log("savedLurny :>> ", savedLurny);
     // Use Promise.all to wait for all promises to resolve simultaneously,
     // rather than waiting for each find operation to complete serially
     const populatedLurniesPromises = savedLurny.map((lurny) =>

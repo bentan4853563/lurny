@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { savePrompts } from "../../actions/prompts";
@@ -58,7 +58,7 @@ export default function Prompt() {
         draggable
         pauseOnHover
         theme="light"
-        transition:Bounce
+        transition={Bounce}
         className="text-[2rem]"
       />
       <div className="flex flex-col w-full px-[12rem] gap-[4rem] py-[4rem]">

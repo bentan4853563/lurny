@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoIosArrowForward } from "react-icons/io";
 
@@ -158,7 +158,7 @@ const LurnyList = () => {
         draggable
         pauseOnHover
         theme="light"
-        transition:Bounce
+        transition={Bounce}
         className="text-[2rem]"
       />
       <div className="w-full bg-[#2E2E2E] flex flex-col gap-[3rem] items-center text-white py-[4rem] sm:py-[3rem] lg:py-[2rem]">

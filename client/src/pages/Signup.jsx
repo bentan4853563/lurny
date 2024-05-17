@@ -5,7 +5,7 @@ import { auth } from "../firebase/config";
 import { useDispatch } from "react-redux";
 import { signUp } from "../actions/auth";
 
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import {
@@ -71,7 +71,7 @@ const Signup = () => {
         draggable
         pauseOnHover
         theme="light"
-        transition:Bounce
+        transition={Bounce}
         className="text-[2rem]"
       />
       <div className="w-1/2 relative">

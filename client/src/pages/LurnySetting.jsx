@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { useDispatch } from "react-redux";
@@ -89,7 +89,7 @@ const LurnySetting = () => {
         draggable
         pauseOnHover
         theme="light"
-        transition:Bounce
+        transition={Bounce}
         className="text-[2rem]"
       />
       <div className="w-full bg-[#262626] flex flex-1 justify-between px-[12rem] py-[6rem]">

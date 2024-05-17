@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -23,9 +23,11 @@ import {
 } from "../actions/lurny";
 import Header from "../components/Header";
 import getSchedule from "../utils/reminder";
+import { useNavigate } from "react-router-dom";
 
 const LurnyFeeds = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { feeds } = useSelector((state) => state.feed);
 
@@ -150,7 +152,7 @@ const LurnyFeeds = () => {
               image: getDefaultImg(image, url), // Ensure getDefaultImg function is defined or imported
               url,
             };
-            dispatch(handleInsertLurny(lurnyObject));
+            dispatch(handleInsertLurny(lurnyObject, navigate));
           }
         }
       } catch (e) {
@@ -207,7 +209,7 @@ const LurnyFeeds = () => {
         draggable
         pauseOnHover
         theme="light"
-        transition:Bounce
+        transition={Bounce}
         className="text-[2rem]"
       />
       <div className="w-full bg-[#262626] flex flex-1 justify-between px-[12rem] py-[6rem]">
