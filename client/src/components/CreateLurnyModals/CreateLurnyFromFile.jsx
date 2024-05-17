@@ -13,31 +13,31 @@ export default function CreateLurnyFromFile({ closeModal }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const quiz_server_url = import.meta.env.VITE_QUIZ_SERVER;
-  const inputUrlRef = useRef(null);
+  const textareaRef = useRef(null);
 
   const { userDetails } = useSelector((state) => state.user);
 
-  const [url, setUrl] = useState("");
+  const [content, setContent] = useState("");
   const [status, setStatus] = useState("");
   const [lurnyData, setLurnyData] = useState(null);
 
-  const onChangeURL = (e) => {
-    setUrl(e.target.value);
+  const onChangeContent = (e) => {
+    setContent(e.target.value);
   };
 
-  const onClickLurnifyFromURL = async () => {
-    if (url === "") {
-      toast.error("Please input url");
-      inputUrlRef.current.focus();
+  const onClickLurnify = async () => {
+    if (content === "") {
+      toast.error("Please input content to lurnify");
+      textareaRef.current.focus();
       return;
     }
     setStatus("processing");
-    const response = await fetch(`${quiz_server_url}/fetch`, {
+    const response = await fetch(`${quiz_server_url}/manually`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ url }),
+      body: JSON.stringify({ content }),
     });
     if (response.ok) {
       setStatus("download");
@@ -110,21 +110,18 @@ export default function CreateLurnyFromFile({ closeModal }) {
           </div>
         </div>
 
-        <div className="flex flex-col flex-1 gap-[1rem] items-center justify-center">
-          <span className="text-[2rem]">
-            Paste the URL in the field below this text
-          </span>
-          <input
+        <div className="px-[2rem] flex flex-col flex-1 gap-[1rem] items-center justify-center">
+          <textarea
             type="text"
-            ref={inputUrlRef}
-            value={url}
-            onChange={onChangeURL}
-            className="w-3/4 p-[1rem] border border-gray-300 rounded-[1rem] text-[1.5rem] focus:outline-gray-600"
+            ref={textareaRef}
+            value={content}
+            onChange={onChangeContent}
+            className="w-full h-full bg-white text-black p-[1rem] border-2 border-dashed border-gray-500 rounded-[1rem] text-[1.5rem] focus:outline-gray-600"
           />
-          <div className="w-full mt-[4rem]">
+          <div className="w-full">
             {status === "" && (
               <button
-                onClick={onClickLurnifyFromURL}
+                onClick={onClickLurnify}
                 className="w-1/2 bg-[#7F52BB] text-white text-[2rem]"
               >
                 LURNIFY
@@ -133,7 +130,7 @@ export default function CreateLurnyFromFile({ closeModal }) {
             {status === "processing" && (
               <button
                 disabled
-                className="w-1/2 flex justify-center items-end gap-[1rem] bg-[#FFC000] text-white text-[2rem]"
+                className="w-1/2 mx-auto flex justify-center items-end gap-[1rem] bg-[#FFC000] text-white text-[2rem]"
               >
                 <span>PROCESSING</span>
                 <ThreeDots

@@ -80,7 +80,7 @@ export const handleLurnyData =
             };
             newLurnies.push(lurnyObject);
           }
-        } else if (parsedLurny.media === "web") {
+        } else {
           const { summary_content, questions, image, url } = parsedLurny;
           // if (Array.isArray(summary_content) && summary_content.length > 0) {
           const json_summary_content = JSON.parse(summary_content);

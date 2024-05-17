@@ -21,6 +21,7 @@ import BrainIcon from "../assets/icons/brain.png";
 import { getTodaysStudies } from "../utils/getTodoayStudies";
 import CreateLurnyFromURL from "./CreateLurnyModals/CreateLurnyFromURL";
 import CreateLurnyFromFile from "./CreateLurnyModals/CreateLurnyFromFile";
+import CreateLurnyManually from "./CreateLurnyModals/CreateLurnyManually";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -247,9 +248,9 @@ export default function Header() {
           <CreateLurnyFromURL closeModal={handleCloseLurnifyModal} />
         )}
 
-        {/* {lurnifyModal === "File" && (
-          <CreateLurnyFromFile closeModal={handleCloseLurnifyModal} />
-        )} */}
+        {lurnifyModal === "Manually" && (
+          <CreateLurnyManually closeModal={handleCloseLurnifyModal} />
+        )}
       </div>
     </div>
   );
