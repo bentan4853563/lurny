@@ -19,6 +19,7 @@ import LetterLogo from "../assets/icons/letter_logo.png";
 import ChromeIcon from "../assets/icons/chrome.png";
 import BrainIcon from "../assets/icons/brain.png";
 import { getTodaysStudies } from "../utils/getTodoayStudies";
+
 import CreateLurnyFromURL from "./CreateLurnyModals/CreateLurnyFromURL";
 import CreateLurnyFromFile from "./CreateLurnyModals/CreateLurnyFromFile";
 import CreateLurnyManually from "./CreateLurnyModals/CreateLurnyManually";
@@ -121,6 +122,8 @@ export default function Header() {
             </div>
           </div>
         )}
+
+        {/* Lurnify in several ways */}
         <Menu
           menuButton={
             <MenuButton>

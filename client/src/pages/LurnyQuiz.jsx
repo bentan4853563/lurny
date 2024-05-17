@@ -30,6 +30,11 @@ import { IoSearchSharp } from "react-icons/io5";
 import QuizItem from "../components/QuizItem";
 import MobileQuizItem from "../components/MobileQuizItem";
 import TranslateComponent from "../components/TranslateComponent";
+import { LuPencil } from "react-icons/lu";
+
+import CreateLurnyFromURL from "../components/CreateLurnyModals/CreateLurnyFromURL";
+import CreateLurnyFromFile from "../components/CreateLurnyModals/CreateLurnyFromFile";
+import CreateLurnyManually from "../components/CreateLurnyModals/CreateLurnyManually";
 
 import { logout } from "../reducers/userSlice";
 import useAdmin from "../hooks/useAdmin";
@@ -50,6 +55,7 @@ function LurnyQuiz() {
   const [content, setContent] = useState(0);
 
   const [imageUrl, setImageUrl] = useState(null);
+  const [lurnifyModal, setLurnifyModal] = useState(null);
 
   // const [isExpand, setIsExpand] = useState(false);
 
@@ -225,6 +231,22 @@ function LurnyQuiz() {
     };
   }, [selectedIndex, lurnies]);
 
+  const handleOpenURLModal = () => {
+    setLurnifyModal("URL");
+  };
+
+  const handleOpenFileModal = () => {
+    setLurnifyModal("File");
+  };
+
+  const handleOpenManuallyModal = () => {
+    setLurnifyModal("Manually");
+  };
+
+  const handleCloseLurnifyModal = () => {
+    setLurnifyModal(null);
+  };
+
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
@@ -307,6 +329,32 @@ function LurnyQuiz() {
         )}
 
         <div className="flex items-center gap-[8rem] lg:gap-[2rem]">
+          {/* Lurnify in several ways */}
+          <Menu
+            menuButton={
+              <MenuButton>
+                <LuPencil className="text-zinc-300 text-[12rem] sm:text-[2.5rem] hover:bg-[#262626] box-content rounded-[0.5rem] p-[0.5rem] hover:text-gray-400" />
+              </MenuButton>
+            }
+            transition
+            align="center"
+          >
+            <MenuItem onClick={handleOpenURLModal}>
+              <span className="w-full py-[2rem] sm:py-[0.5rem] text-black text-[8rem] sm:text-[1.5rem]">
+                Create Lunies From URL
+              </span>
+            </MenuItem>
+            <MenuItem onClick={handleOpenFileModal}>
+              <span className="w-full py-[2rem] sm:py-[0.5rem] text-black text-[8rem] sm:text-[1.5rem]">
+                Create Lunies From PDF
+              </span>
+            </MenuItem>
+            <MenuItem onClick={handleOpenManuallyModal}>
+              <span className="w-full py-[2rem] sm:py-[0.5rem] text-black text-[8rem] sm:text-[1.5rem]">
+                Create Lunies Manually
+              </span>
+            </MenuItem>
+          </Menu>
           {lurnies.length > 0 && (
             <Link to={"/lurny/search"}>
               <IoSearchSharp className="text-zinc-300 text-[16rem] sm:text-[3rem] hover:text-gray-400 hover:bg-[#262626] box-content rounded-[0.5rem] p-[0.5rem]" />
@@ -596,6 +644,16 @@ function LurnyQuiz() {
         transition={Bounce}
         className="text-[2rem]"
       />
+
+      {lurnifyModal === "URL" && (
+        <CreateLurnyFromURL closeModal={handleCloseLurnifyModal} />
+      )}
+      {lurnifyModal === "File" && (
+        <CreateLurnyFromFile closeModal={handleCloseLurnifyModal} />
+      )}
+      {lurnifyModal === "Manually" && (
+        <CreateLurnyManually closeModal={handleCloseLurnifyModal} />
+      )}
 
       {/* Footer */}
       <div className="w-full flex sm:hidden justify-around items-center mb-[24rem]">

@@ -72,7 +72,7 @@ export default function CreateLurnyFromFile({ closeModal }) {
       const formData = new FormData();
       formData.append("file", file); // Append the file
 
-      const response = await fetch(`${quiz_server_url}/manually`, {
+      const response = await fetch(`${quiz_server_url}/lurnify-from-file`, {
         method: "POST",
         body: formData, // Send form data
       });
