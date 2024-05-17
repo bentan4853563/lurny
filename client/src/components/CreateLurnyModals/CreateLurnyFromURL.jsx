@@ -125,7 +125,7 @@ export default function CreateLurnyFromURL({ closeModal }) {
             onChange={onChangeURL}
             className="w-3/4 p-[1rem] border border-gray-300 rounded-[1rem] text-[1.5rem] focus:outline-gray-600"
           />
-          <div className="w-full mt-[4rem]">
+          <div className="w-full flex flex-col items-center mt-[4rem]">
             {status === "" && (
               <button
                 onClick={onClickLurnifyFromURL}
