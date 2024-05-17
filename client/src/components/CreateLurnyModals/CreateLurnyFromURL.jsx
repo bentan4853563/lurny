@@ -123,7 +123,7 @@ export default function CreateLurnyFromURL({ closeModal }) {
             ref={inputUrlRef}
             value={url}
             onChange={onChangeURL}
-            className="w-3/4 bg-white p-[1rem] border border-gray-300 rounded-[1rem] text-[1.5rem] focus:outline-gray-600"
+            className="w-3/4 bg-white text-black p-[1rem] border border-gray-300 rounded-[1rem] text-[1.5rem] focus:outline-gray-600"
           />
           <div className="w-full flex flex-col items-center mt-[4rem]">
             {status === "" && (
