@@ -21,9 +21,11 @@ import {
   handleLurnyData,
   handleShareLurny,
 } from "../actions/lurny";
+import { useNavigate } from "react-router-dom";
 
 const LurnyProfile = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { lurnies } = useSelector((state) => state.lurny);
 
@@ -91,7 +93,7 @@ const LurnyProfile = () => {
   useEffect(() => {
     console.log("tempData :>> ", tempData);
     if (userDetails && tempData && tempData !== "undefined") {
-      handleLurnyData(userDetails.id, tempData);
+      dispatch(handleLurnyData(userDetails.id, tempData, navigate));
       // try {
       //   let newLurnies = [];
       //   const parsedTempData = JSON.parse(tempData);
