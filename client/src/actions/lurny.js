@@ -52,9 +52,14 @@ export const handleLurnyData =
   (user_id, lurnyData, navigate) => async (dispatch) => {
     try {
       let newLurnies = [];
-      for (let i = 0; i < lurnyData.length; i++) {
-        const parsedLurny = JSON.parse(lurnyData[i]);
-        console.log("parsedLurny :>> ", parsedLurny);
+
+      // If lurny data is string, then parse to json
+      const parsedLurnies =
+        typeof lurnyData === "string" ? JSON.parse(lurnyData) : lurnyData;
+
+      for (let i = 0; i < parsedLurnies.length; i++) {
+        const parsedLurny = JSON.parse(parsedLurnies[i]);
+
         if (parsedLurny.media === "PDF") {
           const { summary_content, questions, fileName, url } = parsedLurny;
           if (Array.isArray(summary_content) && summary_content.length > 0) {
@@ -82,9 +87,7 @@ export const handleLurnyData =
           }
         } else {
           const { summary_content, questions, image, url } = parsedLurny;
-          // if (Array.isArray(summary_content) && summary_content.length > 0) {
           const json_summary_content = JSON.parse(summary_content);
-          // If summary_content[0] is a string containing JSON, parse it as well
 
           const title = json_summary_content.title;
           const summary = json_summary_content.summary;
