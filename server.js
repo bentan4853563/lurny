@@ -1,7 +1,6 @@
 // /* eslint-disable no-undef */
 const path = require("path");
 const fs = require("fs");
-const http = require("http");
 const https = require("https");
 const express = require("express");
 const cors = require("cors");
@@ -44,33 +43,12 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// Create an instance of the Express app
-const secureApp = express();
-secureApp.use(app);
+const PORT = process.env.PORT || 443;
 
-// Creating the HTTPS server with the secure options
-const httpsServer = https.createServer(options, secureApp);
-
-// Listen on the specified HTTPS port, default to 443
-const HTTPS_PORT = process.env.PORT || 443;
-httpsServer.listen(HTTPS_PORT, () => {
-  console.log(`Server started on ${HTTPS_PORT}`);
+https.createServer(options, app).listen(PORT, () => {
+  console.log(`Server started on ${PORT}`);
 });
 
-// Redirect from HTTP to HTTPS
-const httpApp = express();
-httpApp.all("*", (req, res) => {
-  res.redirect(301, `https://${req.hostname}${req.url}`);
-});
-
-// Creating the HTTP server that will handle redirects
-const httpServer = http.createServer(httpApp);
-
-// Listen on port 80 for HTTP requests
-const HTTP_PORT = 80;
-httpServer.listen(HTTP_PORT, () => {
-  console.log(`HTTP redirect server started on ${HTTP_PORT}`);
-});
 /* eslint-disable no-undef */
 // const path = require("path");
 // const express = require("express");
