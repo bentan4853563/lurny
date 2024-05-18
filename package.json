@@ -17,6 +17,7 @@
     "google-auth-library": "^9.7.0",
     "https": "^1.0.0",
     "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
     "mammoth": "^1.7.2",
     "mongoose": "^8.2.1",
     "node-fetch": "^3.3.2",

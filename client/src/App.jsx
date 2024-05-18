@@ -7,10 +7,12 @@ import Loading from "./components/Loading";
 import About from "./pages/About";
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
+import Landing from "./pages/Landing";
 import LurnyQuiz from "./pages/LurnyQuiz";
 import LurnyRemind from "./pages/LurnyRemind";
 import LurnyPrice from "./pages/LurnyPrice";
 import LurnyList from "./pages/LurnyList";
+import LurnyGroupList from "./pages/LurnyGroupList";
 import LurnyProfile from "./pages/LurnyProfile";
 import LurnySaved from "./pages/LurnySaved";
 import LurnySetting from "./pages/LurnySetting";
@@ -29,7 +31,6 @@ import { setUserDetails } from "./reducers/userSlice";
 
 import "./App.css";
 import "animate.css";
-import Landing from "./pages/Landing";
 
 function App() {
   const dispatch = useDispatch();
@@ -68,6 +69,7 @@ function App() {
           <Routes>
             <Route path="/lurny" element={<ProtectedRoute />}>
               <Route path="list" element={<LurnyList />} />
+              <Route path="sub-group" element={<LurnyGroupList />} />
               <Route path="profile" element={<LurnyProfile />} />
               <Route path="saved" element={<LurnySaved />} />
               <Route path="feeds/:id" element={<LurnyQuiz />} />

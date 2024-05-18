@@ -1,27 +1,31 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import _ from "lodash";
 
 import { ImSearch } from "react-icons/im";
 
 import LurnyItem from "../components/LurnyItem";
 import NewPagination from "../components/NewPagination";
 import Header from "../components/Header";
+import LurnyGroupItem from "../components/GroupItem";
 
 const LurnySearch = () => {
+  const navigate = useNavigate();
   const { lurnies } = useSelector((state) => state.lurny);
   const [publishedLurnies, setPublishedLurnies] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState(""); // State to hold the search term
   const [filteredLurnies, setFilteredLurnies] = useState([]);
+  const [groupedLurnies, setGroupedLurnies] = useState({});
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(20); // Adjust as needed
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredLurnies.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -62,6 +66,49 @@ const LurnySearch = () => {
     }
   }, [searchTerm, publishedLurnies]);
 
+  useEffect(() => {
+    if (filteredLurnies && filteredLurnies.length > 0) {
+      const grouped = _.chain(filteredLurnies)
+        .groupBy(
+          (lurny) => `${lurny.date.slice(0, 19)}|${lurny.user._id}|${lurny.url}`
+        )
+        .value();
+
+      setGroupedLurnies(grouped);
+    }
+  }, [filteredLurnies]);
+
+  const renderLurnies = useCallback(() => {
+    const groupArray = Object.entries(groupedLurnies);
+
+    // Calculate the current groups based on pagination
+    const currentGroupIndices = groupArray.slice(
+      indexOfFirstItem,
+      indexOfLastItem
+    );
+
+    return currentGroupIndices.map(([groupKey, groupItems]) => {
+      // If only one item in the group, render LurnyItem
+      if (groupItems.length === 1) {
+        const lurny = groupItems[0];
+        return <LurnyItem key={groupKey} data={lurny} />;
+      }
+
+      // If more than one, render your LurnyGroupItem component
+      return (
+        <LurnyGroupItem
+          key={groupKey}
+          group={groupItems}
+          onGroupClick={() => handleExpand(groupItems)} // Implement this as needed
+        />
+      );
+    });
+  }, [groupedLurnies, currentPage, itemsPerPage]);
+
+  const handleExpand = (groupItems) => {
+    navigate("/lurny/sub-group", { state: { groupItems } });
+  };
+
   return (
     <div className="min-h-[100vh] font-raleway">
       <Header />
@@ -95,9 +142,7 @@ const LurnySearch = () => {
 
         <div className="w-full h-full flex flex-col justify-between items-center">
           <div className="w-full h-full flex flex-wrap justify-center sm:justify-start gap-[8rem] lg:gap-[4rem]">
-            {currentItems.map((lurny, index) => (
-              <LurnyItem key={index} data={lurny} />
-            ))}
+            {renderLurnies()}
           </div>
           {filteredLurnies.length > itemsPerPage && (
             <NewPagination

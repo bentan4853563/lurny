@@ -4,6 +4,7 @@ import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import _ from "lodash";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -22,6 +23,7 @@ import {
   handleShareLurny,
 } from "../actions/lurny";
 import { useNavigate } from "react-router-dom";
+import LurnyGroupItem from "../components/GroupItem";
 
 const LurnyProfile = () => {
   const dispatch = useDispatch();
@@ -33,6 +35,8 @@ const LurnyProfile = () => {
   const [myLurnies, setMyLurnies] = useState([]);
   const [tempData, setTempData] = useState(null);
   const [showSidePan, setShowSidePan] = useState(false);
+
+  const [groupedLurnies, setGroupedLurnies] = useState({});
   // const [showAll, setShowAll] = useState(true);
   // const [filterdLurnies, setFilteredLurnies] = useState([]);
 
@@ -41,10 +45,7 @@ const LurnyProfile = () => {
   // Get current items
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems =
-    myLurnies &&
-    myLurnies.length > 0 &&
-    myLurnies.slice(indexOfFirstItem, indexOfLastItem);
+
   // Change page
   const paginate = useCallback((pageNumber) => setCurrentPage(pageNumber), []);
 
@@ -81,6 +82,18 @@ const LurnyProfile = () => {
       setMyLurnies(filtered);
     }
   }, [userDetails, lurnies]);
+
+  useEffect(() => {
+    if (myLurnies && myLurnies.length > 0) {
+      const grouped = _.chain(myLurnies)
+        .groupBy(
+          (lurny) => `${lurny.date.slice(0, 19)}|${lurny.user._id}|${lurny.url}`
+        )
+        .value();
+
+      setGroupedLurnies(grouped);
+    }
+  }, [myLurnies]);
 
   const storedTempData = localStorage.getItem("tempData");
   useEffect(() => {
@@ -161,6 +174,85 @@ const LurnyProfile = () => {
       // }
     }
   }, [tempData, userDetails]);
+
+  // Render the grouped lurnies or individual lurnies based on the grouping condition
+  const renderLurnies = useCallback(() => {
+    const groupArray = Object.entries(groupedLurnies);
+
+    // Calculate the current groups based on pagination
+    const currentGroupIndices = groupArray.slice(
+      indexOfFirstItem,
+      indexOfLastItem
+    );
+
+    return currentGroupIndices.map(([groupKey, groupItems]) => {
+      // If only one item in the group, render LurnyItem
+      if (groupItems.length === 1) {
+        const lurny = groupItems[0];
+        return (
+          <div key={groupKey} className="relative flex flex-col">
+            <div className="absolute right-[4rem] sm:right-[2rem] top-[20rem] sm:top-[12rem] z-50 cursor-pointer">
+              <IoTrashOutline
+                onClick={() => handleDelete(lurny._id)}
+                className="text-[10rem] sm:text-[2rem] text-red-500 hover:text-red-400"
+              />
+            </div>
+
+            <LurnyItem data={lurny} />
+            {lurny.shared ? (
+              <div className="bg-[#00B050] py-[2rem] sm:py-[0.5rem] mt-auto rounded-[2rem] sm:rounded-[0.5rem] text-white text-[8rem] sm:text-[2rem] cursor-pointer">
+                Shared
+              </div>
+            ) : (
+              <div
+                className="bg-white px-[2rem] py-[4rem] sm:py-[0.5rem] mt-auto rounded-[2rem] sm:rounded-[0.5rem] flex justify-around items-center text-black text-[6.5rem] sm:text-[2rem] cursor-pointer"
+                onClick={() => dispatch(handleShareLurny(lurny._id))}
+              >
+                <TfiShare />
+                <span className="justify-center">Share with Community</span>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      // If more than one, render your LurnyGroupItem component
+      return (
+        <div key={groupKey} className="relative flex flex-col">
+          <div className="absolute right-[4rem] sm:right-[2rem] top-[20rem] sm:top-[20rem] z-50 cursor-pointer">
+            <IoTrashOutline
+              onClick={() => handleDelete(groupKey)}
+              className="text-[10rem] sm:text-[2rem] text-red-500 hover:text-red-400"
+            />
+          </div>
+
+          {/* <LurnyItem data={lurny} /> */}
+          <LurnyGroupItem
+            key={groupKey}
+            group={groupItems}
+            onGroupClick={() => handleExpand(groupItems)} // Implement this as needed
+          />
+          {groupItems[0].shared ? (
+            <div className="bg-[#00B050] py-[2rem] sm:py-[0.5rem] mt-auto rounded-[2rem] sm:rounded-[0.5rem] text-white text-[8rem] sm:text-[2rem] cursor-pointer">
+              Shared
+            </div>
+          ) : (
+            <div
+              className="bg-white px-[2rem] py-[4rem] sm:py-[0.5rem] mt-auto rounded-[2rem] sm:rounded-[0.5rem] flex justify-around items-center text-black text-[6.5rem] sm:text-[2rem] cursor-pointer"
+              onClick={() => dispatch(handleShareLurny(groupKey))}
+            >
+              <TfiShare />
+              <span className="justify-center">Share with Community</span>
+            </div>
+          )}
+        </div>
+      );
+    });
+  }, [groupedLurnies, currentPage, itemsPerPage]);
+
+  const handleExpand = (groupItems) => {
+    navigate("/lurny/sub-group", { state: { groupItems } });
+  };
 
   // useEffect(() => {
   //   setCurrentPage(1);
@@ -266,7 +358,7 @@ const LurnyProfile = () => {
         {/* My Lurnies */}
         <div className="w-full flex flex-col justify-between items-center">
           <div className="w-full flex flex-wrap pl-[6rem] justify-start gap-[8rem] lg:gap-[4rem]">
-            {currentItems &&
+            {/* {currentItems &&
               currentItems.length > 0 &&
               currentItems.map((lurny, index) => {
                 // if (typeof lurny === "object" && Object.keys(lurny).length > 3)
@@ -297,7 +389,8 @@ const LurnyProfile = () => {
                     )}
                   </div>
                 );
-              })}
+              })} */}
+            {renderLurnies()}
           </div>
           {myLurnies.length > 0 && (
             <NewPagination
