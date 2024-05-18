@@ -77,7 +77,7 @@ const Landing = () => {
         pauseOnHover
         theme="light"
         transition={Bounce}
-        className="text-[2rem]"
+        className="text-[6rem] sm:text-[2rem]"
       />
 
       <div className="w-full h-full bg-[#262626] flex flex-col px-[12rem] pt-[12rem] pb-[8rem] gap-[4rem]">

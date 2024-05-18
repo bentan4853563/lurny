@@ -134,17 +134,17 @@ export default function Header() {
           align="center"
         >
           <MenuItem onClick={handleOpenURLModal}>
-            <span className="w-full py-[2rem] sm:py-[0.5rem] text-black text-[8rem] sm:text-[1.5rem]">
+            <span className="w-full text-black text-[6rem] sm:text-[1.5rem]">
               Create Lunies From URL
             </span>
           </MenuItem>
           <MenuItem onClick={handleOpenFileModal}>
-            <span className="w-full py-[2rem] sm:py-[0.5rem] text-black text-[8rem] sm:text-[1.5rem]">
+            <span className="w-full text-black text-[6rem] sm:text-[1.5rem]">
               Create Lunies From PDF
             </span>
           </MenuItem>
           <MenuItem onClick={handleOpenManuallyModal}>
-            <span className="w-full py-[2rem] sm:py-[0.5rem] text-black text-[8rem] sm:text-[1.5rem]">
+            <span className="w-full text-black text-[6rem] sm:text-[1.5rem]">
               Create Lunies Manually
             </span>
           </MenuItem>

@@ -111,7 +111,7 @@ function MaterialItem({ data }) {
     <div>
       <div
         // onClick={handleClick}
-        className="w-[150rem] sm:w-[48rem] lg:w-[30rem] relative"
+        className="w-[80rem] sm:w-[48rem] lg:w-[30rem] relative"
       >
         <div className="relative">
           {userDetails && (
@@ -123,11 +123,11 @@ function MaterialItem({ data }) {
               }
               // src={imageUrl}
               alt="lurny image"
-              className="h-[80rem] sm:h-[24rem] lg:h-[16rem] w-full object-cover rounded-[8rem] sm:rounded-[1.5rem]"
+              className="h-[36rem] sm:h-[24rem] lg:h-[16rem] w-full object-cover rounded-[4rem] sm:rounded-[1.5rem]"
             />
           )}
           <span
-            className={`absolute bottom-[2rem] left-[2rem] rounded-[1rem] text-[2rem] font-bold px-[2rem] py-0 ${
+            className={`absolute bottom-[4rem] sm:bottom-[2rem] left-[4rem] sm:left-[2rem] rounded-[1rem] text-[6rem] sm:text-[2rem] font-bold px-[2rem] py-0 ${
               type === "stub"
                 ? "bg-[#FFC35E] text-black"
                 : "bg-[#7F52BB] text-white"
@@ -142,7 +142,7 @@ function MaterialItem({ data }) {
           />
         </div>
         {/* Meta info */}
-        <div className="flex flex-col items-start text-white text-[1.5rem] p-[1rem]">
+        <div className="flex flex-col items-start text-white text-[6rem] sm:text-[1.5rem] p-[1rem]">
           <span className="text-left">
             Total repetitions: {user.repeatTimes}
           </span>

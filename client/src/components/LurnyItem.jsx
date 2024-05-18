@@ -82,7 +82,7 @@ function LurnyItem({ data }) {
         <span className="w-full text-start text-[6rem] sm:text-[3rem] lg:text-[1.2rem] font-semibold truncate">
           {url}
         </span>
-        <div className="w-full text-[8rem] sm:text-[5rem] lg:text-[2rem] leading-[11rem] sm:leading-[6rem] lg:leading-[2.5rem] text-left font-medium line-clamp-2">
+        <div className="w-full text-[6.5rem] sm:text-[4rem] lg:text-[2rem] leading-[11rem] sm:leading-[6rem] lg:leading-[2.5rem] text-left font-medium line-clamp-2">
           {title}
         </div>
       </div>

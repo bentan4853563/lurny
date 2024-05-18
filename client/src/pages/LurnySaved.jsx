@@ -83,9 +83,9 @@ const LurnySaved = () => {
         pauseOnHover
         theme="light"
         transition={Bounce}
-        className="text-[2rem]"
+        className="text-[6rem] sm:text-[2rem]"
       />
-      <div className="w-full bg-[#262626] flex flex-1 justify-between px-[12rem] py-[6rem]">
+      <div className="w-full bg-[#262626] flex flex-1 justify-between px-[12rem] py-[6rem] relative">
         {/* Toggle button for mobile */}
         <div
           onClick={() => setShowSidePan(!showSidePan)}
@@ -99,14 +99,13 @@ const LurnySaved = () => {
             }`}
           />
         </div>
-        <div className="hidden sm:flex">
-          <UserPan />
-        </div>
 
         {/* UserPan is hidden on small screens initially */}
         <div
-          className={`${showSidePan ? "absolute" : "hidden"} sm:block`}
-        ></div>
+          className={`${showSidePan ? "absolute" : "hidden"} sm:block h-full`}
+        >
+          <UserPan />
+        </div>
 
         {/* My Lurnies */}
         <div className="w-full flex flex-col justify-between items-start">

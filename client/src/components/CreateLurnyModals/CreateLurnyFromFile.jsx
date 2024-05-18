@@ -124,10 +124,10 @@ export default function CreateLurnyFromFile({ closeModal }) {
         pauseOnHover
         theme="light"
         transition={Bounce}
-        className="text-[2rem]"
+        className="text-[6rem] sm:text-[2rem]"
       />
-      <div className="w-[150rem] sm:w-[150rem] relative p-[10rem] sm:p-[8rem] bg-white rounded-[2rem] shadow-md shadow-gray-400 flex gap-[4rem] divide-x-2 m-auto">
-        <div className="flex flex-col flex-1 gap-[4rem] text-black text-[1.5rem]">
+      <div className="w-[150rem] sm:w-[150rem] relative p-[10rem] sm:p-[8rem] bg-white rounded-[6rem] sm:rounded-[2rem] shadow-md shadow-gray-400 flex gap-[4rem] sm:divide-x-2 m-auto">
+        <div className="hidden sm:qqqqflex flex-col flex-1 gap-[4rem] text-black text-[2rem]">
           <div className="flex flex-col gap-[2rem]">
             <h3 className="font-bold text-left">LURNIFY A PDF</h3>
             <span className="text-left ml-[2rem]">
@@ -155,9 +155,9 @@ export default function CreateLurnyFromFile({ closeModal }) {
           </div>
         </div>
 
-        <div className="px-[2rem] flex flex-col flex-1 gap-[2rem] items-center justify-center">
-          <div className="w-full h-full flex item-center justify-center border-2 border-gray-600 border-dotted rounded-[1rem]">
-            <div className="flex flex-col gap-[2rem] justify-center text-[2rem] text-black">
+        <div className="px-[2rem] flex flex-col flex-1 gap-[4rem] sm:gap-[2rem] items-center justify-center">
+          <div className="w-full h-full min-h-[60rem] flex item-center justify-center border-2 border-gray-600 border-dotted rounded-[1rem]">
+            <div className="flex flex-col gap-[2rem] justify-center text-[6.5rem] sm:text-[2rem] text-black">
               <span className="font-bold">
                 Drag and Drop your files here <br />
                 PDFs, DOC, DOCX, PPT etc.
@@ -174,27 +174,24 @@ export default function CreateLurnyFromFile({ closeModal }) {
                 id="file-upload"
                 className="hidden"
                 onChange={handleFileChange}
-                accept=".pdf,.doc,.docx,.ppt,.pptx"
+                accept=".pdf,.doc,.docx,.ppt,.pptx,.txt"
               />
-              <div className="flex items-center gap-[2rem]">
+              <div className="flex items-center gap-[2rem] mt-[2rem]">
                 <span className="text-[4rem]">{getFileIcon(fileName)}</span>
                 <span className="text-[1.5rem]">{fileName}</span>
               </div>
             </div>
           </div>
-          <div className="w-full">
+          <div className="w-full text-white text-[6.5rem] sm:text-[2rem]">
             {status === "" && (
-              <button
-                onClick={onClickLurnify}
-                className="w-1/2 bg-[#7F52BB] text-white text-[2rem]"
-              >
+              <button onClick={onClickLurnify} className="w-1/2 bg-[#7F52BB]">
                 LURNIFY
               </button>
             )}
             {status === "processing" && (
               <span
                 disabled
-                className="w-1/2 mx-auto flex justify-center items-end gap-[1rem] bg-[#FFC000] text-white text-[2rem] p-[1rem] rounded-[1rem]"
+                className="w-1/2 mx-auto flex justify-center items-end gap-[1rem] bg-[#FFC000] p-[1rem] rounded-[1rem]"
               >
                 <span>PROCESSING</span>
                 <ThreeDots
@@ -210,16 +207,13 @@ export default function CreateLurnyFromFile({ closeModal }) {
             {status === "error" && (
               <span
                 disabled
-                className="w-1/2 mx-auto flex justify-center items-end gap-[1rem] bg-red-400 text-white text-[2rem] p-[1rem] rounded-[1rem]"
+                className="w-1/2 mx-auto flex justify-center items-end gap-[1rem] bg-red-400 p-[1rem] rounded-[1rem]"
               >
                 Failed
               </span>
             )}
             {status === "download" && (
-              <button
-                onClick={handleDownload}
-                className="w-1/2 bg-[#00B050] text-white text-[2rem]"
-              >
+              <button onClick={handleDownload} className="w-1/2 bg-[#00B050]">
                 DOWNLOAD TO LURNY
               </button>
             )}

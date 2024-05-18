@@ -141,7 +141,11 @@ const LurnyList = () => {
   }, []);
 
   const isYoutubeUrl = (url) => {
-    return url.includes("youtube.com") || url.includes("youtu.be");
+    if (url) {
+      return url.includes("youtube.com") || url.includes("youtu.be");
+    } else {
+      return false;
+    }
   };
 
   return (
@@ -159,7 +163,7 @@ const LurnyList = () => {
         pauseOnHover
         theme="light"
         transition={Bounce}
-        className="text-[2rem]"
+        className="text-[6rem] sm:text-[2rem]"
       />
       <div className="w-full bg-[#2E2E2E] flex flex-col gap-[3rem] items-center text-white py-[4rem] sm:py-[3rem] lg:py-[2rem]">
         <div className="w-4/5 hidden sm:flex flex-wrap justify-center gap-[2rem] text-[10rem] lg:text-[2.5rem] font-bold">

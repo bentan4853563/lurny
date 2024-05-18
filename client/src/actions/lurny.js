@@ -109,6 +109,7 @@ export const handleLurnyData =
         }
       }
       if (newLurnies.length > 0) {
+        console.log("newLurnies :>> ", newLurnies);
         dispatch(handleInsertLurny(newLurnies, navigate));
       }
     } catch (e) {

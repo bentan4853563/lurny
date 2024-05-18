@@ -79,10 +79,10 @@ export default function CreateLurnyFromURL({ closeModal }) {
         pauseOnHover
         theme="light"
         transition={Bounce}
-        className="text-[2rem]"
+        className="text-[6rem] sm:text-[2rem]"
       />
-      <div className="w-[150rem] sm:w-[150rem] relative p-[10rem] sm:p-[8rem] bg-white rounded-[2rem] shadow-md shadow-gray-400 flex gap-[4rem] divide-x-2 m-auto">
-        <div className="flex flex-col flex-1 gap-[4rem] text-black text-[1.5rem]">
+      <div className="w-[180rem] sm:w-[150rem] relative p-[10rem] sm:p-[8rem] bg-white rounded-[2rem] shadow-md shadow-gray-400 flex gap-[4rem] sm:divide-x-2 m-auto">
+        <div className="hidden sm:flex flex-col flex-1 gap-[4rem] text-black text-[2rem]">
           <div className="flex flex-col gap-[2rem]">
             <h3 className="font-bold text-left">LURNIFY A URL</h3>
             <span className="text-left ml-[2rem]">
@@ -115,7 +115,7 @@ export default function CreateLurnyFromURL({ closeModal }) {
         </div>
 
         <div className="flex flex-col flex-1 gap-[1rem] items-center justify-center">
-          <span className="text-[2rem]">
+          <span className="text-[8rem] sm:text-[2rem]">
             Paste the URL in the field below this text
           </span>
           <input
@@ -123,13 +123,13 @@ export default function CreateLurnyFromURL({ closeModal }) {
             ref={inputUrlRef}
             value={url}
             onChange={onChangeURL}
-            className="w-3/4 bg-white text-black p-[1rem] border border-gray-300 rounded-[1rem] text-[1.5rem] focus:outline-gray-600"
+            className="w-full sm:w-3/4 bg-white text-black p-[4rem] sm:p-[1rem] border border-gray-300 rounded-[1rem] text-[6rem] sm:text-[1.5rem]  focus:outline-gray-600"
           />
-          <div className="w-full flex flex-col items-center mt-[4rem]">
+          <div className="w-full flex flex-col items-center mt-[4rem] text-[6.5rem] sm:text-[2rem] text-white">
             {status === "" && (
               <button
                 onClick={onClickLurnifyFromURL}
-                className="w-1/2 bg-[#7F52BB] text-white text-[2rem]"
+                className="w-1/2 bg-[#7F52BB]"
               >
                 LURNIFY
               </button>
@@ -137,7 +137,7 @@ export default function CreateLurnyFromURL({ closeModal }) {
             {status === "processing" && (
               <button
                 disabled
-                className="w-1/2 flex justify-center items-end gap-[1rem] bg-[#FFC000] text-white text-[2rem]"
+                className="w-1/2 flex justify-center items-end gap-[1rem] bg-[#FFC000]"
               >
                 <span>PROCESSING</span>
                 <ThreeDots
@@ -151,10 +151,7 @@ export default function CreateLurnyFromURL({ closeModal }) {
               </button>
             )}
             {status === "download" && (
-              <button
-                onClick={handleDownload}
-                className="w-1/2 bg-[#00B050] text-white text-[2rem]"
-              >
+              <button onClick={handleDownload} className="w-1/2 bg-[#00B050]">
                 DOWNLOAD TO LURNY
               </button>
             )}

@@ -229,9 +229,9 @@ const LurnyProfile = () => {
         pauseOnHover
         theme="light"
         transition={Bounce}
-        className="text-[2rem]"
+        className="text-[6rem] sm:text-[2rem]"
       />
-      <div className="w-full bg-[#262626] flex flex-1 justify-between px-[12rem] py-[6rem]">
+      <div className="w-full bg-[#262626] flex flex-1 justify-between px-[12rem] py-[6rem] relative">
         {/* Toggle button for mobile */}
         <div
           onClick={() => setShowSidePan(!showSidePan)}
@@ -245,18 +245,20 @@ const LurnyProfile = () => {
             }`}
           />
         </div>
-        <div className="hidden sm:flex">
+        {/* <div className="hidden sm:flex">
           <UserPan
             all={myLurnies.length}
             // saved={countSharedTrue}
             // showAll={(value) => setShowAll(value)}
           />
-        </div>
+        </div> */}
 
         {/* UserPan is hidden on small screens initially */}
         <div
-          className={`${showSidePan ? "absolute" : "hidden"} sm:block`}
-        ></div>
+          className={`${showSidePan ? "absolute" : "hidden"} sm:block h-full`}
+        >
+          <UserPan />
+        </div>
 
         {/* My Lurnies */}
         <div className="w-full flex flex-col justify-between items-center">
@@ -267,21 +269,21 @@ const LurnyProfile = () => {
                 // if (typeof lurny === "object" && Object.keys(lurny).length > 3)
                 return (
                   <div key={index} className="relative flex flex-col">
-                    <div className="absolute right-[8rem] sm:right-[2rem] top-[60rem] sm:top-[12rem] z-50 cursor-pointer">
+                    <div className="absolute right-[4rem] sm:right-[2rem] top-[20rem] sm:top-[12rem] z-50 cursor-pointer">
                       <IoTrashOutline
                         onClick={() => handleDelete(lurny._id)}
-                        className="text-[12rem] sm:text-[2rem] text-red-500 hover:text-red-400"
+                        className="text-[10rem] sm:text-[2rem] text-red-500 hover:text-red-400"
                       />
                     </div>
 
                     <LurnyItem data={lurny} />
                     {lurny.shared ? (
-                      <div className="bg-[#00B050] py-[4rem] sm:py-[0.5rem] mt-auto rounded-md text-white text-[8rem] sm:text-[2rem] cursor-pointer">
+                      <div className="bg-[#00B050] py-[2rem] sm:py-[0.5rem] mt-auto rounded-[2rem] sm:rounded-[0.5rem] text-white text-[8rem] sm:text-[2rem] cursor-pointer">
                         Shared
                       </div>
                     ) : (
                       <div
-                        className="bg-white px-[2rem] py-[4rem] sm:py-[0.5rem] mt-auto rounded-md flex justify-around items-center text-black text-[8rem] sm:text-[2rem] cursor-pointer"
+                        className="bg-white px-[2rem] py-[4rem] sm:py-[0.5rem] mt-auto rounded-[2rem] sm:rounded-[0.5rem] flex justify-around items-center text-black text-[6.5rem] sm:text-[2rem] cursor-pointer"
                         onClick={() => dispatch(handleShareLurny(lurny._id))}
                       >
                         <TfiShare />

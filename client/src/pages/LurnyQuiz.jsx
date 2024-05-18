@@ -642,7 +642,7 @@ function LurnyQuiz() {
         pauseOnHover
         theme="light"
         transition={Bounce}
-        className="text-[2rem]"
+        className="text-[6rem] sm:text-[2rem]"
       />
 
       {lurnifyModal === "URL" && (

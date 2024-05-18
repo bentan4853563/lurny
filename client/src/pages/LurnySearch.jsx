@@ -77,24 +77,24 @@ const LurnySearch = () => {
         pauseOnHover
         theme="light"
         transition={Bounce}
-        className="text-[2rem]"
+        className="text-[6rem] sm:text-[2rem]"
       />
 
-      <div className="w-full h-full bg-[#262626] flex flex-col px-[12rem] py-[4rem] gap-[4rem]">
+      <div className="w-full h-full bg-[#262626] flex flex-col px-[12rem] py-[12rem] sm:py-[4rem] gap-[4rem]">
         {/* Search bar */}
-        <div className="bg-transparent w-full px-[1.5rem] py-[0.5rem] flex flex-item items-center border border-gray-500 focus-within:border-white rounded-[0.5rem]">
-          <ImSearch className="text-white text-[2rem]" />
+        <div className="bg-transparent w-full px-[4rem] sm:px-[1.5rem] py-[1rem] sm:py-[0.5rem] flex flex-item items-center border border-gray-500 focus-within:border-white rounded-[2rem] sm:rounded-[0.5rem]  text-[8rem] sm:text-[2rem] text-white">
+          <ImSearch />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-transparent text-white text-[2rem] px-[1.5rem] flex flex-1 focus:outline-none"
+            className="bg-transparent  px-[1.5rem] flex flex-1 focus:outline-none"
             placeholder="Search topics and people"
           />
         </div>
 
         <div className="w-full h-full flex flex-col justify-between items-center">
-          <div className="w-full h-full flex flex-wrap justify-start gap-[8rem] lg:gap-[4rem]">
+          <div className="w-full h-full flex flex-wrap justify-center sm:justify-start gap-[8rem] lg:gap-[4rem]">
             {currentItems.map((lurny, index) => (
               <LurnyItem key={index} data={lurny} />
             ))}

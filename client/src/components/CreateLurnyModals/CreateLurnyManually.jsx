@@ -79,10 +79,10 @@ export default function CreateLurnyManually({ closeModal }) {
         pauseOnHover
         theme="light"
         transition={Bounce}
-        className="text-[2rem]"
+        className="text-[6rem] sm:text-[2rem]"
       />
-      <div className="w-[150rem] sm:w-[150rem] relative p-[10rem] sm:p-[8rem] bg-white rounded-[2rem] shadow-md shadow-gray-400 flex gap-[4rem] divide-x-2 m-auto">
-        <div className="flex flex-col flex-1 gap-[4rem] text-black text-[1.5rem]">
+      <div className="w-[180rem] sm:w-[150rem] relative p-[10rem] sm:p-[8rem] bg-white rounded-[2rem] shadow-md shadow-gray-400 flex gap-[4rem] sm:divide-x-2 m-auto">
+        <div className="hidden sm:flex flex-col flex-1 gap-[4rem] text-black text-[2rem]">
           <div className="flex flex-col gap-[2rem]">
             <h3 className="font-bold text-left">LURNIFY A PDF</h3>
             <span className="text-left ml-[2rem]">
@@ -113,28 +113,25 @@ export default function CreateLurnyManually({ closeModal }) {
           </div>
         </div>
 
-        <div className="px-[2rem] flex flex-col flex-1 gap-[1rem] items-center justify-center">
+        <div className="px-[2rem] flex flex-col flex-1 gap-[4rem] sm:gap-[1rem] items-center justify-center">
           <textarea
             type="text"
             ref={textareaRef}
             value={content}
             onChange={onChangeContent}
             placeholder="Paste the text in this box"
-            className="w-full h-full placeholder:text-center bg-white text-black p-[1rem] border-2 border-dashed border-gray-500 rounded-[1rem] text-[1.5rem] focus:outline-gray-600"
+            className="w-full h-full min-h-[40rem] sm:min-h-[30rem] max-[h-100rem] sm:max-h-[50rem] placeholder:text-center bg-white text-black p-[1rem] border-2 border-dashed border-gray-500 rounded-[1rem] text-[6rem] sm:text-[1.5rem] focus:outline-gray-600"
           />
-          <div className="w-full">
+          <div className="w-full text-white text-[6.5rem] sm:text-[2rem]">
             {status === "" && (
-              <button
-                onClick={onClickLurnify}
-                className="w-1/2 bg-[#7F52BB] text-white text-[2rem]"
-              >
+              <button onClick={onClickLurnify} className="w-1/2 bg-[#7F52BB]">
                 LURNIFY
               </button>
             )}
             {status === "processing" && (
               <button
                 disabled
-                className="w-1/2 mx-auto flex justify-center items-end gap-[1rem] bg-[#FFC000] text-white text-[2rem]"
+                className="w-1/2 mx-auto flex justify-center items-end gap-[1rem] bg-[#FFC000]"
               >
                 <span>PROCESSING</span>
                 <ThreeDots
@@ -148,10 +145,7 @@ export default function CreateLurnyManually({ closeModal }) {
               </button>
             )}
             {status === "download" && (
-              <button
-                onClick={handleDownload}
-                className="w-1/2 bg-[#00B050] text-white text-[2rem]"
-              >
+              <button onClick={handleDownload} className="w-1/2 bg-[#00B050]">
                 DOWNLOAD TO LURNY
               </button>
             )}

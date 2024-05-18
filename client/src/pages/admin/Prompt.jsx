@@ -59,14 +59,14 @@ export default function Prompt() {
         pauseOnHover
         theme="light"
         transition={Bounce}
-        className="text-[2rem]"
+        className="text-[6rem] sm:text-[2rem]"
       />
       <div className="flex flex-col w-full px-[12rem] gap-[4rem] py-[4rem]">
         {/* Summary Prompt */}
         <div className="w-full flex flex-col">
           <label
             htmlFor="summary"
-            className="text-white text-[2rem] text-start"
+            className="text-white text-[8rem] sm:text-[2rem] text-start"
           >
             Summary Prompt
           </label>
@@ -78,7 +78,10 @@ export default function Prompt() {
 
         {/* Quiz Prompt */}
         <div className="w-full flex flex-col">
-          <label htmlFor="quiz" className="text-white text-[2rem] text-start">
+          <label
+            htmlFor="quiz"
+            className="text-white text-[8rem] sm:text-[2rem] text-start"
+          >
             Quiz Prompt
           </label>
           <DynamicHeightTextarea
@@ -89,7 +92,10 @@ export default function Prompt() {
 
         {/* Stub Prompt */}
         <div className="w-full flex flex-col">
-          <label htmlFor="stub" className="text-white text-[2rem] text-start">
+          <label
+            htmlFor="stub"
+            className="text-white text-[8rem] sm:text-[2rem] text-start"
+          >
             Stub Prompt
           </label>
           <DynamicHeightTextarea

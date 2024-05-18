@@ -54,34 +54,34 @@ function UserPan() {
   }, [window.location.pathname]);
 
   return (
-    <div className="w-[140rem] sm:w-[42rem] lg:w-[32rem] bg-[#262626] flex flex-col items-start gap-[8rem] lg:gap-[2rem]">
+    <div className="w-[140rem] sm:w-[42rem] lg:w-[32rem] h-full p-[12rem] sm:p-0 bg-[#262626] flex flex-col items-start gap-[8rem] lg:gap-[2rem] sm:t-0">
       {userData && (
         <img
           src={userData.photoURL}
           alt="User avatar"
-          className=" rounded-full object-cover"
+          className="rounded-full object-cover"
         />
       )}
       {userData && (
-        <span className="text-white text-left text-[2.5rem] font-bold">
+        <span className="text-white text-left text-[8rem] sm:text-[2.5rem] font-bold">
           {userData.displayName}
         </span>
       )}
-      <p className="text-white text-left text-[1.5rem]">
+      <p className="text-white text-left text-[6rem] sm:text-[1.5rem]">
         The Indian economy has shown accelerated economic growth of ver 8% in
         the final months of the year, driven by strong private investments and a
         pickup in the services sector.
       </p>
       <Link
         to="/lurny/setting"
-        className="flex items-center gap-[2rem] bg-white px-[2rem] py-[0.5rem] rounded-[0.5rem] text-black text-[2rem] font-semibold focus:outline-none hover:text-black cursor-pointer hover:bg-gray-300"
+        className="flex items-center gap-[2rem] bg-white px-[6rem] sm:px-[2rem] py-[1rem] sm:py-[0.5rem] rounded-[2rem] sm:rounded-[0.5rem] text-black text-[8rem] sm:text-[2rem] font-semibold focus:outline-none hover:text-black cursor-pointer hover:bg-gray-300"
       >
         <span>Settings</span>
         <IoSettingsSharp />
       </Link>
       <Link
         to="/lurny/saved"
-        className={`w-full flex items-center justify-between active:text-gray-300 hover:text-white text-left text-[2rem] font-bold border-b border-white cursor-pointer ${
+        className={`w-full flex items-center justify-between active:text-gray-300 hover:text-white text-left text-[8rem] sm:text-[2rem] font-bold border-b border-white cursor-pointer ${
           endPoint && endPoint === "saved" ? "text-white" : "text-gray-500"
         } `}
       >
@@ -89,7 +89,7 @@ function UserPan() {
       </Link>
       <Link
         to="/lurny/profile"
-        className={`w-full active:text-gray-300 hover:text-white text-left text-[2rem] font-bold border-b border-white cursor-pointer ${
+        className={`w-full active:text-gray-300 hover:text-white text-left text-[8rem] sm:text-[2rem] font-bold border-b border-white cursor-pointer ${
           endPoint && endPoint === "profile" ? "text-white" : "text-gray-500"
         } `}
       >

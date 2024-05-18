@@ -72,7 +72,7 @@ const Signup = () => {
         pauseOnHover
         theme="light"
         transition={Bounce}
-        className="text-[2rem]"
+        className="text-[6rem] sm:text-[2rem]"
       />
       <div className="w-1/2 relative">
         <img
