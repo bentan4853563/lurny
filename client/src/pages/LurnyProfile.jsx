@@ -89,6 +89,7 @@ const LurnyProfile = () => {
   }, [storedTempData]);
 
   useEffect(() => {
+    console.log("tempData :>> ", tempData);
     if (userDetails && tempData && tempData !== "undefined") {
       handleLurnyData(userDetails.id, tempData);
       // try {
