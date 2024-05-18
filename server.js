@@ -43,10 +43,26 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-const PORT = process.env.PORT || 443;
+const secureApp = express();
+secureApp.use(app);
+length;
+const httpsServer = https.createServer(options, secureApp);
 
-https.createServer(options, app).listen(PORT, () => {
-  console.log(`Server started on ${PORT}`);
+const HTTPS_PORT = process.env.PORT || 443;
+httpsServer.listen(HTTPS_PORT, () => {
+  console.log(`Server started on ${HTTPS_PORT}`);
+});
+
+// Redirect from HTTP to HTTPS
+const httpApp = express();
+httpApp.all("*", (req, res) => {
+  res.redirect(301, `https://${req.hostname}${req.url}`);
+});
+const httpServer = https.createServer(httpApp);
+
+const HTTP_PORT = 80;
+httpServer.listen(HTTP_PORT, () => {
+  console.log(`HTTP redirect server started on ${HTTP_PORT}`);
 });
 
 /* eslint-disable no-undef */
