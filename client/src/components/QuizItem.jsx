@@ -107,13 +107,15 @@ export default function QuizItem({
     if (summaryNumber >= summary.length) {
       setSummaryNumber(summary.length);
     }
-  }, [summary, summaryNumber]);
+  }, [summary]);
 
   useEffect(() => {
     if (currentQuestionNumber >= quiz.length) {
       setCurrentQuestionNumber(quiz.length);
     }
-  }, [quiz, currentQuestionNumber]);
+  }, [quiz]);
+
+  console.log("currenQuestionNumber :>> ", currentQuestionNumber, quiz.length);
 
   // const translateContent = async () => {
   //   try {
@@ -674,7 +676,7 @@ export default function QuizItem({
             </div>
           )}
 
-          {currentQuestionNumber > 0 && (
+          {currentQuestionNumber > 0 && quiz[currentQuestionNumber - 1] && (
             <div className="h-full bg-white p-[6rem] rounded-[2rem] flex flex-col justify-center gap-[6rem] sm:gap-[2rem] items-start">
               {/* Question */}
               <p className="flex gap-4 text-black text-left text-[6rem] sm:text-[2.5rem] leading-[8.5rem] sm:leading-[3rem] font-semibold">

@@ -127,7 +127,7 @@ export default function CreateLurnyFromFile({ closeModal }) {
         className="text-[6rem] sm:text-[2rem]"
       />
       <div className="w-[150rem] sm:w-[150rem] relative p-[10rem] sm:p-[8rem] bg-white rounded-[6rem] sm:rounded-[2rem] shadow-md shadow-gray-400 flex gap-[4rem] sm:divide-x-2 m-auto">
-        <div className="hidden sm:qqqqflex flex-col flex-1 gap-[4rem] text-black text-[2rem]">
+        <div className="hidden sm:flex flex-col flex-1 gap-[4rem] text-black text-[2rem]">
           <div className="flex flex-col gap-[2rem]">
             <h3 className="font-bold text-left">LURNIFY A PDF</h3>
             <span className="text-left ml-[2rem]">
@@ -156,7 +156,7 @@ export default function CreateLurnyFromFile({ closeModal }) {
         </div>
 
         <div className="px-[2rem] flex flex-col flex-1 gap-[4rem] sm:gap-[2rem] items-center justify-center">
-          <div className="w-full h-full min-h-[60rem] flex item-center justify-center border-2 border-gray-600 border-dotted rounded-[1rem]">
+          <div className="w-full h-full min-h-[60rem] sm:min-h-[40rem] flex item-center justify-center border-2 border-gray-600 border-dotted rounded-[1rem]">
             <div className="flex flex-col gap-[2rem] justify-center text-[6.5rem] sm:text-[2rem] text-black">
               <span className="font-bold">
                 Drag and Drop your files here <br />
