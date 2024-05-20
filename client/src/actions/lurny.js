@@ -264,7 +264,6 @@ export const handleDeleteLurny = (id) => async (dispatch) => {
 export const handleDeleteLurnyCluster = (groupKey) => async (dispatch) => {
   try {
     // Send DELETE request to the backend to remove the specified Lurny
-    console.log("groupKey :>> ", groupKey);
     const encodedGroupKey = encodeURIComponent(groupKey);
     const response = await fetch(
       `${backend_url}/api/lurny/delete-cluster/${encodedGroupKey}`,
