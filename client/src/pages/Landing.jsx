@@ -153,7 +153,7 @@ const Landing = () => {
           </div>
           {filteredLurnies.length > itemsPerPage && (
             <NewPagination
-              totalItems={groupedLurnies && groupedLurnies.length}
+              totalItems={filteredLurnies && filteredLurnies.length}
               itemsPerPage={itemsPerPage}
               currentPage={currentPage}
               paginate={(value) => paginate(value)}

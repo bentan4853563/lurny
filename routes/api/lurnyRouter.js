@@ -66,7 +66,6 @@ router.post("/insert", async (req, res) => {
 router.patch("/share/:id", async (req, res) => {
   try {
     const { id } = req.params;
-
     const result = await Lurny.findByIdAndUpdate(
       id,
       { shared: true }, // Set sharedField to true
@@ -83,6 +82,51 @@ router.patch("/share/:id", async (req, res) => {
   }
 });
 
+router.post("/share-many", async (req, res) => {
+  try {
+    const { groupKey } = req.body;
+    const fields = groupKey.split("|");
+    const dateString = fields[0];
+    const user = fields[1];
+    const url = fields[2];
+
+    // First update the documents.
+    const updateResult = await Lurny.updateMany(
+      {
+        user,
+        url,
+        date: {
+          $gte: new Date(`${dateString}.000Z`),
+          $lt: new Date(`${dateString}.999Z`),
+        },
+      },
+      { shared: true } // Set shared field to true
+    );
+
+    // If no documents were modified, send a 404 response
+    if (!updateResult || updateResult.nModified === 0) {
+      return res.status(404).send("No documents found for sharing.");
+    }
+
+    // After successful update, find and return the updated documents.
+    const updatedLurnies = await Lurny.find({
+      user,
+      url,
+      date: {
+        $gte: new Date(`${dateString}.000Z`),
+        $lt: new Date(`${dateString}.999Z`),
+      },
+      shared: true, // Assuming 'shared' property is used to find updated documents
+    }).populate("user");
+
+    // Send back the updated documents
+    res.send(updatedLurnies);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 router.delete("/delete/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -91,6 +135,49 @@ router.delete("/delete/:id", async (req, res) => {
 
     res.send("Successfully deleted");
   } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.delete("/delete-cluster/:groupKey", async (req, res) => {
+  try {
+    const { groupKey } = req.params;
+    console.log("groupKey :>> ", groupKey);
+    const fields = groupKey.split("|");
+    const dateString = fields[0];
+    const user = fields[1];
+    const url = fields[2];
+
+    // Find the documents you want to delete and get their ids
+    const lurniesToDelete = await Lurny.find(
+      {
+        user,
+        url,
+        date: {
+          $gte: new Date(`${dateString}.000Z`),
+          $lt: new Date(`${dateString}.999Z`),
+        },
+      },
+      { _id: 1 }
+    ); // Projection to only return the _id field
+    console.log("lurniesToDelete :>> ", lurniesToDelete);
+    // Extract the ids from the previous query result
+    const idsToDelete = lurniesToDelete.map((lurny) => lurny._id);
+
+    // Now, perform the delete operation if there are ids to delete
+    if (idsToDelete.length > 0) {
+      const deleteResult = await Lurny.deleteMany({
+        _id: { $in: idsToDelete },
+      });
+
+      // Optional: Check deleteResult.deletedCount to see how many were deleted
+      console.log(`${deleteResult.deletedCount} Lurnies have been deleted.`);
+    }
+
+    // Respond with the ids that were deleted
+    res.send(idsToDelete);
+  } catch (error) {
+    console.error(error); // It's good practice to log the actual error
     res.status(500).send("Internal Server Error");
   }
 });
