@@ -1,9 +1,11 @@
 // Import required actions from the lurnySlice reducer and toastify for notifications
 import {
   deleteLurny,
+  deleteLurnyCluster,
   insertLurny,
   setLurnies,
   shareLurny,
+  shareMany,
   updateLurny,
 } from "../reducers/lurnySlice";
 import { toast } from "react-toastify";
@@ -187,6 +189,41 @@ export const handleShareLurny = (id) => async (dispatch) => {
 };
 
 /**
+ * Share an Lurny Cluster through the backend API.
+ *
+ * @param {groupKey} string combined with Date, user id, url - The ID of the Lurny that is being shared.
+ */
+export const handleShareMany = (groupKey) => async (dispatch) => {
+  try {
+    // Send POST request to the backend to share the specified Lurny
+    const response = await fetch(`${backend_url}/api/lurny/share-many`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": true,
+      },
+      body: JSON.stringify({ groupKey }),
+    });
+
+    if (response.ok) {
+      const sharedLurnies = await response.json();
+      dispatch(shareMany(sharedLurnies));
+      toast.success("Shared successfully!", {
+        position: "top-right",
+      });
+    } else {
+      toast.error("Failed to share!", {
+        position: "top-right",
+      });
+    }
+  } catch (error) {
+    toast.error("Network error when trying to update the shared field!", {
+      position: "top-right",
+    });
+  }
+};
+
+/**
  * Delete an existing Lurny through the backend API.
  *
  * @param {number} id - The ID of the Lurny that is being deleted.
@@ -204,6 +241,45 @@ export const handleDeleteLurny = (id) => async (dispatch) => {
 
     if (response.ok) {
       dispatch(deleteLurny(id));
+      toast.success("Deleted successfully!", {
+        position: "top-right",
+      });
+    } else {
+      toast.error("Failed to delete!", {
+        position: "top-right",
+      });
+    }
+  } catch (error) {
+    toast.error("Network error when trying to delete lurny!", {
+      position: "top-right",
+    });
+  }
+};
+
+/**
+ * Delete an existing Lurny Cluster through the backend API.
+ *
+ * @param {string} groupKey - The ID of the Lurny that is being deleted.
+ */
+export const handleDeleteLurnyCluster = (groupKey) => async (dispatch) => {
+  try {
+    // Send DELETE request to the backend to remove the specified Lurny
+    console.log("groupKey :>> ", groupKey);
+    const encodedGroupKey = encodeURIComponent(groupKey);
+    const response = await fetch(
+      `${backend_url}/api/lurny/delete-cluster/${encodedGroupKey}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": true,
+        },
+      }
+    );
+
+    if (response.ok) {
+      const deletedLuryIds = await response.json();
+      dispatch(deleteLurnyCluster(deletedLuryIds));
       toast.success("Deleted successfully!", {
         position: "top-right",
       });

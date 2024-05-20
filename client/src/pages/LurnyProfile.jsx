@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,15 +16,16 @@ import { IoTrashOutline } from "react-icons/io5";
 import Header from "../components/Header";
 import UserPan from "../components/UserPan";
 import LurnyItem from "../components/LurnyItem";
+import LurnyGroupItem from "../components/GroupItem";
 import NewPagination from "../components/NewPagination";
 
 import {
   handleDeleteLurny,
+  handleDeleteLurnyCluster,
   handleLurnyData,
   handleShareLurny,
+  handleShareMany,
 } from "../actions/lurny";
-import { useNavigate } from "react-router-dom";
-import LurnyGroupItem from "../components/GroupItem";
 
 const LurnyProfile = () => {
   const dispatch = useDispatch();
@@ -175,6 +177,10 @@ const LurnyProfile = () => {
     }
   }, [tempData, userDetails]);
 
+  function areAllLurnisShared(groupItems) {
+    return groupItems.every((item) => item.shared === true);
+  }
+
   // Render the grouped lurnies or individual lurnies based on the grouping condition
   const renderLurnies = useCallback(() => {
     const groupArray = Object.entries(groupedLurnies);
@@ -184,7 +190,6 @@ const LurnyProfile = () => {
       indexOfFirstItem,
       indexOfLastItem
     );
-
     return currentGroupIndices.map(([groupKey, groupItems]) => {
       // If only one item in the group, render LurnyItem
       if (groupItems.length === 1) {
@@ -215,13 +220,14 @@ const LurnyProfile = () => {
           </div>
         );
       }
-
       // If more than one, render your LurnyGroupItem component
+      const allLurnisShared = areAllLurnisShared(groupItems);
+
       return (
         <div key={groupKey} className="relative flex flex-col">
           <div className="absolute right-[4rem] sm:right-[2rem] top-[20rem] sm:top-[20rem] z-50 cursor-pointer">
             <IoTrashOutline
-              onClick={() => handleDelete(groupKey)}
+              onClick={() => handleDeleteCluster(groupKey)}
               className="text-[10rem] sm:text-[2rem] text-red-500 hover:text-red-400"
             />
           </div>
@@ -232,14 +238,14 @@ const LurnyProfile = () => {
             group={groupItems}
             onGroupClick={() => handleExpand(groupItems)} // Implement this as needed
           />
-          {groupItems[0].shared ? (
+          {allLurnisShared ? (
             <div className="bg-[#00B050] py-[2rem] sm:py-[0.5rem] mt-auto rounded-[2rem] sm:rounded-[0.5rem] text-white text-[8rem] sm:text-[2rem] cursor-pointer">
               Shared
             </div>
           ) : (
             <div
               className="bg-white px-[2rem] py-[4rem] sm:py-[0.5rem] mt-auto rounded-[2rem] sm:rounded-[0.5rem] flex justify-around items-center text-black text-[6.5rem] sm:text-[2rem] cursor-pointer"
-              onClick={() => dispatch(handleShareLurny(groupKey))}
+              onClick={() => dispatch(handleShareMany(groupKey))}
             >
               <TfiShare />
               <span className="justify-center">Share with Community</span>
@@ -309,6 +315,29 @@ const LurnyProfile = () => {
     [dispatch]
   );
 
+  const handleDeleteCluster = useCallback(
+    async (groupKey) => {
+      confirmAlert({
+        title: "Are you sure to delete this Lurny Cluster?",
+        buttons: [
+          {
+            label: "Yes",
+            onClick: async () => {
+              dispatch(handleDeleteLurnyCluster(groupKey));
+            },
+          },
+          {
+            label: "No",
+            onClick: () => console.log("Click No"),
+          },
+        ],
+      });
+    },
+    [dispatch]
+  );
+
+  handleDeleteCluster;
+
   return (
     <div className="min-h-[100vh] font-raleway">
       <Header />
@@ -340,13 +369,6 @@ const LurnyProfile = () => {
             }`}
           />
         </div>
-        {/* <div className="hidden sm:flex">
-          <UserPan
-            all={myLurnies.length}
-            // saved={countSharedTrue}
-            // showAll={(value) => setShowAll(value)}
-          />
-        </div> */}
 
         {/* UserPan is hidden on small screens initially */}
         <div
@@ -358,38 +380,6 @@ const LurnyProfile = () => {
         {/* My Lurnies */}
         <div className="w-full flex flex-col justify-between items-center">
           <div className="w-full flex flex-wrap pl-[6rem] justify-start gap-[8rem] lg:gap-[4rem]">
-            {/* {currentItems &&
-              currentItems.length > 0 &&
-              currentItems.map((lurny, index) => {
-                // if (typeof lurny === "object" && Object.keys(lurny).length > 3)
-                return (
-                  <div key={index} className="relative flex flex-col">
-                    <div className="absolute right-[4rem] sm:right-[2rem] top-[20rem] sm:top-[12rem] z-50 cursor-pointer">
-                      <IoTrashOutline
-                        onClick={() => handleDelete(lurny._id)}
-                        className="text-[10rem] sm:text-[2rem] text-red-500 hover:text-red-400"
-                      />
-                    </div>
-
-                    <LurnyItem data={lurny} />
-                    {lurny.shared ? (
-                      <div className="bg-[#00B050] py-[2rem] sm:py-[0.5rem] mt-auto rounded-[2rem] sm:rounded-[0.5rem] text-white text-[8rem] sm:text-[2rem] cursor-pointer">
-                        Shared
-                      </div>
-                    ) : (
-                      <div
-                        className="bg-white px-[2rem] py-[4rem] sm:py-[0.5rem] mt-auto rounded-[2rem] sm:rounded-[0.5rem] flex justify-around items-center text-black text-[6.5rem] sm:text-[2rem] cursor-pointer"
-                        onClick={() => dispatch(handleShareLurny(lurny._id))}
-                      >
-                        <TfiShare />
-                        <span className="justify-center">
-                          Share with Community
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                );
-              })} */}
             {renderLurnies()}
           </div>
           {myLurnies.length > 0 && (

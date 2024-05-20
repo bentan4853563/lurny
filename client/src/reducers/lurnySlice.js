@@ -26,6 +26,16 @@ const lurnySlice = createSlice({
         lurny.shared = true;
       }
     },
+    shareMany: (state, action) => {
+      const idsToShare = action.payload.map((lurny) => lurny._id); // Get an array of all _id fields from the payload
+
+      state.lurnies.forEach((lurny) => {
+        if (idsToShare.includes(lurny._id)) {
+          console.log(`Marking lurny with _id ${lurny._id} as shared.`);
+          lurny.shared = true; // Mark the lurny as shared
+        }
+      });
+    },
     // Action to update a lurny based on its _id
     updateLurny: (state, action) => {
       const index = state.lurnies.findIndex(
@@ -41,6 +51,13 @@ const lurnySlice = createSlice({
         (lurny) => lurny._id !== action.payload
       );
     },
+    deleteLurnyCluster: (state, action) => {
+      const idsToDelete = action.payload;
+      console.log("idsToDelete :>> ", idsToDelete);
+      state.lurnies = state.lurnies.filter(
+        (lurny) => !idsToDelete.includes(lurny._id)
+      );
+    },
     // Action to clear all lurnies
     clearLurnies: (state) => {
       state.lurnies = [];
@@ -53,8 +70,10 @@ export const {
   setLurnies,
   insertLurny,
   shareLurny,
+  shareMany,
   updateLurny,
   deleteLurny,
+  deleteLurnyCluster,
   clearLurnies,
 } = lurnySlice.actions;
 
