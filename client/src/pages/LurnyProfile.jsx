@@ -92,12 +92,12 @@ const LurnyProfile = () => {
           (lurny) => `${lurny.date.slice(0, 19)}|${lurny.user._id}|${lurny.url}`
         )
         .value();
-
       setGroupedLurnies(grouped);
     }
   }, [myLurnies]);
 
   const storedTempData = localStorage.getItem("tempData");
+
   useEffect(() => {
     if (storedTempData) {
       setTempData(storedTempData);
