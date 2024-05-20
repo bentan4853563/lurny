@@ -111,7 +111,7 @@ const LurnyGroupList = () => {
           Lurny Cluster
         </span>
         <span className="text-[8rem] sm:text-[2.5rem] font-bold">
-          URL: {localGroupItems.length > 0 && localGroupItems[0].title}
+          {localGroupItems.length > 0 && localGroupItems[0].title}
         </span>
         <span className="text-[8rem] sm:text-[2.5rem] font-bold">
           {localGroupItems.length > 0 && localGroupItems.length} Lurnies
