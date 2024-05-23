@@ -65,12 +65,12 @@ function LurnyItem({ data }) {
     >
       {userDetails && (
         <img
-          // src={
-          //   userDetails.email === "bentan010918@gmail.com"
-          //     ? defaultImg
-          //     : getDefaultImg(image, url)
-          // }
-          src={getDefaultImg(image, url)}
+          src={
+            userDetails.email === "bentan010918@gmail.com"
+              ? defaultImg
+              : getDefaultImg(image, url)
+          }
+          // src={getDefaultImg(image, url)}
           loading="lazy"
           alt="lurny image"
           className="h-[40rem] sm:h-[24rem] lg:h-[16rem] w-full object-cover rounded-[6rem] sm:rounded-[1.5rem]"

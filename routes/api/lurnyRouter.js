@@ -18,11 +18,11 @@ router.get("/get", async (req, res) => {
   }
 });
 
-router.get("/currents", async (req, res) => {
+router.get("/first", async (req, res) => {
   try {
     const lurnies = await Lurny.find({ shared: true })
       .sort({ date: -1 })
-      .limit(20)
+      .limit(100)
       .populate("user");
     res.json(lurnies);
   } catch (error) {
