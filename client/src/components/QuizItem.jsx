@@ -54,8 +54,6 @@ export default function QuizItem({
 
   const [userData, setUserData] = useState(null);
 
-  const [imageUrl, setImageUrl] = useState(null);
-
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -218,25 +216,6 @@ export default function QuizItem({
     }
   };
 
-  useEffect(() => {
-    if (isYoutubeUrl(url)) {
-      setImageUrl(getThumbnailURLFromVideoURL(url));
-    } else if (image) {
-      const img = new Image();
-
-      img.onload = () => {
-        setImageUrl(image);
-      };
-      img.onerror = () => {
-        setImageUrl(defaultImg);
-      };
-
-      img.src = image;
-    } else {
-      setImageUrl(defaultImg);
-    }
-  }, [image, url]);
-
   function getYoutubeVideoID(url) {
     const regExp =
       // eslint-disable-next-line no-useless-escape
@@ -253,6 +232,24 @@ export default function QuizItem({
     }
     return `https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`;
   }
+
+  const getDefaultImg = (image, url) => {
+    if (isYoutubeUrl(url)) {
+      return getThumbnailURLFromVideoURL(url);
+    } else if (
+      image &&
+      image !== null &&
+      image !== "" &&
+      image.includes("http")
+    ) {
+      const extensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
+      const fileExtension = image.split(".").pop().toLowerCase();
+      if (extensions.includes(fileExtension)) {
+        return image;
+      }
+    }
+    return defaultImg;
+  };
 
   // const newImg = getDefaultImg(image, url);
 
@@ -494,8 +491,9 @@ export default function QuizItem({
                 src={
                   userData.email === "bentan010918@gmail.com"
                     ? defaultImg
-                    : imageUrl
+                    : getDefaultImg(image, url)
                 }
+                loading="lazy"
                 alt={title}
                 className="w-full h-full object-cover rounded-[8rem] sm:rounded-[2rem]"
               />
@@ -633,8 +631,9 @@ export default function QuizItem({
                   src={
                     userData.email === "bentan010918@gmail.com"
                       ? defaultImg
-                      : imageUrl
+                      : getDefaultImg(image, url)
                   }
+                  loading="lazy"
                   alt={title}
                   className="w-full h-full object-cover rounded-2xl"
                 />

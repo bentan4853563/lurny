@@ -1,6 +1,5 @@
 /* eslint-disable no-useless-escape */
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -10,7 +9,6 @@ function LurnyItem({ data }) {
   const navigate = useNavigate();
   const { userDetails } = useSelector((state) => state.user);
 
-  const [imageUrl, setImageUrl] = useState(null);
   const { _id, title, image, url } = data;
 
   const isYoutubeUrl = (url) => {
@@ -20,25 +18,6 @@ function LurnyItem({ data }) {
       return false;
     }
   };
-
-  useEffect(() => {
-    if (isYoutubeUrl(url)) {
-      setImageUrl(getThumbnailURLFromVideoURL(url));
-    } else if (image) {
-      const img = new Image();
-
-      img.onload = () => {
-        setImageUrl(image);
-      };
-      img.onerror = () => {
-        setImageUrl(defaultImg);
-      };
-
-      img.src = image;
-    } else {
-      setImageUrl(defaultImg);
-    }
-  }, [image, url]);
 
   const handleClick = () => {
     navigate(`/lurny/feeds/${_id}`);
@@ -61,6 +40,24 @@ function LurnyItem({ data }) {
     return `https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`;
   }
 
+  const getDefaultImg = (image, url) => {
+    if (isYoutubeUrl(url)) {
+      return getThumbnailURLFromVideoURL(url);
+    } else if (
+      image &&
+      image !== null &&
+      image !== "" &&
+      image.includes("http")
+    ) {
+      const extensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
+      const fileExtension = image.split(".").pop().toLowerCase();
+      if (extensions.includes(fileExtension)) {
+        return image;
+      }
+    }
+    return defaultImg;
+  };
+
   return (
     <div
       onClick={handleClick}
@@ -68,12 +65,13 @@ function LurnyItem({ data }) {
     >
       {userDetails && (
         <img
-          src={
-            userDetails.email === "bentan010918@gmail.com"
-              ? defaultImg
-              : imageUrl
-          }
-          // src={imageUrl}
+          // src={
+          //   userDetails.email === "bentan010918@gmail.com"
+          //     ? defaultImg
+          //     : getDefaultImg(image, url)
+          // }
+          src={getDefaultImg(image, url)}
+          loading="lazy"
           alt="lurny image"
           className="h-[40rem] sm:h-[24rem] lg:h-[16rem] w-full object-cover rounded-[6rem] sm:rounded-[1.5rem]"
         />

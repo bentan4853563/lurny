@@ -13,31 +13,11 @@ function MaterialItem({ data }) {
   // const navigate = useNavigate();
   const { userDetails } = useSelector((state) => state.user);
 
-  const [imageUrl, setImageUrl] = useState(null);
   const [nextStudyDay, setNextStudyDay] = useState(null);
   const [isNextStudyDayToday, setIsNextStudyDayToday] = useState(false);
 
   const { image, url, user, learn_count, type, saved_date, last_learned } =
     data;
-
-  useEffect(() => {
-    if (isYoutubeUrl(url)) {
-      setImageUrl(getThumbnailURLFromVideoURL(url));
-    } else if (image) {
-      const img = new Image();
-
-      img.onload = () => {
-        setImageUrl(image);
-      };
-      img.onerror = () => {
-        setImageUrl(defaultImg);
-      };
-
-      img.src = image;
-    } else {
-      setImageUrl(defaultImg);
-    }
-  }, [image, url]);
 
   useEffect(() => {
     if (data) {
@@ -72,9 +52,23 @@ function MaterialItem({ data }) {
     return `https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`;
   };
 
-  // const handleClick = () => {
-  //   navigate(`/lurny/remind/${_id}`);
-  // };
+  const getDefaultImg = (image, url) => {
+    if (isYoutubeUrl(url)) {
+      return getThumbnailURLFromVideoURL(url);
+    } else if (
+      image &&
+      image !== null &&
+      image !== "" &&
+      image.includes("http")
+    ) {
+      const extensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
+      const fileExtension = image.split(".").pop().toLowerCase();
+      if (extensions.includes(fileExtension)) {
+        return image;
+      }
+    }
+    return defaultImg;
+  };
 
   const isDueTodayOrBefore = (date) => {
     const today = new Date();
@@ -119,9 +113,10 @@ function MaterialItem({ data }) {
               src={
                 userDetails.email === "bentan010918@gmail.com"
                   ? defaultImg
-                  : imageUrl
+                  : getDefaultImg(image, url)
               }
-              // src={imageUrl}
+              // src={getDefaultImg(image, url)}
+              loading="lazy"
               alt="lurny image"
               className="h-[36rem] sm:h-[24rem] lg:h-[16rem] w-full object-cover rounded-[4rem] sm:rounded-[1.5rem]"
             />

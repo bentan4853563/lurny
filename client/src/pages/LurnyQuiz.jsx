@@ -608,6 +608,7 @@ function LurnyQuiz() {
                                 ? defaultImg
                                 : getDefaultImg(item.image, item.url)
                             }
+                            // src={getDefaultImg(item.image, item.url)}
                             alt="lurny image"
                             className="w-[10rem] h-[6rem] rounded-lg cursor-pointer"
                           />

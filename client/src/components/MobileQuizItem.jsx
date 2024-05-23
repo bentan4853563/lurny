@@ -34,8 +34,6 @@ export default function MobileQuizItem({
   const [answered, setAnswered] = useState(false);
   const [isShowCorrectAnswer, setIsShowCorrectAnswer] = useState(false);
 
-  const [imageUrl, setImageUrl] = useState(null);
-
   // const [translatedTitle, setTranslatedTitle] = useState("");
   // const [translatedSummary, setTranslatedSummary] = useState([]);
   // const [translatedQuestions, setTranslatedQuestions] = useState([]);
@@ -174,26 +172,6 @@ export default function MobileQuizItem({
   //   }
   // };
 
-  // Set image url
-  useEffect(() => {
-    if (isYoutubeUrl(url)) {
-      setImageUrl(getThumbnailURLFromVideoURL(url));
-    } else if (image) {
-      const img = new Image();
-
-      img.onload = () => {
-        setImageUrl(image);
-      };
-      img.onerror = () => {
-        setImageUrl(defaultImg);
-      };
-
-      img.src = image;
-    } else {
-      setImageUrl(defaultImg);
-    }
-  }, [image, url]);
-
   const isYoutubeUrl = (url) => {
     if (url) {
       return url.includes("youtube.com") || url.includes("youtu.be");
@@ -217,6 +195,24 @@ export default function MobileQuizItem({
     }
     return `https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`;
   }
+
+  const getDefaultImg = (image, url) => {
+    if (isYoutubeUrl(url)) {
+      return getThumbnailURLFromVideoURL(url);
+    } else if (
+      image &&
+      image !== null &&
+      image !== "" &&
+      image.includes("http")
+    ) {
+      const extensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
+      const fileExtension = image.split(".").pop().toLowerCase();
+      if (extensions.includes(fileExtension)) {
+        return image;
+      }
+    }
+    return defaultImg;
+  };
 
   const removePrefix = (sentence) => {
     return sentence.replace(/^[A-Z]\. /, " ");
@@ -411,13 +407,14 @@ export default function MobileQuizItem({
             {userData && (
               <div className="flex flex-col w-full h-full justify-center items-center relative">
                 <img
-                  // src={imageUrl}
+                  // src={getDefaultImg(image, url)}
                   src={
                     userData.email === "bentan010918@gmail.com"
                       ? defaultImg
-                      : imageUrl
+                      : getDefaultImg(image, url)
                   }
                   alt={title}
+                  loading="lazy"
                   className="w-full h-full object-cover rounded-[8rem]"
                 />
                 <div className="w-full h-full bg-[#404040] rounded-[8rem] absolute top-0 left-0 opacity-50"></div>
@@ -477,9 +474,10 @@ export default function MobileQuizItem({
                   src={
                     userData.email === "bentan010918@gmail.com"
                       ? defaultImg
-                      : imageUrl
+                      : getDefaultImg(image, url)
                   }
                   alt={title}
+                  loading="lazy"
                   className="w-full h-full object-cover rounded-[8rem]"
                 />
                 <div className="w-full h-full bg-[#404040] rounded-[8rem] absolute top-0 left-0 opacity-50"></div>
@@ -614,9 +612,10 @@ export default function MobileQuizItem({
                   src={
                     userData.email === "bentan010918@gmail.com"
                       ? defaultImg
-                      : imageUrl
+                      : getDefaultImg(image, url)
                   }
                   alt={title}
+                  loading="lazy"
                   className="w-full h-full object-cover rounded-[8rem]"
                 />
                 <div className="w-full h-full bg-[#404040] rounded-[8rem] absolute top-0 left-0 opacity-50"></div>
