@@ -140,5 +140,17 @@ router.post("/test", async (req, res) => {
   }
 });
 
+router.delete("/delete/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await Study.findByIdAndDelete(id);
+
+    res.send("Successfully deleted");
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 // Export the router to be used by other parts of the application
 module.exports = router;

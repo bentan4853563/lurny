@@ -260,40 +260,6 @@ const LurnyProfile = () => {
     navigate("/lurny/sub-group", { state: { groupItems } });
   };
 
-  // useEffect(() => {
-  //   setCurrentPage(1);
-  //   if (showAll) {
-  //     setFilteredLurnies(lurnies);
-  //   } else {
-  //     let temp = lurnies.filter((lurny) => lurny.user !== userDetails.id);
-  //     setFilteredLurnies(temp);
-  //   }
-  // }, [showAll, lurnies]);
-
-  // const [countSharedTrue, setCountSharedTrue] = useState(0);
-
-  // useEffect(() => {
-  //   if (userDetails && lurnies && lurnies.length > 0) {
-  //     const count =
-  //       lurnies.length > 0
-  //         ? lurnies.filter((obj) => obj.user !== userDetails.id).length
-  //         : 0;
-  //     setCountSharedTrue(count);
-  //   }
-  // }, [userDetails, lurnies]);
-
-  // const isYoutubeUrl = (url) => {
-  //   return url.includes("youtube.com") || url.includes("youtu.be");
-  // };
-
-  // const getDefaultImg = (image, url) => {
-  //   if (isYoutubeUrl(url)) {
-  //     return `${url}/maxresdefault.jpg`;
-  //   } else {
-  //     return image ? image : defaultImg;
-  //   }
-  // };
-
   const handleDelete = useCallback(
     async (id) => {
       confirmAlert({

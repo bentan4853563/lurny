@@ -143,7 +143,11 @@ function LurnyQuiz() {
     if (isYoutubeUrl(url)) {
       return getThumbnailURLFromVideoURL(url);
     } else if (image) {
-      return image ? image : defaultImg;
+      if (image && image !== null && image !== " " && image.includes("http"))
+        return image;
+      else return defaultImg;
+    } else {
+      return defaultImg;
     }
   };
 
@@ -182,8 +186,6 @@ function LurnyQuiz() {
       setImageUrl(defaultImg);
     }
   }, [image, url]);
-
-  // const newImg = getDefaultImg(quizData.image, quizData.url);
 
   const buttons = ["Stubs", "Quiz Me!"];
 
@@ -341,17 +343,17 @@ function LurnyQuiz() {
           >
             <MenuItem onClick={handleOpenURLModal}>
               <span className="w-full py-[2rem] sm:py-[0.5rem] text-black text-[8rem] sm:text-[1.5rem]">
-                Create Lunies From URL
+                Create Lurnies From URL
               </span>
             </MenuItem>
             <MenuItem onClick={handleOpenFileModal}>
               <span className="w-full py-[2rem] sm:py-[0.5rem] text-black text-[8rem] sm:text-[1.5rem]">
-                Create Lunies From PDF
+                Create Lurnies From PDF
               </span>
             </MenuItem>
             <MenuItem onClick={handleOpenManuallyModal}>
               <span className="w-full py-[2rem] sm:py-[0.5rem] text-black text-[8rem] sm:text-[1.5rem]">
-                Create Lunies Manually
+                Create Lurnies Manually
               </span>
             </MenuItem>
           </Menu>

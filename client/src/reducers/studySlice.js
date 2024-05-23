@@ -22,11 +22,16 @@ const studySlice = createSlice({
         study._id === action.payload._id ? action.payload : study
       );
     },
+    deleteStudy: (state, action) => {
+      state.studies = state.studies.filter(
+        (study) => study._id !== action.payload
+      );
+    },
   },
 });
 
 // Export the action creators for use in dispatching actions to store.
-export const { setStudies, setStudy } = studySlice.actions;
+export const { setStudies, setStudy, deleteStudy } = studySlice.actions;
 
 // Export the reducer for inclusion in the Redux store.
 export default studySlice.reducer;

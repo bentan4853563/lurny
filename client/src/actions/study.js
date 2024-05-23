@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { setStudies, setStudy } from "../reducers/studySlice";
+import { deleteStudy, setStudies, setStudy } from "../reducers/studySlice";
 
 // Define the backend URL from environment variables
 const backend_url = import.meta.env.VITE_BACKEND_URL;
@@ -92,5 +92,38 @@ export const handleTest = (studyId, newStudyData) => async (dispatch) => {
     }
   } catch (error) {
     console.error("Error during handling test:", error);
+  }
+};
+
+/**
+ * Delete an existing Lurny through the backend API.
+ *
+ * @param {number} id - The ID of the Lurny that is being deleted.
+ */
+export const handleDeleteStudy = (id) => async (dispatch) => {
+  try {
+    // Send DELETE request to the backend to remove the specified Lurny
+    const response = await fetch(`${backend_url}/api/study/delete/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": true,
+      },
+    });
+
+    if (response.ok) {
+      dispatch(deleteStudy(id));
+      toast.success("Deleted successfully!", {
+        position: "top-right",
+      });
+    } else {
+      toast.error("Failed to delete!", {
+        position: "top-right",
+      });
+    }
+  } catch (error) {
+    toast.error("Network error when trying to delete lurny!", {
+      position: "top-right",
+    });
   }
 };

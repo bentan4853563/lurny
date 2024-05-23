@@ -218,16 +218,6 @@ export default function QuizItem({
     }
   };
 
-  // const getDefaultImg = (image, url) => {
-  //   if (isYoutubeUrl(url)) {
-  //     return getThumbnailURLFromVideoURL(url);
-  //   } else if (image) {
-  //     return image ? image : defaultImg;
-  //   } else {
-  //     return defaultImg;
-  //   }
-  // };
-
   useEffect(() => {
     if (isYoutubeUrl(url)) {
       setImageUrl(getThumbnailURLFromVideoURL(url));

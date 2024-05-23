@@ -202,14 +202,6 @@ export default function MobileQuizItem({
     }
   };
 
-  // const getDefaultImg = (image, url) => {
-  //   if (isYoutubeUrl(url)) {
-  //     return getThumbnailURLFromVideoURL(url);
-  //   } else if (image.slice(1, 4) === "url") {
-  //     return pdfImage;
-  //   } else return defaultImg;
-  // };
-
   function getYoutubeVideoID(url) {
     const regExp =
       // eslint-disable-next-line no-useless-escape

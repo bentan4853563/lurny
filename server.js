@@ -1,4 +1,3 @@
-// /* eslint-disable no-undef */
 const path = require("path");
 const fs = require("fs");
 const http = require("http");
@@ -64,7 +63,6 @@ https.createServer(options, app).listen(HTTPS_PORT, () => {
   console.log(`HTTPS Server started on port ${HTTPS_PORT}`);
 });
 
-/* eslint-disable no-undef */
 // const path = require("path");
 // const express = require("express");
 // const cors = require("cors");

@@ -3,18 +3,24 @@ import { jwtDecode } from "jwt-decode";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { IoIosArrowForward } from "react-icons/io";
+import { IoTrashOutline } from "react-icons/io5";
 
 import Header from "../components/Header";
 import UserPan from "../components/UserPan";
 import NewPagination from "../components/NewPagination";
-
 import MaterialItem from "../components/MaterialItem";
 
+import { handleDeleteStudy } from "../actions/study";
+
 const LurnySaved = () => {
+  const dispatch = useDispatch();
+
   const { studies } = useSelector((state) => state.study);
 
   const [userDetails, setUserDetails] = useState(null);
@@ -68,6 +74,27 @@ const LurnySaved = () => {
     }
   }, [userDetails, studies]);
 
+  const handleDelete = useCallback(
+    async (id) => {
+      confirmAlert({
+        title: `Are you sure to delete this Stub?`,
+        buttons: [
+          {
+            label: "Yes",
+            onClick: async () => {
+              dispatch(handleDeleteStudy(id));
+            },
+          },
+          {
+            label: "No",
+            onClick: () => console.log("Click No"),
+          },
+        ],
+      });
+    },
+    [dispatch]
+  );
+
   return (
     <div className="min-h-[100vh] font-raleway">
       <Header />
@@ -112,7 +139,13 @@ const LurnySaved = () => {
           <div className="flex flex-wrap ml-[6rem] justify-start gap-[8rem] lg:gap-[4rem]">
             {studies.length > 0 &&
               studies.map((study) => (
-                <MaterialItem key={study._id} data={study} />
+                <div key={study._id} className="relative">
+                  <IoTrashOutline
+                    onClick={() => handleDelete(study._id)}
+                    className="absolute text-[10rem] sm:text-[2rem] text-red-500 hover:text-red-400 cursor-pointer right-[2rem] top-[12rem] z-50"
+                  />
+                  <MaterialItem key={study._id} data={study} />
+                </div>
               ))}
           </div>
           {currentItems.length > 0 && (

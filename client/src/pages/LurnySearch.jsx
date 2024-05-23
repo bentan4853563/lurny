@@ -134,6 +134,8 @@ const LurnySearch = () => {
           <input
             type="text"
             value={searchTerm}
+            autoComplete
+            autoFocus
             onChange={(e) => setSearchTerm(e.target.value)}
             className="bg-transparent  px-[1.5rem] flex flex-1 focus:outline-none"
             placeholder="Search topics and people"
