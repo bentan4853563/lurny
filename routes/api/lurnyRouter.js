@@ -18,7 +18,7 @@ router.get("/get", async (req, res) => {
   }
 });
 
-router.get("/first", async (req, res) => {
+router.get("/currents", async (req, res) => {
   try {
     const lurnies = await Lurny.find({ shared: true })
       .sort({ date: -1 })

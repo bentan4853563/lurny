@@ -28,7 +28,7 @@ export const getLurnies = () => async (dispatch) => {
 
   try {
     // Fetch current Lurnies from the backend
-    const currents = await fetch(`${backend_url}/api/lurny/first`, options);
+    const currents = await fetch(`${backend_url}/api/lurny/currents`, options);
     if (currents.ok) {
       const currentLurnies = await currents.json();
       dispatch(setLurnies(currentLurnies));
