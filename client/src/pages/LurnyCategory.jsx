@@ -37,8 +37,8 @@ const LurnyCategory = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
-    console.log("change category =>");
     if (lurnies.length > 0 && category.length > 0) {
+      console.log("change category =>");
       const filteredLurnies = lurnies.filter(
         (item) =>
           item.shared === true &&
@@ -47,6 +47,7 @@ const LurnyCategory = () => {
               Object.values(collection)[0][2] === thirdLevelCategory
           )
       );
+      console.log("filteredLurnies :>> ", filteredLurnies);
       setPublishedLurnies(filteredLurnies);
     }
   }, [lurnies, category]);
