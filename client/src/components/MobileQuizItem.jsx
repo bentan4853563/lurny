@@ -511,12 +511,12 @@ export default function MobileQuizItem({
             {currentQuestionNumber > 0 && (
               <div className="h-full bg-white p-[12rem] rounded-[8rem] flex flex-col justify-center gap-[12rem] items-start">
                 {/* Question */}
-                <p className="text-black text-left text-[12rem] leading-[12rem] font-semibold">
+                <p className="text-black text-left text-[12rem] leading-[12rem] font-bold">
                   Q{currentQuestionNumber}:{" "}
                   {quiz[currentQuestionNumber - 1].question}
                 </p>
 
-                <div className=" w-full flex flex-col gap-[8rem] items-start">
+                <div className="w-full max-h-[70%] overflow-y-auto flex flex-col gap-[8rem] items-start">
                   {quiz[currentQuestionNumber - 1].answer.map(
                     (translatedAnswer, index) =>
                       // Answer

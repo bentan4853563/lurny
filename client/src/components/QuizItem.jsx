@@ -667,14 +667,14 @@ export default function QuizItem({
           )}
 
           {currentQuestionNumber > 0 && quiz[currentQuestionNumber - 1] && (
-            <div className="h-full bg-white p-[6rem] rounded-[2rem] flex flex-col justify-center gap-[6rem] sm:gap-[2rem] items-start">
+            <div className="h-full bg-white p-[6rem] rounded-[2rem] flex flex-col justify-center gap-[6rem] sm:gap-[4rem] items-start">
               {/* Question */}
-              <p className="flex gap-4 text-black text-left text-[6rem] sm:text-[2.5rem] leading-[8.5rem] sm:leading-[3rem] font-semibold">
+              <p className="flex gap-4 text-black text-left text-[6rem] sm:text-[16px] leading-[8.5rem] sm:leading-[3rem] font-bold">
                 <span>Q{currentQuestionNumber}:</span>
                 <span>{quiz[currentQuestionNumber - 1].question}</span>
               </p>
 
-              <div className="w-full max-h-[70%] overflow-y-auto flex flex-col gap-[8rem] sm:gap-[2rem] items-start">
+              <div className="w-full max-h-[70%] overflow-y-auto flex flex-col gap-[8rem] sm:gap-[1.5rem] items-start sm:text-[16px]">
                 {quiz[currentQuestionNumber - 1].answer.map(
                   (translatedAnswer, index) =>
                     // Answer
@@ -701,7 +701,7 @@ export default function QuizItem({
                         key={index}
                         onClick={() => !answered && setAnswerNumber(index)}
                       >
-                        <p className="flex flex-1 text-black">
+                        <p className="flex flex-1 text-black sm:text-[16px]">
                           <span className="mr-[2rem]">
                             {String.fromCharCode(index + 65)}.
                           </span>
@@ -717,7 +717,7 @@ export default function QuizItem({
                               onClick={() =>
                                 setIsShowCorrectAnswer(!isShowCorrectAnswer)
                               }
-                              className="text-[16rem] sm:text-[2.5rem] my-auto text-black"
+                              className="text-[16rem] sm:text-[16px] my-auto text-black"
                             />
                           )}
                         <Tooltip
