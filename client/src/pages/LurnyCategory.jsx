@@ -42,10 +42,15 @@ const LurnyCategory = () => {
       const filteredLurnies = lurnies.filter(
         (item) =>
           item.shared === true &&
-          item.collections.some(
-            (collection) =>
-              Object.values(collection)[0][2] === thirdLevelCategory
-          )
+          item.collections.some((collection) => {
+            if (thirdLevelCategory) {
+              return Object.values(collection)[0][2] === thirdLevelCategory;
+            } else if (secondLevelCategory) {
+              return Object.values(collection)[0][1] === secondLevelCategory;
+            } else {
+              return Object.values(collection)[0][0] === firstLevelCategory;
+            }
+          })
       );
       console.log("filteredLurnies :>> ", filteredLurnies);
       setPublishedLurnies(filteredLurnies);
@@ -76,6 +81,7 @@ const LurnyCategory = () => {
 
   useEffect(() => {
     if (!searchTerm.trim()) {
+      console.log("object :>> ", publishedLurnies);
       setFilteredLurnies(publishedLurnies);
     } else {
       const filteredBySearch = publishedLurnies.filter(matchesSearchTerms);
@@ -83,16 +89,16 @@ const LurnyCategory = () => {
     }
   }, [searchTerm, publishedLurnies]);
 
-  useEffect(() => {
-    if (filteredLurnies && filteredLurnies.length > 0) {
-      const grouped = _.chain(filteredLurnies)
-        .groupBy(
-          (lurny) => `${lurny.date.slice(0, 19)}|${lurny.user._id}|${lurny.url}`
-        )
-        .value();
+  console.log("filtered :>> ", filteredLurnies);
 
-      setGroupedLurnies(grouped);
-    }
+  useEffect(() => {
+    const grouped = _.chain(filteredLurnies)
+      .groupBy(
+        (lurny) => `${lurny.date.slice(0, 19)}|${lurny.user._id}|${lurny.url}`
+      )
+      .value();
+
+    setGroupedLurnies(grouped);
   }, [filteredLurnies]);
 
   const renderLurnies = useCallback(() => {
@@ -127,7 +133,7 @@ const LurnyCategory = () => {
   };
 
   let fourthLevelCategories = [];
-  if (Categories[firstLevelCategory][secondLevelCategory][thirdLevelCategory]) {
+  if (thirdLevelCategory && secondLevelCategory && firstLevelCategory) {
     fourthLevelCategories =
       Categories[firstLevelCategory][secondLevelCategory][thirdLevelCategory];
   }
@@ -137,10 +143,6 @@ const LurnyCategory = () => {
   } else if (typeof Object.values(fourthLevelCategories)[0] === "string") {
     fourthLevelCategories = Object.values(fourthLevelCategories);
   }
-
-  console.log(firstLevelCategory, secondLevelCategory, thirdLevelCategory);
-
-  console.log("fourthLevelCategories", fourthLevelCategories);
 
   return (
     <div className="min-h-[100vh] font-raleway">
@@ -185,14 +187,14 @@ const LurnyCategory = () => {
                 </li>
               )}
               {secondLevelCategory && (
-                <li className="text-left">
+                <li className="text-left ml-[1rem]">
                   {secondLevelCategory.includes("#")
                     ? secondLevelCategory
                     : `#${secondLevelCategory}`}
                 </li>
               )}
               {thirdLevelCategory && (
-                <li className="text-left">
+                <li className="text-left ml-[2rem]">
                   {thirdLevelCategory.includes("#")
                     ? thirdLevelCategory
                     : `#${thirdLevelCategory}`}
@@ -212,7 +214,7 @@ const LurnyCategory = () => {
               ))}
             </ul>
           </div>
-          <div className="w-full h-full flex flex-col justify-between items-center">
+          <div className="w-full h-full pl-[4rem] flex flex-col justify-between items-center">
             <div className="w-full h-full flex flex-wrap justify-center sm:justify-start gap-[8rem] lg:gap-[4rem]">
               {renderLurnies()}
             </div>

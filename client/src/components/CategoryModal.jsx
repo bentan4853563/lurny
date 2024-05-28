@@ -31,7 +31,6 @@ function CategoryModal({ hideModal, maintainModal }) {
   }, [secondLevelCategory]);
 
   const handleClickCategory = () => {
-    console.log(firstLevelCategory, secondLevelCategory, thirdLevelCategory);
     navigate("/lurny/category", {
       state: {
         category: [firstLevelCategory, secondLevelCategory, thirdLevelCategory],
@@ -52,6 +51,7 @@ function CategoryModal({ hideModal, maintainModal }) {
           return (
             <span
               key={index}
+              onClick={handleClickCategory}
               onMouseOver={() => setFirstLevelCategory(firtLevel)}
               className="flex items-center justify-between gap-[1rem] px-[2rem] py-[0.8rem] whitespace-nowrap text-[1.5rem] hover:bg-[#E6DEF2] hover:text-[#7F52BB] relative"
             >
@@ -64,6 +64,7 @@ function CategoryModal({ hideModal, maintainModal }) {
                     return (
                       <span
                         key={index}
+                        onClick={handleClickCategory}
                         onMouseOver={() => setSecondLevelCategory(secondLevel)}
                         className="flex items-center justify-between gap-[1rem] px-[2rem] py-[0.8rem] whitespace-nowrap text-[1.5rem] hover:bg-[#E6DEF2] hover:text-[#7F52BB] relative"
                       >

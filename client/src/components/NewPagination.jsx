@@ -32,7 +32,7 @@ const NewPagination = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
     if (currentPage < pageNumbers.length - 1) {
       paginate(currentPage + 1);
 
-      if (currentPage + 1 > maxPageNumberLimit) {
+      if (currentPage + 1 < maxPageNumberLimit) {
         setMaxPageNumberLimit(maxPageNumberLimit + pageNumberLimit);
         setMinPageNumberLimit(minPageNumberLimit + pageNumberLimit);
       }
