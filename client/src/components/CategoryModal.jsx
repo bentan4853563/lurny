@@ -45,6 +45,7 @@ function CategoryModal({ hideModal, maintainModal }) {
       onMouseLeave={() => hideModal()}
       onMouseEnter={() => maintainModal()}
       className="absolute left-0 top-full py-[1rem]"
+      style={{ zIndex: 300 }}
     >
       <div className="bg-[#505050] rounded-[0.2rem] text-white shadow-md shadow-[#2e2e2e] flex flex-col">
         {firstLevelCategories.map((firtLevel, index) => {
