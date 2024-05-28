@@ -37,6 +37,7 @@ const LurnyCategory = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
+    console.log("change category =>");
     if (lurnies.length > 0 && category.length > 0) {
       const filteredLurnies = lurnies.filter(
         (item) =>
@@ -124,8 +125,11 @@ const LurnyCategory = () => {
     navigate("/lurny/sub-group", { state: { groupItems } });
   };
 
-  let fourthLevelCategories =
-    Categories[firstLevelCategory][secondLevelCategory][thirdLevelCategory];
+  let fourthLevelCategories = [];
+  if (Categories[firstLevelCategory][secondLevelCategory][thirdLevelCategory]) {
+    fourthLevelCategories =
+      Categories[firstLevelCategory][secondLevelCategory][thirdLevelCategory];
+  }
 
   if (typeof Object.values(fourthLevelCategories)[0] === "object") {
     fourthLevelCategories = Object.keys(fourthLevelCategories);
