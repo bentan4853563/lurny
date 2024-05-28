@@ -22,11 +22,6 @@ function LurnyRemind() {
 
   const [userData, setUserData] = useState(null);
   const [studyData, setStudyData] = useState({});
-  // const [todayStudies, setTodayStudies] = useState(null);
-
-  const [imageUrl, setImageUrl] = useState(null);
-
-  // const [isExpand, setIsExpand] = useState(false);
 
   const { image, url } = studyData;
 
@@ -61,29 +56,26 @@ function LurnyRemind() {
       if (currentStudy) {
         setStudyData(currentStudy);
       }
-      // const todays = getTodaysStudies(studies);
-      // setTodayStudies(todays);
     }
   }, [studies, id]);
 
-  useEffect(() => {
+  const getDefaultImg = (image, url) => {
     if (isYoutubeUrl(url)) {
-      setImageUrl(getThumbnailURLFromVideoURL(url));
-    } else if (image) {
-      const img = new Image();
-
-      img.onload = () => {
-        setImageUrl(image);
-      };
-      img.onerror = () => {
-        setImageUrl(defaultImg);
-      };
-
-      img.src = image;
-    } else {
-      setImageUrl(defaultImg);
+      return getThumbnailURLFromVideoURL(url);
+    } else if (
+      image &&
+      image !== null &&
+      image !== "" &&
+      image.includes("http")
+    ) {
+      const extensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
+      const fileExtension = image.split(".").pop().toLowerCase();
+      if (extensions.includes(fileExtension)) {
+        return image;
+      }
     }
-  }, [image, url]);
+    return defaultImg;
+  };
 
   const isYoutubeUrl = (url) => {
     if (url) {
@@ -120,12 +112,12 @@ function LurnyRemind() {
             <div className="w-full px-[16rem] sm:px-0 flex flex-col">
               {userData && (
                 <img
-                  src={imageUrl}
-                  // src={
-                  //   userData.email === "bentan010918@gmail.com"
-                  //     ? defaultImg
-                  //     : imageUrl
-                  // }
+                  // src={imageUrl}
+                  src={
+                    userData.email === "bentan010918@gmail.com"
+                      ? defaultImg
+                      : getDefaultImg(image, url)
+                  }
                   alt=""
                   className="w-full h-[64rem] sm:h-[20rem] object-cover rounded-[2rem] mt-[3rem]"
                 />

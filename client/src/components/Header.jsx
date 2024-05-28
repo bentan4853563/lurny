@@ -15,6 +15,8 @@ import "@szhsin/react-menu/dist/transitions/slide.css";
 import { LuPencil } from "react-icons/lu";
 import { IoCompassOutline } from "react-icons/io5";
 import { IoSearchSharp } from "react-icons/io5";
+import { FaTh } from "react-icons/fa";
+
 import LetterLogo from "../assets/icons/letter_logo.png";
 import ChromeIcon from "../assets/icons/chrome.png";
 import BrainIcon from "../assets/icons/brain.png";
@@ -23,6 +25,7 @@ import { getTodaysStudies } from "../utils/getTodoayStudies";
 import CreateLurnyFromURL from "./CreateLurnyModals/CreateLurnyFromURL";
 import CreateLurnyFromFile from "./CreateLurnyModals/CreateLurnyFromFile";
 import CreateLurnyManually from "./CreateLurnyModals/CreateLurnyManually";
+import CategoryModal from "./CategoryModal";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -36,6 +39,7 @@ export default function Header() {
   const [todayStudies, setTodayStudies] = useState(null);
 
   const [lurnifyModal, setLurnifyModal] = useState(null);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
 
   const accessToken = localStorage.getItem("token");
 
@@ -98,13 +102,30 @@ export default function Header() {
       className="bg-black px-[12rem] flex justify-between items-center py-[4rem] sm:py-[1.5rem] top-0 sticky"
       style={{ zIndex: 999 }}
     >
-      <Link to="/" className="select-none">
-        <img
-          src={LetterLogo}
-          alt="Letter logo"
-          className="w-[56rem] sm:w-[32rem] md:w-[24rem] lg:w-[18rem] xl:w-[12rem]"
-        />
-      </Link>
+      <div className="flex items-center gap-[4rem]">
+        <Link to="/" className="select-none">
+          <img
+            src={LetterLogo}
+            alt="Letter logo"
+            className="w-[56rem] sm:w-[32rem] md:w-[24rem] lg:w-[18rem] xl:w-[12rem]"
+          />
+        </Link>
+        <div
+          onMouseOver={() => setShowCategoryModal(true)}
+          onMouseLeave={() => setShowCategoryModal(false)}
+          className="text-white text-[2rem] flex items-center gap-[1rem] cursor-pointer relative"
+        >
+          <FaTh />
+          <span>Category</span>
+          {showCategoryModal && (
+            <CategoryModal
+              hideModal={() => setShowCategoryModal(false)}
+              maintainModal={() => setShowCategoryModal(true)}
+            />
+          )}
+        </div>
+      </div>
+
       <div className="flex items-center gap-[4rem]">
         {/* {lurnies.length > 0 && (
           <Link to={`/admin/lurny`}>

@@ -17,7 +17,7 @@ const LurnySchema = new mongoose.Schema({
   },
   summary: [
     {
-      type: String,
+      type: Object,
     },
   ],
   quiz: [
@@ -25,7 +25,7 @@ const LurnySchema = new mongoose.Schema({
       type: Object,
     },
   ],
-  collections: [{ type: String }],
+  collections: [{ type: Object }],
   image: {
     type: String,
     trim: true,

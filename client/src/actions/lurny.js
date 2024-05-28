@@ -54,7 +54,7 @@ export const handleLurnyData =
   (user_id, lurnyData, navigate) => async (dispatch) => {
     try {
       let newLurnies = [];
-
+      console.log("lurnyDatga", lurnyData);
       // If lurny data is string, then parse to json
       const parsedLurnies =
         typeof lurnyData === "string" ? JSON.parse(lurnyData) : lurnyData;
@@ -88,12 +88,13 @@ export const handleLurnyData =
             newLurnies.push(lurnyObject);
           }
         } else {
+          console.log("parsedLurny :>> ", parsedLurny);
           const { summary_content, questions, image, url } = parsedLurny;
-          const json_summary_content = JSON.parse(summary_content);
+          // const json_summary_content = JSON.parse(summary_content);
 
-          const title = json_summary_content.title;
-          const summary = json_summary_content.summary;
-          const collections = json_summary_content.hash_tags;
+          const title = summary_content.title;
+          const summary = summary_content.summary;
+          const collections = summary_content.hash_tags;
 
           let quiz = [];
           questions.forEach((element) => {

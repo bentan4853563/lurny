@@ -25,7 +25,9 @@ import "@szhsin/react-menu/dist/transitions/slide.css";
 
 import LetterLogo from "../assets/icons/letter_logo.png";
 import defaultImg from "../assets/images/Lurny/default.png";
+
 import { IoSearchSharp } from "react-icons/io5";
+import { FaTh } from "react-icons/fa";
 
 import QuizItem from "../components/QuizItem";
 import MobileQuizItem from "../components/MobileQuizItem";
@@ -51,6 +53,7 @@ function LurnyQuiz() {
   const [quizData, setQuizData] = useState({});
   const [selectedIndex, setSelectedIndex] = useState(1);
   const [relatedLurnies, setRelatedLurnies] = useState([]);
+  const [viewAllCollections, setViewAllCollections] = useState(false);
 
   const [content, setContent] = useState(0);
 
@@ -60,6 +63,13 @@ function LurnyQuiz() {
   // const [isExpand, setIsExpand] = useState(false);
 
   const { collections } = quizData;
+  let slicedCollections = [];
+
+  if (collections && collections.length > 0) {
+    slicedCollections = viewAllCollections
+      ? collections
+      : collections.slice(0, 8);
+  }
 
   let { id } = useParams();
   const { image, url } = quizData;
@@ -258,13 +268,19 @@ function LurnyQuiz() {
     <div className="min-h-[100vh] bg-black font-raleway flex flex-col justify-center sm:justify-start">
       {/* Header */}
       <div className="w-full bg-black px-[4rem] sm:px-[20rem] flex justify-between items-center mb-[4rem] sm:mb-0 sm:py-[2rem]">
-        <Link to="/" className="select-none">
-          <img
-            src={LetterLogo}
-            alt="Letter logo"
-            className="w-[56rem] sm:w-[32rem] md:w-[24rem] lg:w-[18rem] xl:w-[12rem]"
-          />
-        </Link>
+        <div className="flex items-center gap-[4rem]">
+          <Link to="/" className="select-none">
+            <img
+              src={LetterLogo}
+              alt="Letter logo"
+              className="w-[56rem] sm:w-[32rem] md:w-[24rem] lg:w-[18rem] xl:w-[12rem]"
+            />
+          </Link>
+          <div className="text-white text-[2rem] flex items-center gap-[1rem] cursor-pointer">
+            <FaTh />
+            <span>Category</span>
+          </div>
+        </div>
 
         {/* Button Group */}
         {quizData && Object.keys(quizData).length > 0 && (
@@ -437,7 +453,7 @@ function LurnyQuiz() {
       {/* body */}
       <div className="flex flex-wrap px-[4rem] sm:px-[20rem] py-[2rem] gap-[8rem] sm:gap-0">
         {/* Image */}
-        <div className="hidden sm:flex w-[32rem]">
+        <div className="hidden sm:flex w-[36rem]">
           {quizData && Object.keys(quizData).length > 0 && (
             <div className="w-full px-[16rem] sm:px-0 flex flex-col ">
               <span className="text-white text-start text-[7rem] sm:text-[2.5rem] leading-[3rem]">
@@ -522,7 +538,7 @@ function LurnyQuiz() {
 
         <div
           id="current-quiz"
-          className="hidden sm:flex flex-1 gap-[4rem] px-[16rem]"
+          className="hidden sm:flex flex-1 gap-[4rem] px-[12rem]"
         >
           {quizData && Object.keys(quizData).length > 0 && (
             <QuizItem
@@ -568,21 +584,36 @@ function LurnyQuiz() {
                   Related Collections
                 </span>
                 <ul className="ml-[6rem] sm:ml-[2rem]">
-                  {collections &&
-                    collections.length > 0 &&
-                    collections.slice(0, 9).map((keyword, index) => (
-                      <li
-                        onClick={() =>
-                          navigate("/lurny/list", {
-                            state: { category: keyword },
-                          })
-                        }
-                        key={index}
-                        className="text-gray-300 text-left text-[6rem] sm:text-[2rem] cursor-pointer"
-                      >
-                        {keyword.includes("#") ? keyword : `# ${keyword}`}
-                      </li>
-                    ))}
+                  {slicedCollections &&
+                    slicedCollections.length > 0 &&
+                    slicedCollections.map((collection, index) => {
+                      if (collection) {
+                        const keyword = Object.keys(collection)[0];
+                        return (
+                          <li
+                            onClick={() =>
+                              navigate("/lurny/list", {
+                                state: { category: keyword },
+                              })
+                            }
+                            key={index}
+                            className="text-gray-300 text-left text-[6rem] sm:text-[2rem] cursor-pointer"
+                          >
+                            {keyword.includes("#") ? keyword : `#${keyword}`}
+                          </li>
+                        );
+                      }
+                    })}
+                  {collections.length > 9 && (
+                    <li
+                      onClick={() => setViewAllCollections(!viewAllCollections)}
+                      className="mt-[1rem] text-gray-300 text-left text-[6rem] sm:text-[2rem] cursor-pointer hover:underline font-bold"
+                    >
+                      {viewAllCollections
+                        ? "Collapse"
+                        : `${collections.length - 9} more`}
+                    </li>
+                  )}
                 </ul>
               </div>
 

@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
+import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
+import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 
 const NewPagination = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
   const pageNumbers = [];
@@ -17,8 +19,17 @@ const NewPagination = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
     paginate(Number(event.target.id));
   };
 
+  console.log(
+    "pageNumbers.length :>> ",
+    pageNumbers.length,
+    maxPageNumberLimit,
+    minPageNumberLimit,
+    currentPage,
+    currentPage === pageNumbers.length - 1
+  );
+
   const handleNextBtn = () => {
-    if (currentPage < pageNumbers.length) {
+    if (currentPage < pageNumbers.length - 1) {
       paginate(currentPage + 1);
 
       if (currentPage + 1 > maxPageNumberLimit) {
@@ -28,12 +39,30 @@ const NewPagination = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
     }
   };
 
+  const handleLastBtn = () => {
+    if (currentPage < pageNumbers.length) {
+      paginate(pageNumbers.length - 1);
+
+      setMaxPageNumberLimit(pageNumbers.length - 1);
+      setMinPageNumberLimit(pageNumbers.length - (pageNumbers.length % 5));
+    }
+  };
+
+  const handleFstBtn = () => {
+    if (currentPage > 1) {
+      paginate(1);
+
+      setMaxPageNumberLimit(pageNumberLimit);
+      setMinPageNumberLimit(0);
+    }
+  };
+
   const handlePrevBtn = () => {
     if (currentPage > 1) {
       paginate(currentPage - 1);
 
       if ((currentPage - 1) % pageNumberLimit === 0) {
-        setMaxPageNumberLimit(maxPageNumberLimit - pageNumberLimit);
+        setMaxPageNumberLimit(minPageNumberLimit);
         setMinPageNumberLimit(minPageNumberLimit - pageNumberLimit);
       }
     }
@@ -45,10 +74,22 @@ const NewPagination = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
         <ul className="list-reset flex items-center gap-[4rem] sm:gap-[1.5rem] px-[2rem] py-[1rem]">
           <li>
             <span
+              aria-label="First Page"
+              onClick={handleFstBtn}
+              disabled={currentPage === 1}
+              className={`text-[8rem] sm:text-[2rem] p-[0.5rem]  focus:outline-none bg-transparent block cursor-pointer hover:border rounded-full  border-white ${
+                currentPage === 1 && "cursor-not-allowed"
+              }`}
+            >
+              <MdOutlineKeyboardDoubleArrowLeft />
+            </span>
+          </li>
+          <li>
+            <span
               aria-label="Previous Page"
               onClick={handlePrevBtn}
               disabled={currentPage === 1}
-              className={`text-[8rem] sm:text-[2rem] p-[0.5rem] rounded focus:outline-none bg-transparent block cursor-pointer hover:border border-white ${
+              className={`text-[8rem] sm:text-[2rem] p-[0.5rem]  focus:outline-none bg-transparent block cursor-pointer hover:border rounded-full  border-white ${
                 currentPage === 1 && "cursor-not-allowed"
               }`}
             >
@@ -84,13 +125,23 @@ const NewPagination = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
           <li>
             <span
               onClick={handleNextBtn}
-              disabled={currentPage === pageNumbers[pageNumbers.length - 1]}
+              disabled={currentPage === pageNumbers.length - 1}
               className={`text-[8rem] sm:text-[2rem] p-[0.5rem] focus:outline-none bg-transparent hover:border border-white block ${
-                currentPage === pageNumbers[pageNumbers.length - 1] &&
-                "cursor-not-allowed"
+                currentPage === pageNumbers.length - 1 && "cursor-not-allowed"
               }`}
             >
               <IoIosArrowForward />
+            </span>
+          </li>
+          <li>
+            <span
+              onClick={handleLastBtn}
+              disabled={currentPage === pageNumbers.length - 1}
+              className={`text-[8rem] sm:text-[2rem] p-[0.5rem] focus:outline-none bg-transparent hover:border border-white block rounded-full ${
+                currentPage === pageNumbers.length - 1 && "cursor-not-allowed"
+              }`}
+            >
+              <MdOutlineKeyboardDoubleArrowRight />
             </span>
           </li>
         </ul>

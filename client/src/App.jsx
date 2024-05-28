@@ -17,6 +17,7 @@ import LurnyProfile from "./pages/LurnyProfile";
 import LurnySaved from "./pages/LurnySaved";
 import LurnySetting from "./pages/LurnySetting";
 import LurnySearch from "./pages/LurnySearch";
+import LurnyCategory from "./pages/LurnyCategory";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 import Lurny from "./pages/admin/Lurny";
@@ -75,6 +76,7 @@ function App() {
               <Route path="feeds/:id" element={<LurnyQuiz />} />
               <Route path="remind/:id" element={<LurnyRemind />} />
               <Route path="search" element={<LurnySearch />} />
+              <Route path="category" element={<LurnyCategory />} />
               <Route path="price" element={<LurnyPrice />} />
               <Route path="setting" element={<LurnySetting />} />
             </Route>

@@ -70,18 +70,15 @@ const LurnyList = () => {
   }, [publishedLurnies]);
 
   useEffect(() => {
-    if (publishedLurnies.length > 0) {
-      if (selectedCategories.length === 0) {
-        setFilteredLurnies(publishedLurnies);
-      } else {
-        const tempLurnies = publishedLurnies.filter((lurny) =>
-          selectedCategories.some((selectedCategory) =>
-            lurny.collections.includes(selectedCategory)
+    setFilteredLurnies(
+      selectedCategories.length === 0
+        ? publishedLurnies
+        : publishedLurnies.filter((lurny) =>
+            lurny.collections.some((collectionObj) =>
+              selectedCategories.includes(Object.keys(collectionObj)[0])
+            )
           )
-        );
-        setFilteredLurnies(tempLurnies);
-      }
-    }
+    );
   }, [publishedLurnies, selectedCategories]);
 
   useEffect(() => {
@@ -96,7 +93,8 @@ const LurnyList = () => {
       })
       .reduce((accumulator, lurny) => {
         // Go through each collection/category in the lurny
-        lurny.collections.forEach((category) => {
+        lurny.collections.forEach((collection) => {
+          const category = Object.keys(collection)[0];
           if (!categoryMatchesSearchTerm(category)) {
             return;
           }

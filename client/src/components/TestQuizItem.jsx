@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
-import { ToastContainer, Bounce } from "react-toastify";
+import { ToastContainer, Bounce, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { handleTest } from "../actions/study";
@@ -42,18 +42,21 @@ function TestQuizItem({ data }) {
   }, [studies, _id]);
 
   const handleAnswer = () => {
-    console.log("answered :>> ", answered);
-    setAnswered(true);
-    let correctAnswerIndex = 0;
-    answer.map((item, index) => {
-      if (item === correctanswer) correctAnswerIndex = index;
-    });
-    const accuracy = correctAnswerIndex === answerNumber;
-    let newStudyData = {
-      last_learned: new Date(),
-      learn_count: accuracy ? learn_count + 1 : 0,
-    };
-    dispatch(handleTest(_id, newStudyData));
+    if (answerNumber !== null) {
+      setAnswered(true);
+      let correctAnswerIndex = 0;
+      answer.map((item, index) => {
+        if (item === correctanswer) correctAnswerIndex = index;
+      });
+      const accuracy = correctAnswerIndex === answerNumber;
+      let newStudyData = {
+        last_learned: new Date(),
+        learn_count: accuracy ? learn_count + 1 : 0,
+      };
+      dispatch(handleTest(_id, newStudyData));
+    } else {
+      toast.warning("Pleaser select answer");
+    }
   };
 
   const handleNavigateStudy = (direction) => {

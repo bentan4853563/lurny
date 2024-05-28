@@ -525,12 +525,12 @@ export default function QuizItem({
           )}
           {summary &&
             summary.length > 0 &&
-            summary.map((bullet, index) => {
+            summary.map((item, index) => {
               return (
                 summaryNumber === index + 1 && (
                   <div
                     key={index}
-                    className={`relative w-full h-full bg-white rounded-2xl text-[8rem] sm:text-[2.5rem] text-[#404040] font-bold flex flex-col items-center justify-center gap-[2rem] p-[8rem] ${
+                    className={`relative w-full h-full bg-white rounded-2xl text-[8rem] sm:text-[2.5rem] text-[#404040] flex flex-col items-center justify-center gap-[2rem] p-[8rem] ${
                       summaryNumber === 1
                         ? "animate__animated animate__flipInY"
                         : "animate__animated animate__fadeIn"
@@ -539,7 +539,8 @@ export default function QuizItem({
                     <span className="font-bold  text-[10rem] sm:text-[3rem]">
                       {index + 1} / {summary.length}
                     </span>
-                    <p>{bullet}</p>
+                    <p className="font-bold">{item.question}</p>
+                    <p>{item.answer}</p>
                     <div className="absolute flex gap-[2rem] sm:bottom-[4rem] sm:right-[4rem]">
                       {userData.id === user._id && (
                         <div
@@ -673,7 +674,7 @@ export default function QuizItem({
                 <span>{quiz[currentQuestionNumber - 1].question}</span>
               </p>
 
-              <div className="w-full flex flex-col gap-[8rem] sm:gap-[2rem] items-start">
+              <div className="w-full max-h-[70%] overflow-y-auto flex flex-col gap-[8rem] sm:gap-[2rem] items-start">
                 {quiz[currentQuestionNumber - 1].answer.map(
                   (translatedAnswer, index) =>
                     // Answer

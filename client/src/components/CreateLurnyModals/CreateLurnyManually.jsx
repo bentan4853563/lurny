@@ -119,8 +119,9 @@ export default function CreateLurnyManually({ closeModal }) {
             ref={textareaRef}
             value={content}
             onChange={onChangeContent}
+            autoFocus
             placeholder="Paste the text in this box"
-            className="w-full h-full min-h-[40rem] sm:min-h-[30rem] max-[h-100rem] sm:max-h-[50rem] placeholder:text-center bg-white text-black p-[1rem] border-2 border-dashed border-gray-500 rounded-[1rem] text-[6rem] sm:text-[1.5rem] focus:outline-gray-600"
+            className="w-full h-full min-h-[40rem] sm:min-h-[30rem] max-[h-100rem] sm:max-h-[50rem] placeholder:text-start bg-white text-black p-[1rem] border-2 border-dashed border-gray-500 rounded-[1rem] text-[6rem] sm:text-[1.5rem] focus:outline-gray-600"
           />
           <div className="w-full text-white text-[6.5rem] sm:text-[2rem]">
             {status === "" && (

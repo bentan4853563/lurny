@@ -7,7 +7,7 @@ const path = require("path");
 
 const Lurny = require("../../models/Lurny");
 
-const quiz_server_url = process.env.VITE_QUIZ_SERVER;
+const processHashtags = require("../../test");
 
 router.get("/get", async (req, res) => {
   try {
@@ -46,17 +46,20 @@ router.post("/my-lurnies", async (req, res) => {
 
 router.post("/insert", async (req, res) => {
   try {
-    console.log("req.body :>> ", req.body);
     const newLurnies = req.body;
+
+    // for (const lurny of newLurnies) {
+    //   const newCollections = await processHashtags(lurny["collections"]);
+    //   lurny.collections = newCollections;
+    // }
+
     const savedLurny = await Lurny.insertMany(newLurnies);
-    console.log("savedLurny :>> ", savedLurny);
-    // Use Promise.all to wait for all promises to resolve simultaneously,
-    // rather than waiting for each find operation to complete serially
+
     const populatedLurniesPromises = savedLurny.map((lurny) =>
       Lurny.findById(lurny._id).populate("user")
     );
+
     const populatedLurnies = await Promise.all(populatedLurniesPromises);
-    console.log("populatedLurnies", populatedLurnies);
     res.status(201).json(populatedLurnies);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -265,7 +268,7 @@ router.delete("/clear-hash", async (req, res) => {
 });
 
 router.delete("/delete-byuser", async (req, res) => {
-  await Lurny.deleteMany({ user: "65f726277e1c4b277e67a352" });
+  await Lurny.deleteMany({ user: "6627e122081fb43132b9dacb" });
 
   res.send("Success!!");
 });
@@ -293,6 +296,45 @@ router.delete("/low-quality", async (req, res) => {
       .json({ message: "Low quality lurnies have been deleted and logged." });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+router.post("/update-collections", async (req, res) => {
+  try {
+    // Retrieve all Lurnies from the database
+    const lurnies = await Lurny.find();
+
+    for (const lurny of lurnies) {
+      console.log(typeof lurny.collections[0]);
+      if (typeof lurny.collections[0] === "string") {
+        console.log(lurny._id);
+        const newCollections = await processHashtags(lurny.collections);
+        await Lurny.findByIdAndUpdate(lurny._id, {
+          collections: newCollections,
+        });
+      }
+    }
+
+    // Once the updates are done, send a response back to the client
+    res.status(200).json({ message: "All Lurnies updated successfully" });
+  } catch (error) {
+    console.error("error :>> ", error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/get-link", async (req, res) => {
+  try {
+    const filePath = "urls.txt";
+    const lurnies = await Lurny.find();
+    console.log(lurnies.length);
+    for (const lurny of lurnies) {
+      if (lurny.url) {
+        fs.appendFileSync(filePath, `${lurny.url}\n`, "utf-8");
+      }
+    }
+  } catch (error) {
+    console.log(error);
   }
 });
 

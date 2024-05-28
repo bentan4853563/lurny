@@ -122,6 +122,7 @@ export default function CreateLurnyFromURL({ closeModal }) {
             type="text"
             ref={inputUrlRef}
             value={url}
+            autoFocus
             onChange={onChangeURL}
             className="w-full sm:w-3/4 bg-white text-black p-[4rem] sm:p-[1rem] border border-gray-300 rounded-[1rem] text-[6rem] sm:text-[1.5rem]  focus:outline-gray-600"
           />
