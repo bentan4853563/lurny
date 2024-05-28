@@ -7,8 +7,6 @@ const path = require("path");
 
 const Lurny = require("../../models/Lurny");
 
-const processHashtags = require("../../test");
-
 router.get("/get", async (req, res) => {
   try {
     const lurnies = await Lurny.find().sort({ date: -1 }).populate("user");
