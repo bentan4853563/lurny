@@ -40,6 +40,7 @@ import CreateLurnyManually from "../components/CreateLurnyModals/CreateLurnyManu
 
 import { logout } from "../reducers/userSlice";
 import useAdmin from "../hooks/useAdmin";
+import CategoryModal from "../components/CategoryModal";
 
 function LurnyQuiz() {
   const dispatch = useDispatch();
@@ -59,6 +60,7 @@ function LurnyQuiz() {
 
   const [imageUrl, setImageUrl] = useState(null);
   const [lurnifyModal, setLurnifyModal] = useState(null);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
 
   // const [isExpand, setIsExpand] = useState(false);
 
@@ -276,9 +278,19 @@ function LurnyQuiz() {
               className="w-[56rem] sm:w-[32rem] md:w-[24rem] lg:w-[18rem] xl:w-[12rem]"
             />
           </Link>
-          <div className="text-white text-[2rem] flex items-center gap-[1rem] cursor-pointer">
+          <div
+            onMouseOver={() => setShowCategoryModal(true)}
+            onMouseLeave={() => setShowCategoryModal(false)}
+            className="text-white text-[2rem] flex items-center gap-[1rem] cursor-pointer relative"
+          >
             <FaTh />
             <span>Category</span>
+            {showCategoryModal && (
+              <CategoryModal
+                hideModal={() => setShowCategoryModal(false)}
+                maintainModal={() => setShowCategoryModal(true)}
+              />
+            )}
           </div>
         </div>
 
