@@ -110,6 +110,11 @@ router.post("/save", async (req, res) => {
     });
 
     const savedStudy = await newStudy.save();
+
+    await Lurny.findByIdAndUpdate(lurny._id, {
+      saved_count: lurny.saved_count ? lurny.saved_count + 1 : 1,
+    });
+
     res.status(201).json(savedStudy);
   } catch (error) {
     console.error(error);

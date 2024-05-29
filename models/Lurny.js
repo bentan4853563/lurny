@@ -38,6 +38,10 @@ const LurnySchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  saved_count: {
+    type: Number,
+    default: 0,
+  },
 });
 
 LurnySchema.index({ "$**": "text" });
