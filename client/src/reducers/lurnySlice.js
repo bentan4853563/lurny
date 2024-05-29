@@ -45,6 +45,15 @@ const lurnySlice = createSlice({
         state.lurnies[index] = { ...state.lurnies[index], ...action.payload };
       }
     },
+    savedLurny: (state, action) => {
+      state.lurnies = state.lurnies.map((lurny) => {
+        if (lurny._id === action.payload) {
+          return { ...lurny, saved_count: (lurny.saved_count || 0) + 1 };
+        } else {
+          return lurny;
+        }
+      });
+    },
     // Action to delete a lurny based on its _id
     deleteLurny: (state, action) => {
       state.lurnies = state.lurnies.filter(
@@ -71,6 +80,7 @@ export const {
   insertLurny,
   shareLurny,
   shareMany,
+  savedLurny,
   updateLurny,
   deleteLurny,
   deleteLurnyCluster,

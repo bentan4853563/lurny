@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteStudy, setStudies, setStudy } from "../reducers/studySlice";
+import { savedLurny } from "../reducers/lurnySlice";
 
 // Define the backend URL from environment variables
 const backend_url = import.meta.env.VITE_BACKEND_URL;
@@ -52,6 +53,7 @@ export const handleRemember = (user_id, lurny_id, type, number) => async () => {
         position: "top-right",
       });
     } else if (response.ok) {
+      savedLurny(lurny_id);
       // If successful, display a success message
       toast.success("Saved Lurny", {
         position: "top-right",

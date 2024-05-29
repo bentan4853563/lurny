@@ -98,12 +98,12 @@ function LurnyItem({ data }) {
           <span className="text-[1.5rem]">
             {summary.length} STUBS | {quiz.length} QUIZZES{" "}
           </span>
-          <div>
+          <div className="flex items-center gap-[1rem]">
             <img
               src={BrainIcon}
               className="w-[3rem] border-2 border-gray-300 rounded-full hover:transform"
             />
-            <span>{saved_count}</span>
+            <span className="text-[1.5rem]">{saved_count}</span>
           </div>
         </div>
       </div>
