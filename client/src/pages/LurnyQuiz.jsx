@@ -600,7 +600,10 @@ function LurnyQuiz() {
                     slicedCollections.length > 0 &&
                     slicedCollections.map((collection, index) => {
                       if (collection) {
-                        const keyword = Object.keys(collection)[0];
+                        const keyword =
+                          typeof collection === "string"
+                            ? collection
+                            : Object.keys(collection)[0];
                         return (
                           <li
                             onClick={() =>
