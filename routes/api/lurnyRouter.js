@@ -6,6 +6,7 @@ const fs = require("fs");
 const path = require("path");
 
 const Lurny = require("../../models/Lurny");
+const { messaging } = require("firebase-admin");
 
 router.get("/get", async (req, res) => {
   try {
@@ -46,11 +47,6 @@ router.post("/insert", async (req, res) => {
   try {
     const newLurnies = req.body;
 
-    // for (const lurny of newLurnies) {
-    //   const newCollections = await processHashtags(lurny["collections"]);
-    //   lurny.collections = newCollections;
-    // }
-
     const savedLurny = await Lurny.insertMany(newLurnies);
 
     const populatedLurniesPromises = savedLurny.map((lurny) =>
@@ -61,6 +57,31 @@ router.post("/insert", async (req, res) => {
     res.status(201).json(populatedLurnies);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+});
+
+router.post("/collections-process", async (req, res) => {
+  try {
+    const lurnies = req.body;
+
+    const newLurniesPromises = lurnies.map(async (lurny) => {
+      const response = await fetch(`${process.env.VITE_QUIZ_SERVER}/collections-process`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(lurny.collections),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const newCollections = await response.json();
+      return { ...lurny, collections: newCollections };
+    });
+
+    const newLurnies = await Promise.all(newLurniesPromises);
+
+    res.status(200).json(newLurnies);
+  } catch (error) {
+    res.status(400).json({ messag: error.messag });
   }
 });
 

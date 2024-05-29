@@ -45,6 +45,19 @@ const lurnySlice = createSlice({
         state.lurnies[index] = { ...state.lurnies[index], ...action.payload };
       }
     },
+    updateCollections: (state, action) => {
+      const idsToUpdate = action.payload.map((lurny) => lurny._id);
+
+      state.lurnies = state.lurnies.map((lurny) => {
+        const index = idsToUpdate.indexOf(lurny._id);
+
+        if (index !== -1) {
+          return { ...lurny, ...action.payload[index] };
+        }
+
+        return lurny; // Ensure that items not being updated are returned unchanged
+      });
+    },
     savedLurny: (state, action) => {
       state.lurnies = state.lurnies.map((lurny) => {
         if (lurny._id === action.payload) {
@@ -82,6 +95,7 @@ export const {
   shareMany,
   savedLurny,
   updateLurny,
+  updateCollections,
   deleteLurny,
   deleteLurnyCluster,
   clearLurnies,

@@ -6,6 +6,7 @@ import {
   setLurnies,
   shareLurny,
   shareMany,
+  updateCollections,
   updateLurny,
 } from "../reducers/lurnySlice";
 import { toast } from "react-toastify";
@@ -144,9 +145,37 @@ export const handleInsertLurny = (lurnies, navigate) => async (dispatch) => {
       const responseData = await response.json();
       navigate("/lurny/profile");
       dispatch(insertLurny(responseData));
+      dispatch(collectionsProcess(responseData));
       // toast.success("Inserted!", {
       //   position: "top-right",
       // });
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    toast.error("Error!", {
+      position: "top-right",
+    });
+  }
+};
+
+export const collectionsProcess = (lurnies) => async (dispatch) => {
+  try {
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(lurnies),
+    };
+
+    const response = await fetch(
+      `${backend_url}/api/lurny/collections-process`,
+      options
+    );
+    if (response.ok) {
+      const responseData = await response.json();
+      dispatch(updateCollections(responseData));
+      console.log("responseData :>> ", responseData);
     }
   } catch (error) {
     console.error("Error:", error);
