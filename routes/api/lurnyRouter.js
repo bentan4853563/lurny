@@ -65,11 +65,14 @@ router.post("/collections-process", async (req, res) => {
     const lurnies = req.body;
 
     const newLurniesPromises = lurnies.map(async (lurny) => {
-      const response = await fetch(`${process.env.VITE_QUIZ_SERVER}/collections-process`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(lurny.collections),
-      });
+      const response = await fetch(
+        `${process.env.VITE_QUIZ_SERVER}/collections-process`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ hashtag: lurny.collections }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
