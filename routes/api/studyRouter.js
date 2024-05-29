@@ -65,7 +65,7 @@ router.post("/save", async (req, res) => {
       }
 
       stub = lurny.summary[number];
-
+      console.log("stub :>> ", stub);
       // Fetch quiz from external quiz server
       const quizResponse = await fetch(
         `${process.env.VITE_QUIZ_SERVER}/get_quiz`,

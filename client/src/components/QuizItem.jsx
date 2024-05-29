@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Tooltip } from "react-tooltip";
-import { toast, ToastContainer, Bounce } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -869,7 +869,7 @@ export default function QuizItem({
         </div>
       )}
 
-      <ToastContainer
+      {/* <ToastContainer
         position="top-right"
         autoClose={1000}
         hideProgressBar={false}
@@ -882,7 +882,7 @@ export default function QuizItem({
         theme="light"
         transition={Bounce}
         className="text-[6rem] sm:text-[2rem]"
-      />
+      /> */}
     </div>
   );
 }

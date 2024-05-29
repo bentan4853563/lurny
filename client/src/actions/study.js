@@ -36,42 +36,42 @@ export const getStudies = (id) => async (dispatch) => {
  * @param {string} type - The type of Lurny.
  * @param {number} number - A number associated with the Lurny.
  */
-export const handleRemember = (user_id, lurny_id, type, number) => async () => {
-  try {
-    const response = await fetch(`${backend_url}/api/study/save`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ user_id, lurny_id, type, number }),
-    });
+export const handleRemember =
+  (user_id, lurny_id, type, number) => async (dispatch) => {
+    try {
+      const response = await fetch(`${backend_url}/api/study/save`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_id, lurny_id, type, number }),
+      });
 
-    // Check for 409 Conflict status code
-    if (response.status === 409) {
-      const data = await response.json();
-      toast.error(data.message, {
-        position: "top-right",
-      });
-    } else if (response.ok) {
-      savedLurny(lurny_id);
-      // If successful, display a success message
-      toast.success("Saved Lurny", {
-        position: "top-right",
-      });
-    } else {
-      // Handle other errors
-      const errorData = await response.json();
-      toast.error(errorData.message || "An unknown error occurred", {
+      // Check for 409 Conflict status code
+      if (response.status === 409) {
+        const data = await response.json();
+        toast.error(data.message, {
+          position: "top-right",
+        });
+      } else if (response.ok) {
+        dispatch(savedLurny(lurny_id));
+        toast.success("Saved Lurny", {
+          position: "top-right",
+        });
+      } else {
+        // Handle other errors
+        const errorData = await response.json();
+        toast.error(errorData.message || "An unknown error occurred", {
+          position: "top-right",
+        });
+      }
+    } catch (error) {
+      console.error("Network or unexpected error:", error);
+      toast.error("Network or unexpected error", {
         position: "top-right",
       });
     }
-  } catch (error) {
-    console.error("Network or unexpected error:", error);
-    toast.error("Network or unexpected error", {
-      position: "top-right",
-    });
-  }
-};
+  };
 
 /**
  * Handle testing by submitting test data.
