@@ -77,12 +77,17 @@ router.post("/collections-process", async (req, res) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const newCollections = await response.json();
-      return { ...lurny, collections: newCollections };
+      await Lurny.findOneAndUpdate(
+        lurny._id,
+        {
+          $set: { collections: newCollections },
+        },
+        { new: true }
+      );
     });
 
-    console.log("newLurniesPromises :>> ", newLurniesPromises);
-
     const newLurnies = await Promise.all(newLurniesPromises);
+    console.log("newLurnies :>> ", newLurnies);
 
     res.status(200).json(newLurnies);
   } catch (error) {
