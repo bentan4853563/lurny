@@ -80,6 +80,8 @@ router.post("/collections-process", async (req, res) => {
       return { ...lurny, collections: newCollections };
     });
 
+    console.log("newLurniesPromises :>> ", newLurniesPromises);
+
     const newLurnies = await Promise.all(newLurniesPromises);
 
     res.status(200).json(newLurnies);

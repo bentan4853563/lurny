@@ -5,8 +5,6 @@ import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
 
-import { ImSearch } from "react-icons/im";
-
 import LurnyItem from "../components/LurnyItem";
 import NewPagination from "../components/NewPagination";
 import Header from "../components/Header";
@@ -21,8 +19,6 @@ const LurnyCategory = () => {
   const { lurnies } = useSelector((state) => state.lurny);
   const [publishedLurnies, setPublishedLurnies] = useState([]);
 
-  const [searchTerm, setSearchTerm] = useState(""); // State to hold the search term
-  const [filteredLurnies, setFilteredLurnies] = useState([]);
   const [groupedLurnies, setGroupedLurnies] = useState({});
 
   // Pagination state
@@ -54,49 +50,15 @@ const LurnyCategory = () => {
     }
   }, [lurnies, firstLevelCategory, secondLevelCategory, thirdLevelCategory]);
 
-  const matchesSearchTerms = (lurny) => {
-    // If unsure about the structure, add additional checks
-    const collectionText = lurny.collections?.join(" ") || "";
-    const summaryText = lurny.summary || "";
-    const titleText = lurny.title || "";
-    const quizContent =
-      lurny.quiz
-        ?.map((quizItem) => {
-          const questionText = quizItem.question || "";
-          const answersText = quizItem.answers?.join(" ") || "";
-          return `${questionText} ${answersText}`;
-        })
-        .join(" ") || "";
-
-    const searchWords = searchTerm.toLowerCase().split(" ");
-    const textToSearch = [collectionText, summaryText, titleText, quizContent]
-      .join(" ")
-      .toLowerCase();
-
-    return searchWords.every((word) => textToSearch.includes(word));
-  };
-
   useEffect(() => {
-    if (!searchTerm.trim()) {
-      console.log("object :>> ", publishedLurnies);
-      setFilteredLurnies(publishedLurnies);
-    } else {
-      const filteredBySearch = publishedLurnies.filter(matchesSearchTerms);
-      setFilteredLurnies(filteredBySearch);
-    }
-  }, [searchTerm, publishedLurnies]);
-
-  console.log("filtered :>> ", filteredLurnies);
-
-  useEffect(() => {
-    const grouped = _.chain(filteredLurnies)
+    const grouped = _.chain(publishedLurnies)
       .groupBy(
         (lurny) => `${lurny.date.slice(0, 19)}|${lurny.user._id}|${lurny.url}`
       )
       .value();
 
     setGroupedLurnies(grouped);
-  }, [filteredLurnies]);
+  }, [publishedLurnies]);
 
   const renderLurnies = useCallback(() => {
     const groupArray = Object.entries(groupedLurnies);
@@ -160,19 +122,6 @@ const LurnyCategory = () => {
       />
 
       <div className="w-full h-full bg-[#262626] flex flex-col px-[12rem] py-[12rem] sm:py-[4rem] gap-[4rem]">
-        {/* Search bar */}
-        <div className="bg-transparent w-full px-[4rem] sm:px-[1.5rem] py-[1rem] sm:py-[0.5rem] flex flex-item items-center border border-gray-500 focus-within:border-white rounded-[2rem] sm:rounded-[0.5rem]  text-[8rem] sm:text-[2rem] text-white">
-          <ImSearch />
-          <input
-            type="text"
-            value={searchTerm}
-            autoComplete
-            // autoFocus
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-transparent  px-[1.5rem] flex flex-1 focus:outline-none"
-            placeholder="Search topics and people"
-          />
-        </div>
         <div className="flex">
           <div className="w-[32rem] text-white">
             <ul className="flex flex-col items-start text-[2rem]">
@@ -215,9 +164,9 @@ const LurnyCategory = () => {
             <div className="w-full h-full flex flex-wrap justify-center sm:justify-start gap-[8rem] lg:gap-[4rem]">
               {renderLurnies()}
             </div>
-            {filteredLurnies.length > itemsPerPage && (
+            {publishedLurnies.length > itemsPerPage && (
               <NewPagination
-                totalItems={filteredLurnies && filteredLurnies.length}
+                totalItems={publishedLurnies && publishedLurnies.length}
                 itemsPerPage={itemsPerPage}
                 currentPage={currentPage}
                 paginate={(value) => paginate(value)}
