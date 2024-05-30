@@ -30,13 +30,34 @@ function CategoryModal({ hideModal, maintainModal }) {
     }
   }, [secondLevelCategory]);
 
-  const handleClickCategory = () => {
-    navigate("/lurny/category", {
-      state: {
-        category: [firstLevelCategory, secondLevelCategory, thirdLevelCategory],
-      },
-    });
-    hideModal();
+  const handleClickCategory = (level, value) => {
+    let newPath;
+
+    // Updating the state according to the level of the category clicked.
+    if (level === "first") {
+      setFirstLevelCategory(value);
+      setSecondLevelCategory(null);
+      setThirdLevelCategory(null);
+      setSecondLevelCategories(Object.keys(Categories[value]));
+      newPath = `/lurny/category/${value}`;
+    } else if (level === "second") {
+      if (!firstLevelCategory) return; // Ensure that the first-level category has been selected
+      setSecondLevelCategory(value);
+      setThirdLevelCategory(null);
+      setThirdLevelCategories(
+        Object.keys(Categories[firstLevelCategory][value])
+      );
+      newPath = `/lurny/category/${firstLevelCategory}/${value}`;
+    } else if (level === "third") {
+      if (!firstLevelCategory || !secondLevelCategory) return; // Ensure that the first-level and second-level categories have been selected
+      setThirdLevelCategory(value);
+      newPath = `/lur ny/category/${firstLevelCategory}/${secondLevelCategory}/${value}`;
+    }
+
+    // Navigate to the new path
+    navigate(newPath);
+
+    hideModal(); // Since we're navigating away, we should close any open modal.
   };
 
   return (
@@ -51,7 +72,7 @@ function CategoryModal({ hideModal, maintainModal }) {
           return (
             <span
               key={index}
-              onClick={handleClickCategory}
+              onClick={() => handleClickCategory("first", firtLevel)}
               onMouseOver={() => setFirstLevelCategory(firtLevel)}
               className="flex items-center justify-between gap-[1rem] px-[2rem] py-[0.8rem] whitespace-nowrap text-[1.5rem] hover:bg-[#E6DEF2] hover:text-[#7F52BB] relative"
             >
@@ -64,7 +85,9 @@ function CategoryModal({ hideModal, maintainModal }) {
                     return (
                       <span
                         key={index}
-                        onClick={handleClickCategory}
+                        onClick={() =>
+                          handleClickCategory("second", secondLevel)
+                        }
                         onMouseOver={() => setSecondLevelCategory(secondLevel)}
                         className="flex items-center justify-between gap-[1rem] px-[2rem] py-[0.8rem] whitespace-nowrap text-[1.5rem] hover:bg-[#E6DEF2] hover:text-[#7F52BB] relative"
                       >
@@ -77,7 +100,9 @@ function CategoryModal({ hideModal, maintainModal }) {
                               return (
                                 <span
                                   key={index}
-                                  onClick={handleClickCategory}
+                                  onClick={() =>
+                                    handleClickCategory("third", thirdLevel)
+                                  }
                                   onMouseOver={() =>
                                     setThirdLevelCategory(thirdLevel)
                                   }

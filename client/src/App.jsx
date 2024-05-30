@@ -76,7 +76,18 @@ function App() {
               <Route path="feeds/:id" element={<LurnyQuiz />} />
               <Route path="remind/:id" element={<LurnyRemind />} />
               <Route path="search" element={<LurnySearch />} />
-              <Route path="category" element={<LurnyCategory />} />
+              <Route
+                path="category/:firstLevelCategory"
+                element={<LurnyCategory />}
+              />
+              <Route
+                path="category/:firstLevelCategory/:secondLevelCategory"
+                element={<LurnyCategory />}
+              />
+              <Route
+                path="category/:firstLevelCategory/:secondLevelCategory/:thirdLevelCategory"
+                element={<LurnyCategory />}
+              />
               <Route path="price" element={<LurnyPrice />} />
               <Route path="setting" element={<LurnySetting />} />
             </Route>

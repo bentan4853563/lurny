@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,11 +15,8 @@ import Categories from "../utils/Categories.json";
 
 const LurnyCategory = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const { category } = location.state || {};
-  const [firstLevelCategory, secondLevelCategory, thirdLevelCategory] =
-    category;
+  let { firstLevelCategory, secondLevelCategory, thirdLevelCategory } =
+    useParams();
 
   const { lurnies } = useSelector((state) => state.lurny);
   const [publishedLurnies, setPublishedLurnies] = useState([]);
@@ -37,7 +34,7 @@ const LurnyCategory = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
-    if (lurnies.length > 0 && category.length > 0) {
+    if (lurnies.length > 0) {
       console.log("change category =>");
       const filteredLurnies = lurnies.filter(
         (item) =>
@@ -55,7 +52,7 @@ const LurnyCategory = () => {
       console.log("filteredLurnies :>> ", filteredLurnies);
       setPublishedLurnies(filteredLurnies);
     }
-  }, [lurnies, category]);
+  }, [lurnies, firstLevelCategory, secondLevelCategory, thirdLevelCategory]);
 
   const matchesSearchTerms = (lurny) => {
     // If unsure about the structure, add additional checks
