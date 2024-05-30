@@ -77,21 +77,25 @@ router.post("/collections-process", async (req, res) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const newCollections = await response.json();
-      await Lurny.findOneAndUpdate(
-        lurny._id,
-        {
-          $set: { collections: newCollections },
-        },
+
+      // Return the promise of the update operation so that Promise.all can await it
+      return Lurny.findOneAndUpdate(
+        { _id: lurny._id }, // Corrected the filter query object
+        { $set: { collections: newCollections } },
         { new: true }
       );
     });
 
+    // This will now wait for all the findOneAndUpdate operations to complete
     const newLurnies = await Promise.all(newLurniesPromises);
     console.log("newLurnies :>> ", newLurnies);
 
+    // Respond with the updated lurnies
     res.status(200).json(newLurnies);
   } catch (error) {
-    res.status(400).json({ messag: error.messag });
+    console.error("Error processing collections:", error);
+    // Corrected the error attribute names
+    res.status(400).json({ message: error.message });
   }
 });
 
